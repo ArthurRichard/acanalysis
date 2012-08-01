@@ -77,6 +77,14 @@
     <Compile Include="GIM.Designer.cs">
       <DependentUpon>GIM.cs</DependentUpon>
     </Compile>
+    <Compile Include="ini.cs" />
+    <Compile Include="Note.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Note.Designer.cs">
+      <DependentUpon>Note.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Notes.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SM.cs">
@@ -90,6 +98,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GIM.resx">
       <DependentUpon>GIM.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Note.resx">
+      <DependentUpon>Note.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
