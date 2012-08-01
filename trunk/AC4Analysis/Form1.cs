@@ -18,6 +18,7 @@ namespace AC4Analysis
         public AC4Analysis()
         {
             InitializeComponent();
+            Notes.load();
         }
         uint culsize = 0;
         uint culadd = 0;
@@ -62,7 +63,7 @@ namespace AC4Analysis
                     tn.Tag = L1;
                     uint subNum = CheckAddList(L1.add, L1.size, brc, tn);
                     if (subNum > 0)
-                        tn.Text = string.Format("{0:X8} {1}", L1.add, subNum);
+                        tn.Text = string.Format("{0:X8} {1} {2}", L1.add, subNum, Notes.Get(L1.add.ToString()));
                     treeView1.Nodes.Add(tn);
                     progressBar1.Value =  i*100 / (int)L1Size;
                 }
@@ -100,6 +101,7 @@ namespace AC4Analysis
             fsc.Read(culdata, 0, (int)culsize);
             fsc.Close();
 
+            panel1.Controls.Clear();
             string Head = System.Text.Encoding.ASCII.GetString(culdata,0,4).ToString();
             switch (Head)
             {
@@ -107,7 +109,6 @@ namespace AC4Analysis
                     {
                         smwin.data = culdata;
                         smwin.Analysis_SM();
-                        panel1.Controls.Clear();
                         panel1.Controls.Add(smwin);
                         break;
                     }
@@ -117,7 +118,6 @@ namespace AC4Analysis
                         gimwin.Analysis_GIM();
                         gimwin.add = totaladd;
                         gimwin.cdpfilename = cdpfilename;
-                        panel1.Controls.Clear();
                         panel1.Controls.Add(gimwin);
                         break;
                     }
@@ -166,7 +166,7 @@ namespace AC4Analysis
 
                     uint subNum2 = CheckAddList(tmp.add + add, tmp.size, brc, nodes[i - 1]);
                     nodes[i - 1].Name = tmp.add.ToString();
-                    nodes[i - 1].Text = string.Format("{0:X8},{1}", tmp.add, subNum2);
+                    nodes[i - 1].Text = string.Format("{0:X8},{1} {2}", tmp.add, subNum2, Notes.Get(tmp.add.ToString()));
                     nodes[i - 1].Tag = tmp;
                 }
                 lastAdd = culadd;
@@ -177,7 +177,7 @@ namespace AC4Analysis
             nodes[subNum - 1] = new TreeNode();
             uint subNum3 = CheckAddList(tmp2.add + add, tmp2.size, brc, nodes[subNum - 1]);
             nodes[subNum - 1].Name = tmp2.add.ToString();
-            nodes[subNum - 1].Text = string.Format("{0:X8},{1}", tmp2.add, subNum3);
+            nodes[subNum - 1].Text = string.Format("{0:X8},{1} ", tmp2.add, subNum3);
             nodes[subNum - 1].Tag = tmp2;
             foreach (TreeNode node in nodes)
             {
@@ -210,6 +210,16 @@ namespace AC4Analysis
             FileStream fs = new FileStream(sfd.FileName, FileMode.Create);
             fs.Write(saveFile, 0,(int) culsize);
             fs.Close();
+        }
+
+        private void 编辑注释ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (treeView1.SelectedNode == null)
+                return;
+            Note note = new Note();
+            note.DataAdd = treeView1.SelectedNode.Name;
+            note.ShowDialog();
+            treeView1.SelectedNode.Text += note.DataNote;
         }
     }
 }
