@@ -166,7 +166,7 @@ namespace AC4Analysis
 
                     uint subNum2 = CheckAddList(tmp.add + add, tmp.size, brc, nodes[i - 1]);
                     nodes[i - 1].Name = tmp.add.ToString();
-                    nodes[i - 1].Text = string.Format("{0:X8},{1} {2}", tmp.add, subNum2, Notes.Get(tmp.add.ToString()));
+                    nodes[i - 1].Text = string.Format("{0:X8},{1} {2}", tmp.add, subNum2, Notes.Get((add+tmp.add).ToString()));
                     nodes[i - 1].Tag = tmp;
                 }
                 lastAdd = culadd;
@@ -220,6 +220,14 @@ namespace AC4Analysis
             note.DataAdd = treeView1.SelectedNode.Name;
             note.ShowDialog();
             treeView1.SelectedNode.Text += note.DataNote;
+        }
+
+        private void btnSaveNote_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(tbNote.Text))
+                return;
+            Notes.Set(tb绝对地址.Text, tbNote.Text);
+            Notes.Save();
         }
     }
 }

@@ -31,6 +31,8 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AC4Analysis));
             this.treeView1 = new System.Windows.Forms.TreeView();
+            this.cmsNotes = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.编辑注释ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.btn打开tbl = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -41,22 +43,36 @@
             this.btn另存当前数据段 = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
-            this.cmsNotes = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.编辑注释ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.label4 = new System.Windows.Forms.Label();
+            this.tbNote = new System.Windows.Forms.TextBox();
+            this.btnSaveNote = new System.Windows.Forms.Button();
             this.cmsNotes.SuspendLayout();
             this.SuspendLayout();
             // 
             // treeView1
             // 
-            this.treeView1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)));
-            this.treeView1.ContextMenuStrip = this.cmsNotes;
+            this.treeView1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.treeView1.LabelEdit = true;
             this.treeView1.Location = new System.Drawing.Point(12, 12);
             this.treeView1.Name = "treeView1";
-            this.treeView1.Size = new System.Drawing.Size(308, 591);
+            this.treeView1.Size = new System.Drawing.Size(308, 641);
             this.treeView1.TabIndex = 0;
             this.treeView1.DoubleClick += new System.EventHandler(this.treeView1_DoubleClick);
+            // 
+            // cmsNotes
+            // 
+            this.cmsNotes.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.编辑注释ToolStripMenuItem});
+            this.cmsNotes.Name = "cmsNotes";
+            this.cmsNotes.Size = new System.Drawing.Size(153, 48);
+            // 
+            // 编辑注释ToolStripMenuItem
+            // 
+            this.编辑注释ToolStripMenuItem.Name = "编辑注释ToolStripMenuItem";
+            this.编辑注释ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.编辑注释ToolStripMenuItem.Text = "编辑注释";
+            this.编辑注释ToolStripMenuItem.Click += new System.EventHandler(this.编辑注释ToolStripMenuItem_Click);
             // 
             // btn打开tbl
             // 
@@ -71,7 +87,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(637, 16);
+            this.label1.Location = new System.Drawing.Point(563, 16);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(47, 12);
             this.label1.TabIndex = 2;
@@ -80,7 +96,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(789, 16);
+            this.label2.Location = new System.Drawing.Point(715, 16);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(65, 12);
             this.label2.TabIndex = 3;
@@ -88,21 +104,21 @@
             // 
             // tb绝对地址
             // 
-            this.tb绝对地址.Location = new System.Drawing.Point(683, 13);
+            this.tb绝对地址.Location = new System.Drawing.Point(609, 13);
             this.tb绝对地址.Name = "tb绝对地址";
             this.tb绝对地址.Size = new System.Drawing.Size(100, 21);
             this.tb绝对地址.TabIndex = 4;
             // 
             // tb相对地址
             // 
-            this.tb相对地址.Location = new System.Drawing.Point(858, 11);
+            this.tb相对地址.Location = new System.Drawing.Point(784, 11);
             this.tb相对地址.Name = "tb相对地址";
             this.tb相对地址.Size = new System.Drawing.Size(100, 21);
             this.tb相对地址.TabIndex = 5;
             // 
             // tb大小
             // 
-            this.tb大小.Location = new System.Drawing.Point(1003, 11);
+            this.tb大小.Location = new System.Drawing.Point(929, 11);
             this.tb大小.Name = "tb大小";
             this.tb大小.Size = new System.Drawing.Size(100, 21);
             this.tb大小.TabIndex = 7;
@@ -110,7 +126,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(968, 16);
+            this.label3.Location = new System.Drawing.Point(894, 16);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(29, 12);
             this.label3.TabIndex = 6;
@@ -128,43 +144,57 @@
             // 
             // panel1
             // 
-            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.AutoScroll = true;
-            this.panel1.Location = new System.Drawing.Point(327, 41);
+            this.panel1.Location = new System.Drawing.Point(327, 75);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(771, 590);
+            this.panel1.Size = new System.Drawing.Size(789, 606);
             this.panel1.TabIndex = 10;
             // 
             // progressBar1
             // 
-            this.progressBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)));
-            this.progressBar1.Location = new System.Drawing.Point(13, 608);
+            this.progressBar1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.progressBar1.Location = new System.Drawing.Point(13, 659);
             this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(307, 23);
+            this.progressBar1.Size = new System.Drawing.Size(307, 22);
             this.progressBar1.TabIndex = 11;
             // 
-            // cmsNotes
+            // label4
             // 
-            this.cmsNotes.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.编辑注释ToolStripMenuItem});
-            this.cmsNotes.Name = "cmsNotes";
-            this.cmsNotes.Size = new System.Drawing.Size(153, 48);
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(563, 43);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(29, 12);
+            this.label4.TabIndex = 12;
+            this.label4.Text = "Note";
             // 
-            // 编辑注释ToolStripMenuItem
+            // tbNote
             // 
-            this.编辑注释ToolStripMenuItem.Name = "编辑注释ToolStripMenuItem";
-            this.编辑注释ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.编辑注释ToolStripMenuItem.Text = "编辑注释";
-            this.编辑注释ToolStripMenuItem.Click += new System.EventHandler(this.编辑注释ToolStripMenuItem_Click);
+            this.tbNote.Location = new System.Drawing.Point(610, 40);
+            this.tbNote.Name = "tbNote";
+            this.tbNote.Size = new System.Drawing.Size(100, 21);
+            this.tbNote.TabIndex = 13;
+            // 
+            // btnSaveNote
+            // 
+            this.btnSaveNote.Location = new System.Drawing.Point(717, 37);
+            this.btnSaveNote.Name = "btnSaveNote";
+            this.btnSaveNote.Size = new System.Drawing.Size(75, 23);
+            this.btnSaveNote.TabIndex = 14;
+            this.btnSaveNote.Text = "Save Note";
+            this.btnSaveNote.UseVisualStyleBackColor = true;
+            this.btnSaveNote.Click += new System.EventHandler(this.btnSaveNote_Click);
             // 
             // AC4Analysis
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1106, 643);
+            this.ClientSize = new System.Drawing.Size(1124, 693);
+            this.Controls.Add(this.btnSaveNote);
+            this.Controls.Add(this.tbNote);
+            this.Controls.Add(this.label4);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.btn另存当前数据段);
@@ -200,6 +230,9 @@
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.ContextMenuStrip cmsNotes;
         private System.Windows.Forms.ToolStripMenuItem 编辑注释ToolStripMenuItem;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TextBox tbNote;
+        private System.Windows.Forms.Button btnSaveNote;
     }
 }
 
