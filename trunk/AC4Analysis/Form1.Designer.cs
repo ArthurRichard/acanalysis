@@ -28,11 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AC4Analysis));
             this.treeView1 = new System.Windows.Forms.TreeView();
-            this.cmsNotes = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.编辑注释ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.btn打开tbl = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -46,7 +43,6 @@
             this.label4 = new System.Windows.Forms.Label();
             this.tbNote = new System.Windows.Forms.TextBox();
             this.btnSaveNote = new System.Windows.Forms.Button();
-            this.cmsNotes.SuspendLayout();
             this.SuspendLayout();
             // 
             // treeView1
@@ -59,20 +55,6 @@
             this.treeView1.Size = new System.Drawing.Size(308, 641);
             this.treeView1.TabIndex = 0;
             this.treeView1.DoubleClick += new System.EventHandler(this.treeView1_DoubleClick);
-            // 
-            // cmsNotes
-            // 
-            this.cmsNotes.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.编辑注释ToolStripMenuItem});
-            this.cmsNotes.Name = "cmsNotes";
-            this.cmsNotes.Size = new System.Drawing.Size(153, 48);
-            // 
-            // 编辑注释ToolStripMenuItem
-            // 
-            this.编辑注释ToolStripMenuItem.Name = "编辑注释ToolStripMenuItem";
-            this.编辑注释ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.编辑注释ToolStripMenuItem.Text = "编辑注释";
-            this.编辑注释ToolStripMenuItem.Click += new System.EventHandler(this.编辑注释ToolStripMenuItem_Click);
             // 
             // btn打开tbl
             // 
@@ -209,7 +191,6 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "AC4Analysis";
             this.Text = "AC4Analysis";
-            this.cmsNotes.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -228,8 +209,6 @@
         private System.Windows.Forms.Button btn另存当前数据段;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.ProgressBar progressBar1;
-        private System.Windows.Forms.ContextMenuStrip cmsNotes;
-        private System.Windows.Forms.ToolStripMenuItem 编辑注释ToolStripMenuItem;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox tbNote;
         private System.Windows.Forms.Button btnSaveNote;
