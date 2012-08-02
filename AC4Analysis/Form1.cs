@@ -185,10 +185,6 @@ namespace AC4Analysis
             }
             return subNum;
         }
-        private void btn解析文件_Click(object sender, EventArgs e)
-        {
-
-        }
 
         private void btn另存当前数据段_Click(object sender, EventArgs e)
         {
@@ -210,16 +206,6 @@ namespace AC4Analysis
             FileStream fs = new FileStream(sfd.FileName, FileMode.Create);
             fs.Write(saveFile, 0,(int) culsize);
             fs.Close();
-        }
-
-        private void 编辑注释ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (treeView1.SelectedNode == null)
-                return;
-            Note note = new Note();
-            note.DataAdd = treeView1.SelectedNode.Name;
-            note.ShowDialog();
-            treeView1.SelectedNode.Text += note.DataNote;
         }
 
         private void btnSaveNote_Click(object sender, EventArgs e)
