@@ -159,11 +159,11 @@ namespace AC4Analysis
             for (int i = 0; i < subNum; i++)
             {
                 uint culadd = brc.ReadUInt32();
+                if (culadd == 0)
+                    continue;
                 if (culadd < lastAdd)
                     return 0;
                 if (culadd < (subNum * 4 + 4))
-                    return 0;
-                if (culadd == 0)
                     return 0;
                 if (culadd >= size)
                     return 0;
@@ -178,11 +178,21 @@ namespace AC4Analysis
             {
                 brc.BaseStream.Seek(add + i * 4 + 4, SeekOrigin.Begin);
                 uint culadd = brc.ReadUInt32();
+                if (lastAdd == 0)
+                {
+                    lastAdd = culadd;
+                    continue;
+                }
                 if (i != 0)
                 {
                     _L1 tmp = new _L1();
                     tmp.add = lastAdd;
                     tmp.size = culadd - lastAdd;
+                    if (tmp.size == 0)
+                    {
+                        lastAdd = culadd;
+                        continue;
+                    }
                     nodes[i - 1] = new TreeNode();
 
                     uint subNum2 = CheckAddList(tmp.add + add, tmp.size, brc, nodes[i - 1]);
@@ -192,16 +202,20 @@ namespace AC4Analysis
                 }
                 lastAdd = culadd;
             }
-            _L1 tmp2 = new _L1();
-            tmp2.add = lastAdd;
-            tmp2.size = size - lastAdd;
-            nodes[subNum - 1] = new TreeNode();
-            uint subNum3 = CheckAddList(tmp2.add + add, tmp2.size, brc, nodes[subNum - 1]);
-            nodes[subNum - 1].Name = tmp2.add.ToString();
-            nodes[subNum - 1].Text = string.Format("{0:X8},{1} ", tmp2.add, subNum3);
-            nodes[subNum - 1].Tag = tmp2;
+            if (lastAdd != 0)
+            {
+                _L1 tmp2 = new _L1();
+                tmp2.add = lastAdd;
+                tmp2.size = size - lastAdd;
+                nodes[subNum - 1] = new TreeNode();
+                uint subNum3 = CheckAddList(tmp2.add + add, tmp2.size, brc, nodes[subNum - 1]);
+                nodes[subNum - 1].Name = tmp2.add.ToString();
+                nodes[subNum - 1].Text = string.Format("{0:X8},{1} ", tmp2.add, subNum3);
+                nodes[subNum - 1].Tag = tmp2;
+            }
             foreach (TreeNode node in nodes)
             {
+                if (node!=null)
                 pnode.Nodes.Add(node);
             }
             return subNum;
