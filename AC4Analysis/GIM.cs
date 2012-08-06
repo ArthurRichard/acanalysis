@@ -28,7 +28,7 @@ namespace AC4Analysis
             h = data[0x1e] + data[0x1f] * 256;
             if (w == 0 || h == 0)
                 return;
-            if ((w * h) >= data.Length)
+            if ((w * h+1024) >= data.Length)
                 return;
             //this.Width = w;
             //this.Height = h;
