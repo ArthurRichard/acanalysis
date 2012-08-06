@@ -10,6 +10,11 @@ namespace AC4Analysis
 {
     public partial class AC4Analysis : Form
     {
+        public enum _Mode
+        {
+            AC4,
+            AC0
+        }
         struct _L1
         {
             public uint add;
@@ -26,6 +31,7 @@ namespace AC4Analysis
         public byte[] culdata;
         GIM gimwin = new GIM();
         SM smwin = new SM();
+        public static _Mode mode = _Mode.AC4;
         private void 打开tbl_Click(object sender, EventArgs e)
         {
            // try
@@ -37,9 +43,16 @@ namespace AC4Analysis
                 cdpfilename = System.IO.Path.GetDirectoryName(ofd.FileName) + "\\" + System.IO.Path.GetFileNameWithoutExtension(ofd.FileName) + ".cdp";
                 if (!File.Exists(cdpfilename))
                 {
-                    MessageBox.Show("未找到" + cdpfilename);
-                    return;
+                    mode = _Mode.AC0;
+                    cdpfilename = System.IO.Path.GetDirectoryName(ofd.FileName) + "\\" + System.IO.Path.GetFileNameWithoutExtension(ofd.FileName) + ".pac";
+                    if (!File.Exists(cdpfilename))
+                    {
+                        MessageBox.Show("未找到tbl对应的data文件");
+                        return;
+                    }
                 }
+                else
+                    mode = _Mode.AC4;
                 if (string.IsNullOrEmpty(cdpfilename))
                 {
                     MessageBox.Show("未打开TBL");
@@ -52,10 +65,18 @@ namespace AC4Analysis
                 BinaryReader brc = new BinaryReader(fsc);
 
                 uint L1Size = (uint)fileInfo.Length / 8;
+                if (mode == _Mode.AC0)
+                {
+                    L1Size = br.ReadUInt32();
+                    br.ReadUInt32();
+                }
                 for (int i = 0; i < L1Size; i++)
                 {
                     _L1 L1 = new _L1();
-                    L1.add = br.ReadUInt32() * 0x800;
+                    if (mode == _Mode.AC4)
+                        L1.add = br.ReadUInt32() * 0x800;
+                    else
+                        L1.add = br.ReadUInt32();
                     L1.size = br.ReadUInt32();
                     TreeNode tn = new TreeNode();
                     tn.Name = L1.add.ToString();
