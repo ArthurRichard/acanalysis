@@ -27,15 +27,21 @@ namespace AC4Analysis
             w = data[0x1c] + data[0x1d] * 256;
             h = data[0x1e] + data[0x1f] * 256;
             if (w == 0 || h == 0)
+            {
+                this.Visible = false;
                 return;
-            if ((w * h+1024) >= data.Length)
+            }
+            if ((w * h + 1024) >= data.Length)
+            {
+                this.Visible = false;
                 return;
+            }
             //this.Width = w;
             //this.Height = h;
-            //pictureBox1.Width = w;
-            //pictureBox1.Height = h;
-            label1.Text = "宽度：" + w.ToString();
-            label2.Text = "宽度：" + h.ToString();
+            pictureBox1.Width = w;
+            pictureBox1.Height = h;
+            label1.Text = "Width：" + w.ToString();
+            label2.Text = "Height：" + h.ToString();
             culfmt = System.Drawing.Imaging.PixelFormat.Format8bppIndexed;
             System.Drawing.Bitmap gb = new Bitmap(w,h, System.Drawing.Imaging.PixelFormat.Format8bppIndexed);
             paladd=0x20+w*h+0x10;
@@ -85,11 +91,12 @@ namespace AC4Analysis
 
             pictureBox1.Image = gb;
             pictureBox1.BackColor = Color.FromArgb(255, 0, 0, 0);
+            this.Visible = true;
 
         }
         void Analysis_GIM4bit()
         {
-
+            this.Visible = false;
         }
         public void Analysis_GIM()
         {
