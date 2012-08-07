@@ -236,6 +236,7 @@ namespace AC4Analysis
             fsc.Read(saveFile,0 , (int)culsize);
             fsc.Close();
             SaveFileDialog sfd = new SaveFileDialog();
+            sfd.FileName = tb绝对地址.Text;
             if (!sfd.ShowDialog().Equals(DialogResult.OK))
                 return;
             FileStream fs = new FileStream(sfd.FileName, FileMode.Create);
