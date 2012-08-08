@@ -26,16 +26,16 @@ namespace AC4Analysis
         {
             w = data[0x1c] + data[0x1d] * 256;
             h = data[0x1e] + data[0x1f] * 256;
-            if (w == 0 || h == 0)
-            {
-                this.Visible = false;
-                return;
-            }
-            if ((w * h + 1024) >= data.Length)
-            {
-                this.Visible = false;
-                return;
-            }
+            //if (w == 0 || h == 0)
+            //{
+            //    this.Visible = false;
+            //    return;
+            //}
+            //if ((w * h + 1024) >= data.Length)
+            //{
+            //    this.Visible = false;
+            //    return;
+            //}
             //this.Width = w;
             //this.Height = h;
             pictureBox1.Width = w;
@@ -96,16 +96,91 @@ namespace AC4Analysis
         }
         void Analysis_GIM4bit()
         {
-            this.Visible = false;
+            w = data[0x1c] + data[0x1d] * 256;
+            h = data[0x1e] + data[0x1f] * 256;
+            pictureBox1.Width = w;
+            pictureBox1.Height = h;
+            label1.Text = "Width：" + w.ToString();
+            label2.Text = "Height：" + h.ToString();
+
+            culfmt = System.Drawing.Imaging.PixelFormat.Format4bppIndexed;
+            System.Drawing.Bitmap gb = new Bitmap(w, h, culfmt);
+            paladd = 0x20 + w * h / 2 + 0x10;
+            paladd += paladd % 16;
+            Color[] tmpcols = new Color[16];
+            for (int i = 0; i < tmpcols.Length; i++)
+            {
+                byte alpha = data[paladd + i * 4 + 3];
+                if (alpha == 128)
+                    alpha = 255;
+                else
+                    alpha = (byte)(alpha * 2);
+                tmpcols[i] = Color.FromArgb(
+                    alpha,
+                    data[paladd + i * 4 + 0],
+                    data[paladd + i * 4 + 1],
+                    data[paladd + i * 4 + 2]);
+            }
+            System.Drawing.Imaging.ColorPalette tempPalette;
+            using (Bitmap tempBmp = new Bitmap(1, 1, culfmt))
+            {
+                tempPalette = tempBmp.Palette;
+            }
+            for (int i = 0; i < tmpcols.Length; i++)
+            {
+                tempPalette.Entries[i] = tmpcols[i];
+            }
+            gb.Palette = tempPalette;
+            System.Drawing.Imaging.BitmapData bdata = gb.LockBits(Rectangle.FromLTRB(0, 0, w, h), System.Drawing.Imaging.ImageLockMode.WriteOnly, culfmt);
+            System.Runtime.InteropServices.Marshal.Copy(data, 0x20, bdata.Scan0, w * h/2);
+            gb.UnlockBits(bdata);
+            pictureBox1.Image = gb;
+            pictureBox1.BackColor = Color.FromArgb(255, 0, 0, 0);
+            this.Visible = true;
+        }
+        void Analysis_GIM16bit()
+        {
+            w = data[0x1c] + data[0x1d] * 256;
+            h = data[0x1e] + data[0x1f] * 256;
+            pictureBox1.Width = w;
+            pictureBox1.Height = h;
+            label1.Text = "Width：" + w.ToString();
+            label2.Text = "Height：" + h.ToString();
+            culfmt = System.Drawing.Imaging.PixelFormat.Format24bppRgb;
+            System.Drawing.Bitmap gb = new Bitmap(w, h, culfmt);
+            System.Drawing.Imaging.BitmapData bdata = gb.LockBits(Rectangle.FromLTRB(0, 0, w, h), System.Drawing.Imaging.ImageLockMode.WriteOnly, culfmt);
+            System.Runtime.InteropServices.Marshal.Copy(data, 0x20, bdata.Scan0, w * h *3);
+            gb.UnlockBits(bdata);
+            pictureBox1.Image = gb;
+            pictureBox1.BackColor = Color.FromArgb(255, 0, 0, 0);
+            this.Visible = true;
         }
         public void Analysis_GIM()
         {
+            this.Visible = false;
             if (data == null)
                 return;
-            if (data[4] == 1)
-                Analysis_GIM4bit();
-            else
+            if (data[0x10] == 0x30)
+                return;
+            if (data[0x13] == 0x13 || data[0x13]==0x1B)
+            {
                 Analysis_GIM8bit();
+                return;
+            }
+            if (data[0x13] == 0x14)
+            {
+                if (data[0x8] != 0 || data[0x9] != 0 || data[0xA] != 0 || data[0xB] != 0)
+                {
+                    return;
+                }
+                Analysis_GIM4bit();
+                return;
+            }
+            if (data[0x12] == 4 || data[0x13] == 1)
+            {
+                Analysis_GIM16bit();
+                return;
+            }
         }
 
         private void btn保存图像_Click(object sender, EventArgs e)
