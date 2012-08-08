@@ -97,7 +97,25 @@ namespace AC4Analysis
             //    MessageBox.Show(error.Message);
             //}
         }
-
+        string GetDataHead(uint add, int size, BinaryReader brc)
+        {
+            brc.BaseStream.Seek(add, SeekOrigin.Begin);
+            byte[] Data = new byte[size];
+            brc.BaseStream.Read(Data, 0, size);
+            string Head = System.Text.Encoding.ASCII.GetString(Data, 0, size).ToString(); 
+            switch (Head)
+            {
+                case "SM \0":
+                    {
+                        return "SM";
+                    }
+                case "GIM\0":
+                    {
+                        return "GIM";
+                    }
+            }
+            return "";
+        }
         private void treeView1_DoubleClick(object sender, EventArgs e)
         {
             if (treeView1.SelectedNode == null)
@@ -197,7 +215,7 @@ namespace AC4Analysis
 
                     uint subNum2 = CheckAddList(tmp.add + add, tmp.size, brc, nodes[i - 1]);
                     nodes[i - 1].Name = tmp.add.ToString();
-                    nodes[i - 1].Text = string.Format("{0:X8},{1} {2}", tmp.add, subNum2, Notes.Get((add+tmp.add).ToString()));
+                    nodes[i - 1].Text = string.Format("{0:X8},{1} {2} {3}", tmp.add, subNum2, GetDataHead(add + tmp.add, 4, brc), Notes.Get((add + tmp.add).ToString()));
                     nodes[i - 1].Tag = tmp;
                 }
                 lastAdd = culadd;
@@ -210,7 +228,7 @@ namespace AC4Analysis
                 nodes[subNum - 1] = new TreeNode();
                 uint subNum3 = CheckAddList(tmp2.add + add, tmp2.size, brc, nodes[subNum - 1]);
                 nodes[subNum - 1].Name = tmp2.add.ToString();
-                nodes[subNum - 1].Text = string.Format("{0:X8},{1} ", tmp2.add, subNum3);
+                nodes[subNum - 1].Text = string.Format("{0:X8},{1} {2} {3}", tmp2.add, subNum3, GetDataHead(add + tmp2.add, 4, brc), Notes.Get((add + tmp2.add).ToString()));
                 nodes[subNum - 1].Tag = tmp2;
             }
             foreach (TreeNode node in nodes)
