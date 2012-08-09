@@ -45,12 +45,14 @@ namespace AC4Analysis
             else
                 Notelists[key] = value;
         }
-        static public string Get(string key)
+
+        static public string Get(uint key)
         {
-            if (!Notelists.ContainsKey(key))
+            string keytmp = string.Format("{0:X8}", key);
+            if (!Notelists.ContainsKey(keytmp))
                 return "";
             else
-                return Notelists[key];
+                return Notelists[keytmp];
         }
     }
 }
