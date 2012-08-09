@@ -33,6 +33,7 @@
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.btn保存图像 = new System.Windows.Forms.Button();
             this.btn导入图像 = new System.Windows.Forms.Button();
+            this.btn保存非调色板图像 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -56,9 +57,9 @@
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureBox1.Location = new System.Drawing.Point(0, 35);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(561, 522);
@@ -85,10 +86,21 @@
             this.btn导入图像.UseVisualStyleBackColor = true;
             this.btn导入图像.Click += new System.EventHandler(this.btn导入图像_Click);
             // 
+            // btn保存非调色板图像
+            // 
+            this.btn保存非调色板图像.Location = new System.Drawing.Point(357, 6);
+            this.btn保存非调色板图像.Name = "btn保存非调色板图像";
+            this.btn保存非调色板图像.Size = new System.Drawing.Size(155, 23);
+            this.btn保存非调色板图像.TabIndex = 5;
+            this.btn保存非调色板图像.Text = "Save no palette image ";
+            this.btn保存非调色板图像.UseVisualStyleBackColor = true;
+            this.btn保存非调色板图像.Click += new System.EventHandler(this.btn保存非调色板图像_Click);
+            // 
             // GIM
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.btn保存非调色板图像);
             this.Controls.Add(this.btn导入图像);
             this.Controls.Add(this.btn保存图像);
             this.Controls.Add(this.pictureBox1);
@@ -109,5 +121,6 @@
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Button btn保存图像;
         private System.Windows.Forms.Button btn导入图像;
+        private System.Windows.Forms.Button btn保存非调色板图像;
     }
 }
