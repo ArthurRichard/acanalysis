@@ -84,7 +84,7 @@ namespace AC4Analysis
                     tn.Tag = L1;
                     uint subNum = CheckAddList(L1.add, L1.size, brc, tn);
                     if (subNum > 0)
-                        tn.Text = string.Format("{0:X8} {1} {2}", L1.add, subNum, Notes.Get(L1.add.ToString()));
+                        tn.Text = string.Format("{0:X8} {1} {2}", L1.add, subNum, Notes.Get(L1.add));
                     treeView1.Nodes.Add(tn);
                     progressBar1.Value =  i*100 / (int)L1Size;
                 }
@@ -215,7 +215,9 @@ namespace AC4Analysis
 
                     uint subNum2 = CheckAddList(tmp.add + add, tmp.size, brc, nodes[i - 1]);
                     nodes[i - 1].Name = tmp.add.ToString();
-                    nodes[i - 1].Text = string.Format("{0:X8},{1} {2} {3}", tmp.add, subNum2, GetDataHead(add + tmp.add, 4, brc), Notes.Get((add + tmp.add).ToString()));
+
+                    nodes[i - 1].Text = string.Format("{0:X8},{1} {2} {3}", tmp.add, subNum2, GetDataHead(add + tmp.add, 4, brc), Notes.Get(add + tmp.add));
+
                     nodes[i - 1].Tag = tmp;
                 }
                 lastAdd = culadd;
@@ -228,7 +230,7 @@ namespace AC4Analysis
                 nodes[subNum - 1] = new TreeNode();
                 uint subNum3 = CheckAddList(tmp2.add + add, tmp2.size, brc, nodes[subNum - 1]);
                 nodes[subNum - 1].Name = tmp2.add.ToString();
-                nodes[subNum - 1].Text = string.Format("{0:X8},{1} {2} {3}", tmp2.add, subNum3, GetDataHead(add + tmp2.add, 4, brc), Notes.Get((add + tmp2.add).ToString()));
+                nodes[subNum - 1].Text = string.Format("{0:X8},{1} {2} {3}", tmp2.add, subNum3, GetDataHead(add + tmp2.add, 4, brc), Notes.Get(add + tmp2.add));
                 nodes[subNum - 1].Tag = tmp2;
             }
             foreach (TreeNode node in nodes)
@@ -268,6 +270,7 @@ namespace AC4Analysis
                 return;
             Notes.Set(tb绝对地址.Text, tbNote.Text);
             Notes.Save();
+            treeView1.SelectedNode.Text += tbNote.Text;
         }
     }
 }
