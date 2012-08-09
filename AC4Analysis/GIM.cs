@@ -26,18 +26,6 @@ namespace AC4Analysis
         {
             w = data[0x1c] + data[0x1d] * 256;
             h = data[0x1e] + data[0x1f] * 256;
-            //if (w == 0 || h == 0)
-            //{
-            //    this.Visible = false;
-            //    return;
-            //}
-            //if ((w * h + 1024) >= data.Length)
-            //{
-            //    this.Visible = false;
-            //    return;
-            //}
-            //this.Width = w;
-            //this.Height = h;
             pictureBox1.Width = w;
             pictureBox1.Height = h;
             label1.Text = "Width：" + w.ToString();
@@ -93,7 +81,8 @@ namespace AC4Analysis
             pictureBox1.Image = gb;
             pictureBox1.BackColor = Color.FromArgb(255, 0, 0, 0);
             this.Visible = true;
-
+            btn导入图像.Enabled = true;
+            btn保存非调色板图像.Enabled = true;
         }
         void Analysis_GIM4bit()
         {
@@ -132,9 +121,16 @@ namespace AC4Analysis
             {
                 tempPalette.Entries[i] = tmpcols[i];
             }
+            byte[] newdata = new byte[w * h / 2];
+            for (int i = 0; i < newdata.Length; i++)
+            {
+                byte A = data[i + 0x20];
+                //newdata[i] = (byte)(255 - data[i + 0x20]);
+                newdata[i] = (byte)(((A & 0xf0) >> 4) | ((A & 0x0f) << 4));
+            }
             gb.Palette = tempPalette;
             System.Drawing.Imaging.BitmapData bdata = gb.LockBits(Rectangle.FromLTRB(0, 0, w, h), System.Drawing.Imaging.ImageLockMode.WriteOnly, culfmt);
-            System.Runtime.InteropServices.Marshal.Copy(data, 0x20, bdata.Scan0, w * h/2);
+            System.Runtime.InteropServices.Marshal.Copy(newdata, 0, bdata.Scan0, w * h / 2);
             gb.UnlockBits(bdata);
             pictureBox1.Image = gb;
             pictureBox1.BackColor = Color.FromArgb(255, 0, 0, 0);
@@ -176,6 +172,8 @@ namespace AC4Analysis
         }
         public void Analysis_GIM()
         {
+            btn保存非调色板图像.Enabled = false;
+            btn导入图像.Enabled = false;
             this.Visible = false;
             if (data == null)
                 return;
@@ -305,6 +303,45 @@ namespace AC4Analysis
             }
             if (culfmt == System.Drawing.Imaging.PixelFormat.Format8bppIndexed)
                 save8Bit(imb);
+        }
+
+        private void btn保存非调色板图像_Click(object sender, EventArgs e)
+        {
+            if (pictureBox1.Image == null)
+                return;
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.Filter = "tif files (*.tif)|*.tif|png files|*.png";
+            if (!sfd.ShowDialog().Equals(DialogResult.OK))
+                return;
+            string ext=System.IO.Path.GetExtension(sfd.FileName);
+            System.Drawing.Bitmap gb = (System.Drawing.Bitmap)pictureBox1.Image;
+            if (gb.PixelFormat == System.Drawing.Imaging.PixelFormat.Format8bppIndexed)
+            {
+                System.Drawing.Bitmap newb = new Bitmap(w,h, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                for(int y=0;y<w;y++)
+                    for (int x = 0; x < w; x++)
+                    { 
+                        newb.SetPixel(x,y,gb.GetPixel(x,y));
+                    }
+                switch (ext)
+                {
+                    case ".png":
+                        {
+                            newb.Save(sfd.FileName, System.Drawing.Imaging.ImageFormat.Png);
+                            break;
+                        }
+                    case ".tif":
+                        {
+                            newb.Save(sfd.FileName, System.Drawing.Imaging.ImageFormat.Tiff);
+                            break;
+                        }
+                    default:
+                        {
+                            newb.Save(sfd.FileName, System.Drawing.Imaging.ImageFormat.Tiff);
+                            break;
+                        }
+                }
+            }
         }
     }
 }
