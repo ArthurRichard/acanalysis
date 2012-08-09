@@ -154,9 +154,9 @@ namespace AC4Analysis
             {
                 for (int x = 0; x < w; x++)
                 {
-                    DataBgra[y * newW * 3 + x * 3 + 0] = data[y * w * 3 + x * 3 + 2];
-                    DataBgra[y * newW * 3 + x * 3 + 1] = data[y * w * 3 + x * 3 + 1];
-                    DataBgra[y * newW * 3 + x * 3 + 2] = data[y * w * 3 + x * 3 + 0];
+                    DataBgra[y * newW * 3 + x * 3 + 0] = data[y * w * 3 + x * 3 + 1];
+                    DataBgra[y * newW * 3 + x * 3 + 1] = data[y * w * 3 + x * 3 + 0];
+                    DataBgra[y * newW * 3 + x * 3 + 2] = data[y * w * 3 + x * 3 + 2];
                 }
                 for (int x = w; x < newW; x++)
                 {
