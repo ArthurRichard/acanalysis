@@ -45,7 +45,8 @@ namespace AC4Analysis
             culfmt = System.Drawing.Imaging.PixelFormat.Format8bppIndexed;
             System.Drawing.Bitmap gb = new Bitmap(w,h, System.Drawing.Imaging.PixelFormat.Format8bppIndexed);
             paladd=0x20+w*h+0x10;
-            paladd+=paladd%16;
+            if ((paladd % 16) > 0)
+                paladd += (16 - paladd % 16);
             Color[] tmpcols = new Color[256];
             for (int i = 0; i < tmpcols.Length; i++)
             {
@@ -106,7 +107,8 @@ namespace AC4Analysis
             culfmt = System.Drawing.Imaging.PixelFormat.Format4bppIndexed;
             System.Drawing.Bitmap gb = new Bitmap(w, h, culfmt);
             paladd = 0x20 + w * h / 2 + 0x10;
-            paladd += paladd % 16;
+            if ((paladd % 16) > 0)
+                paladd += (16 - paladd % 16);
             Color[] tmpcols = new Color[16];
             for (int i = 0; i < tmpcols.Length; i++)
             {
@@ -138,7 +140,7 @@ namespace AC4Analysis
             pictureBox1.BackColor = Color.FromArgb(255, 0, 0, 0);
             this.Visible = true;
         }
-        void Analysis_GIM16bit()
+        void Analysis_GIM24bit()
         {
             w = data[0x1c] + data[0x1d] * 256;
             h = data[0x1e] + data[0x1f] * 256;
@@ -146,10 +148,27 @@ namespace AC4Analysis
             pictureBox1.Height = h;
             label1.Text = "Width：" + w.ToString();
             label2.Text = "Height：" + h.ToString();
+            int newW=w + 4 - w % 4;
+            byte[] DataBgra = new byte[newW * h * 3];
+            for (int y = 0; y < h; y++)
+            {
+                for (int x = 0; x < w; x++)
+                {
+                    DataBgra[y * newW * 3 + x * 3 + 0] = data[y * w * 3 + x * 3 + 2];
+                    DataBgra[y * newW * 3 + x * 3 + 1] = data[y * w * 3 + x * 3 + 1];
+                    DataBgra[y * newW * 3 + x * 3 + 2] = data[y * w * 3 + x * 3 + 0];
+                }
+                for (int x = w; x < newW; x++)
+                {
+                    DataBgra[y * newW * 3 + x * 3 + 0] = 0;
+                    DataBgra[y * newW * 3 + x * 3 + 1] = 0;
+                    DataBgra[y * newW * 3 + x * 3 + 2] = 0;
+                }
+            }
             culfmt = System.Drawing.Imaging.PixelFormat.Format24bppRgb;
-            System.Drawing.Bitmap gb = new Bitmap(w, h, culfmt);
-            System.Drawing.Imaging.BitmapData bdata = gb.LockBits(Rectangle.FromLTRB(0, 0, w, h), System.Drawing.Imaging.ImageLockMode.WriteOnly, culfmt);
-            System.Runtime.InteropServices.Marshal.Copy(data, 0x20, bdata.Scan0, w * h *3);
+            System.Drawing.Bitmap gb = new Bitmap(newW, h, culfmt);
+            System.Drawing.Imaging.BitmapData bdata = gb.LockBits(Rectangle.FromLTRB(0, 0, newW, h), System.Drawing.Imaging.ImageLockMode.WriteOnly, culfmt);
+            System.Runtime.InteropServices.Marshal.Copy(DataBgra, 0, bdata.Scan0, newW * h * 3);
             gb.UnlockBits(bdata);
             pictureBox1.Image = gb;
             pictureBox1.BackColor = Color.FromArgb(255, 0, 0, 0);
@@ -178,7 +197,7 @@ namespace AC4Analysis
             }
             if (data[0x12] == 4 || data[0x13] == 1)
             {
-                Analysis_GIM16bit();
+                Analysis_GIM24bit();
                 return;
             }
         }
