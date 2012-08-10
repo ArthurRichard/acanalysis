@@ -162,7 +162,38 @@ namespace AC4Analysis
                     }
             }
         }
+        uint CheckEEList(uint add, uint size, BinaryReader brc, TreeNode pnode)
+        {
+            if (size <= 0x70)
+                return 0;
+            brc.BaseStream.Seek(add, SeekOrigin.Begin);
+            byte[] EEHead = new byte[size];
+            brc.BaseStream.Read(EEHead, 0, EEHead.Length);
+            if (EEHead[3] != 0x10)
+                return 0;
+            if (EEHead[0xf] != 0x51)
+                return 0;
+            int EESize = EEHead[0] * 0x10 + EEHead[1] * 0x1000;
+            if ((int)size != EESize + 0x20)
+                return 0;
+            if ((EEHead[0] != EEHead[0xC]) || (EEHead[1] != EEHead[0xD]) || (EEHead[2] != EEHead[0xE]))
+                return 0;
 
+            brc.BaseStream.Seek(add, SeekOrigin.Begin);
+            byte[] EEData = new byte[size];
+
+            brc.BaseStream.Read(EEData, 0, EEData.Length);
+
+            bool EEend = false;
+            uint EECount = 0;
+            uint EEadd=0x10;
+            while (!EEend)
+            {
+                if (EEData[EEadd + 1] == 0x20)
+                    break;
+            }
+            return EECount;
+        }
         private uint CheckAddList(uint add, uint size, BinaryReader brc, TreeNode pnode)
         {
             brc.BaseStream.Seek(add, SeekOrigin.Begin);
