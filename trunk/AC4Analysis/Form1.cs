@@ -31,6 +31,7 @@ namespace AC4Analysis
         public byte[] culdata;
         GIM gimwin = new GIM();
         SM smwin = new SM();
+        EE eewin = new EE();
         public static _Mode mode = _Mode.AC4;
         private void 打开tbl_Click(object sender, EventArgs e)
         {
@@ -97,12 +98,20 @@ namespace AC4Analysis
             //    MessageBox.Show(error.Message);
             //}
         }
+        bool isEE(byte[] Data, int size)
+        {
+            int EEsize = (Data[0] + Data[1] * 0x100 + Data[2] * 0x10000)*0x10+0x20;
+            if (EEsize != size)
+                return false;
+            else
+                return true;
+        }
         string GetDataHead(uint add, int size, BinaryReader brc)
         {
             brc.BaseStream.Seek(add, SeekOrigin.Begin);
-            byte[] Data = new byte[size];
-            brc.BaseStream.Read(Data, 0, size);
-            string Head = System.Text.Encoding.ASCII.GetString(Data, 0, size).ToString(); 
+            byte[] Data = new byte[4];
+            brc.BaseStream.Read(Data, 0, 4);
+            string Head = System.Text.Encoding.ASCII.GetString(Data, 0, 4).ToString(); 
             switch (Head)
             {
                 case "SM \0":
@@ -114,6 +123,8 @@ namespace AC4Analysis
                         return "GIM";
                     }
             }
+            if (isEE(Data, size))
+                return "Images";
             return "";
         }
         private void treeView1_DoubleClick(object sender, EventArgs e)
@@ -149,7 +160,7 @@ namespace AC4Analysis
                         smwin.data = culdata;
                         smwin.Analysis_SM();
                         panel1.Controls.Add(smwin);
-                        break;
+                        return;
                     }
                 case "GIM\0":
                     {
@@ -158,8 +169,16 @@ namespace AC4Analysis
                         gimwin.add = totaladd;
                         gimwin.cdpfilename = cdpfilename;
                         panel1.Controls.Add(gimwin);
-                        break;
+                        return;
                     }
+            }
+            if (culsize>0x70)
+            if (isEE(culdata, (int)culsize))
+            {
+                eewin.data = culdata;
+                eewin.Analysis_EE();
+                panel1.Controls.Add(eewin);
+                return;
             }
         }
         uint CheckEEList(uint add, uint size, BinaryReader brc, TreeNode pnode)
@@ -186,11 +205,38 @@ namespace AC4Analysis
 
             bool EEend = false;
             uint EECount = 0;
-            uint EEadd=0x10;
+            uint EEadd = 0x10;
+            List<TreeNode> EENodelist = new List<TreeNode>();
             while (!EEend)
             {
-                if (EEData[EEadd + 1] == 0x20)
+                if (EEData[EEadd + 1] == 0x80)
+                {
+                    EEend = true;
                     break;
+                }
+                if (EEData[EEadd + 8] != 0xEE)
+                {
+                    return 0;
+                }
+                if (EEData[EEadd + 9] != 0xEE)
+                {
+                    return 0;
+                }
+                uint Size = (uint)(EEData[EEadd + 0x50] + EEData[EEadd + 0x51] * 256) * 0x10;
+                _L1 tmp = new _L1();
+                tmp.add = EEadd;
+                tmp.size = Size + 0x60;
+
+                TreeNode EEnode = new TreeNode();
+                EEnode.Name = EEadd.ToString();
+                EEnode.Text = string.Format("{0:X8},{1} {2} {3}", EEadd, "Tex", Notes.Get(add + tmp.add));
+                EENodelist.Add(EEnode);
+                EEadd += Size + 0x60;
+                EECount++;
+            }
+            foreach (TreeNode node in EENodelist)
+            {
+                pnode.Nodes.Add(node);
             }
             return EECount;
         }
@@ -247,7 +293,7 @@ namespace AC4Analysis
                     uint subNum2 = CheckAddList(tmp.add + add, tmp.size, brc, nodes[i - 1]);
                     nodes[i - 1].Name = tmp.add.ToString();
 
-                    nodes[i - 1].Text = string.Format("{0:X8},{1} {2} {3}", tmp.add, subNum2, GetDataHead(add + tmp.add, 4, brc), Notes.Get(add + tmp.add));
+                    nodes[i - 1].Text = string.Format("{0:X8},{1} {2} {3}", tmp.add, subNum2, GetDataHead(add + tmp.add, (int)tmp.size, brc), Notes.Get(add + tmp.add));
 
                     nodes[i - 1].Tag = tmp;
                 }
@@ -261,7 +307,7 @@ namespace AC4Analysis
                 nodes[subNum - 1] = new TreeNode();
                 uint subNum3 = CheckAddList(tmp2.add + add, tmp2.size, brc, nodes[subNum - 1]);
                 nodes[subNum - 1].Name = tmp2.add.ToString();
-                nodes[subNum - 1].Text = string.Format("{0:X8},{1} {2} {3}", tmp2.add, subNum3, GetDataHead(add + tmp2.add, 4, brc), Notes.Get(add + tmp2.add));
+                nodes[subNum - 1].Text = string.Format("{0:X8},{1} {2} {3}", tmp2.add, subNum3, GetDataHead(add + tmp2.add, (int)tmp2.size, brc), Notes.Get(add + tmp2.add));
                 nodes[subNum - 1].Tag = tmp2;
             }
             foreach (TreeNode node in nodes)
