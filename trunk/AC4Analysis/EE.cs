@@ -10,6 +10,7 @@ namespace AC4Analysis
 {
     public partial class EE : UserControl
     {
+        int CulEEadd = 0;
         public byte[] data;
         public EE()
         {
