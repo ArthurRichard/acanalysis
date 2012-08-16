@@ -100,6 +100,8 @@ namespace AC4Analysis
         }
         bool isEE(byte[] Data, int size)
         {
+            if (size < 0x70)
+                return false;
             int EEsize = (Data[0] + Data[1] * 0x100 + Data[2] * 0x10000)*0x10+0x20;
             if (EEsize != size)
                 return false;
@@ -175,70 +177,12 @@ namespace AC4Analysis
             if (culsize>0x70)
             if (isEE(culdata, (int)culsize))
             {
+                eewin = new EE();
                 eewin.data = culdata;
                 eewin.Analysis_EE();
                 panel1.Controls.Add(eewin);
                 return;
             }
-        }
-        uint CheckEEList(uint add, uint size, BinaryReader brc, TreeNode pnode)
-        {
-            if (size <= 0x70)
-                return 0;
-            brc.BaseStream.Seek(add, SeekOrigin.Begin);
-            byte[] EEHead = new byte[size];
-            brc.BaseStream.Read(EEHead, 0, EEHead.Length);
-            if (EEHead[3] != 0x10)
-                return 0;
-            if (EEHead[0xf] != 0x51)
-                return 0;
-            int EESize = EEHead[0] * 0x10 + EEHead[1] * 0x1000;
-            if ((int)size != EESize + 0x20)
-                return 0;
-            if ((EEHead[0] != EEHead[0xC]) || (EEHead[1] != EEHead[0xD]) || (EEHead[2] != EEHead[0xE]))
-                return 0;
-
-            brc.BaseStream.Seek(add, SeekOrigin.Begin);
-            byte[] EEData = new byte[size];
-
-            brc.BaseStream.Read(EEData, 0, EEData.Length);
-
-            bool EEend = false;
-            uint EECount = 0;
-            uint EEadd = 0x10;
-            List<TreeNode> EENodelist = new List<TreeNode>();
-            while (!EEend)
-            {
-                if (EEData[EEadd + 1] == 0x80)
-                {
-                    EEend = true;
-                    break;
-                }
-                if (EEData[EEadd + 8] != 0xEE)
-                {
-                    return 0;
-                }
-                if (EEData[EEadd + 9] != 0xEE)
-                {
-                    return 0;
-                }
-                uint Size = (uint)(EEData[EEadd + 0x50] + EEData[EEadd + 0x51] * 256) * 0x10;
-                _L1 tmp = new _L1();
-                tmp.add = EEadd;
-                tmp.size = Size + 0x60;
-
-                TreeNode EEnode = new TreeNode();
-                EEnode.Name = EEadd.ToString();
-                EEnode.Text = string.Format("{0:X8},{1} {2} {3}", EEadd, "Tex", Notes.Get(add + tmp.add));
-                EENodelist.Add(EEnode);
-                EEadd += Size + 0x60;
-                EECount++;
-            }
-            foreach (TreeNode node in EENodelist)
-            {
-                pnode.Nodes.Add(node);
-            }
-            return EECount;
         }
         private uint CheckAddList(uint add, uint size, BinaryReader brc, TreeNode pnode)
         {
