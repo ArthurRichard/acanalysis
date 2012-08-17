@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.IO;
+using System.Runtime.InteropServices;
 namespace AC4Analysis
 {
     public partial class AC4Analysis : Form
@@ -24,7 +25,10 @@ namespace AC4Analysis
         {
             InitializeComponent();
             Notes.load();
+            InitRenderThread(smwin.Handle);
         }
+        [DllImport("AC4_3DWIN.DLL", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void InitRenderThread(IntPtr hwnd);
         uint culsize = 0;
         uint culadd = 0;
         public string cdpfilename;

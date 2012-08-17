@@ -28,31 +28,19 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.btn保存 = new System.Windows.Forms.Button();
             this.SuspendLayout();
-            // 
-            // btn保存
-            // 
-            this.btn保存.Location = new System.Drawing.Point(27, 16);
-            this.btn保存.Name = "btn保存";
-            this.btn保存.Size = new System.Drawing.Size(75, 23);
-            this.btn保存.TabIndex = 0;
-            this.btn保存.Text = "save";
-            this.btn保存.UseVisualStyleBackColor = true;
             // 
             // SM
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.btn保存);
             this.Name = "SM";
-            this.Size = new System.Drawing.Size(489, 405);
+            this.Size = new System.Drawing.Size(650, 490);
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.Button btn保存;
     }
 }
