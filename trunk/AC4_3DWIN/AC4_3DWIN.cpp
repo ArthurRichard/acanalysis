@@ -91,11 +91,11 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	glEnable(GL_DEPTH_TEST);							// Enables Depth Testing
 	glDepthFunc(GL_LEQUAL);								// The Type Of Depth Testing To Do
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);	// Really Nice Perspective Calculations
-	glLightfv(GL_LIGHT1, GL_AMBIENT, LightAmbient);	
-	glLightfv(GL_LIGHT1, GL_DIFFUSE, LightDiffuse);
-	glLightfv(GL_LIGHT1, GL_SPECULAR, LightDiffuse);
-	//glLightfv(GL_LIGHT1, GL_POSITION,LightPosition);
-	glEnable(GL_LIGHT1);
+	glLightfv(GL_LIGHT0, GL_AMBIENT, LightDiffuse);	
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, LightDiffuse);
+	glLightfv(GL_LIGHT0, GL_SPECULAR, LightDiffuse);
+	//glLightfv(GL_LIGHT0, GL_POSITION,LightPosition);
+	glEnable(GL_LIGHT0);
 	glEnable(GL_LIGHTING);
 	return TRUE;										// Initialization Went OK
 }
@@ -107,12 +107,16 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear Screen And Depth Buffer
 											// Done Drawing The Triangle
 	glLoadIdentity();
+	//glLightfv(GL_LIGHT0, GL_POSITION,LightPosition);
 	glTranslatef(0.0f,0.0f,-msize*((100.0f+WHEEL)/100.0f));	
 	glRotatef(45.0f,1.0f,0.0f,0.0f);
 	glRotatef(rquad,0.0f,1.0f,0.0f);// Done Drawing The Quad
 	rtri+=1.2f;											// Increase The Rotation Variable For The Triangle ( NEW )
 	rquad-=1.15f;										// Decrease The Rotation Variable For The Quad ( NEW )
 	glColor3f(1.0f,1.0f,1.0f);
+	glMaterialf(GL_FRONT_AND_BACK,GL_SHININESS,40.0f);
+	glMaterialfv(GL_FRONT_AND_BACK,GL_DIFFUSE,LightDiffuse);
+	glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR,LightDiffuse);
 	glBegin(GL_TRIANGLES);
 	for(int i=0;i<VecSize/3;i++)
 	{
