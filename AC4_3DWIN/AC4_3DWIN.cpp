@@ -19,6 +19,25 @@ bool	keys[256];			// Array Used For The Keyboard Routine
 bool	active=TRUE;		// Window Active Flag Set To TRUE By Default
 bool	fullscreen=TRUE;	// Fullscreen Flag Set To Fullscreen Mode By Default
 
+bool UseLight=false;
+unsigned int TexID=0;
+int TexW=0;
+int TexH=0;
+unsigned char * TexData=0;
+bool TexChanged=false;
+void ChangeTex()
+{
+	if(!TexChanged)
+		return;
+	TexChanged=false;
+	if(TexID)
+		glDeleteTextures(1, &TexID);
+		glGenTextures( 1, &TexID );
+		glBindTexture( GL_TEXTURE_2D, TexID ); 
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, TexW, TexH, 0, GL_BGRA_EXT, GL_UNSIGNED_BYTE, TexData);
+		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+}
 GLfloat	rtri;				// Angle For The Triangle ( NEW )
 GLfloat	rquad;				// Angle For The Quad ( NEW )
 HWND ParentHWND=0;
@@ -27,6 +46,7 @@ float * Vecs=0;
 float * Nors=0;
 float * Texs=0;
 int VecSize=0;
+int TexsSize=0;
 float WHEEL=0.0f;
 LRESULT	CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);	// Declaration For WndProc
 inline void EastPerspective(float fovyInDegrees, float aspectRatio,
@@ -96,14 +116,18 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	glLightfv(GL_LIGHT1, GL_DIFFUSE, LightDiffuse);		// Setup The Diffuse Light
 	glLightfv(GL_LIGHT1, GL_POSITION,LightPosition);	// Position The Light
 	glEnable(GL_LIGHT1);								// Enable Light One
-	glEnable(GL_LIGHTING);
+	//glEnable(GL_LIGHTING);
 	return TRUE;										// Initialization Went OK
 }
 
 int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 {
-	glBindTexture(GL_TEXTURE_2D,0);
-	glDisable(GL_TEXTURE_2D);
+	if(UseLight)
+		glEnable(GL_LIGHTING);
+	else
+		glDisable(GL_LIGHTING);
+	ChangeTex();
+	glEnable(GL_TEXTURE_2D);
 	WaitForSingleObject(Mutex,INFINITE);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear Screen And Depth Buffer
 											// Done Drawing The Triangle
@@ -118,8 +142,9 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	glBegin(GL_TRIANGLES);
 	for(int i=0;i<VecSize/3;i++)
 	{
-		glVertex3f(Vecs[i*3+0],-Vecs[i*3+1], Vecs[i*3+2]);
-		glNormal3f(Nors[i*3+0]*2.0f,-Nors[i*3+1]*2.0f, Nors[i*3+2]*2.0f);
+		glNormal3f(Nors[i*3+0],Nors[i*3+1], Nors[i*3+2]);
+		glTexCoord2f(Texs[i*2+0],Texs[i*2+1]);
+		glVertex3f(Vecs[i*3+0],Vecs[i*3+1], Vecs[i*3+2]);
 	}
 	glEnd();
 	ReleaseMutex(Mutex);
@@ -469,17 +494,20 @@ extern "C" _declspec(dllexport) void InitRenderThread(HWND EditerHWND)
 	RenderThreadHANDLE = (HANDLE)_beginthreadex(0,0,(unsigned int (__stdcall *)(void *))RenderThread,0,CREATE_SUSPENDED,0);
 	ResumeThread(RenderThreadHANDLE);
 }
-extern "C" _declspec(dllexport) void Set3DData(float * VecsIn,float * NorsIn,int VecSizeIn)
+extern "C" _declspec(dllexport) void Set3DData(float * VecsIn,float * NorsIn,int VecSizeIn,float * TexsIn,int TexsSizeIn)
 {
 	WaitForSingleObject(Mutex,INFINITE);
 	if(Vecs) delete [] Vecs;
 	if(Nors) delete [] Nors;
 	if(Texs) delete [] Texs;
 	VecSize=VecSizeIn;
+	TexsSize=TexsSizeIn;
 	Vecs=new float [VecSize];
 	Nors=new float [VecSize];
+	Texs=new float [TexsSize];
 	memcpy_s(Vecs,sizeof(float)*VecSizeIn,VecsIn,sizeof(float)*VecSizeIn);
 	memcpy_s(Nors,sizeof(float)*VecSizeIn,NorsIn,sizeof(float)*VecSizeIn);
+	memcpy_s(Texs,sizeof(float)*TexsSizeIn,TexsIn,sizeof(float)*TexsSizeIn);
 	for(int i=0;i<VecSizeIn;i++)
 		msize=max(msize,abs(Vecs[i]));
 	msize=min(1000.0f,msize);
@@ -489,4 +517,20 @@ extern "C" _declspec(dllexport) void Set3DData(float * VecsIn,float * NorsIn,int
 extern "C" _declspec(dllexport) void CloseRenderThread()
 {
 	done=1;
+}
+extern "C" _declspec(dllexport) void InputTex(unsigned char * TexDataIn,int SizeX,int SizeY,int DataSize)
+{
+	WaitForSingleObject(Mutex,INFINITE);
+	TexW=SizeX;
+	TexH=SizeY;
+	
+	if(TexData) delete [] TexData;
+	TexData=new unsigned char[DataSize];
+	memcpy_s(TexData,DataSize,TexDataIn,DataSize);
+	TexChanged=true;
+	ReleaseMutex(Mutex);
+}
+extern "C" _declspec(dllexport) void LightSwitch(bool Use)
+{
+	UseLight=Use;
 }
