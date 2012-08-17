@@ -6,6 +6,7 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 
+using System.Runtime.InteropServices;
 namespace AC4Analysis
 {
     public partial class SM : UserControl
@@ -16,6 +17,8 @@ namespace AC4Analysis
         List<Single> Normals = new List<Single>();
         List<Single> TexCoords = new List<Single>();
 
+        [DllImport("AC4_3DWIN.DLL", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void Set3DData(float[] VecsIn, int VecSizeIn);
         public SM()
         {
             InitializeComponent();
@@ -25,7 +28,9 @@ namespace AC4Analysis
         {
             if (data == null)
                 return;
-
+            Verts = new List<Single>();
+            Normals = new List<Single>();
+            TexCoords = new List<Single>();
             Int32 mOffset = 0;
             mOffset = BitConverter.ToInt32(data, 20);              // Model.Offset
             mOffset = BitConverter.ToInt32(data, mOffset + 36);    // RootPart.Offset
@@ -81,6 +86,9 @@ namespace AC4Analysis
                     }
                 }
             }
+            float [] Vesout=new float[Verts.Count];
+            Verts.CopyTo(Vesout);
+            Set3DData(Vesout, Vesout.Length);
         }
     }
 }
