@@ -18,7 +18,7 @@ namespace AC4Analysis
         List<Single> TexCoords = new List<Single>();
 
         [DllImport("AC4_3DWIN.DLL", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void Set3DData(float[] VecsIn, int VecSizeIn);
+        public static extern void Set3DData(float[] VecsIn, float[] NorsIn, int VecSizeIn);
         public SM()
         {
             InitializeComponent();
@@ -89,9 +89,11 @@ namespace AC4Analysis
                     }
                 }
             }
-            float [] Vesout=new float[Verts.Count];
+            float[] Vesout = new float[Verts.Count];
+            float[] Norout = new float[Verts.Count];
             Verts.CopyTo(Vesout);
-            Set3DData(Vesout, Vesout.Length);
+            Normals.CopyTo(Norout);
+            Set3DData(Vesout, Norout, Vesout.Length);
         }
     }
 }

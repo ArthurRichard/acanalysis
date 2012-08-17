@@ -24,6 +24,8 @@ GLfloat	rquad;				// Angle For The Quad ( NEW )
 HWND ParentHWND=0;
 HANDLE RenderThreadHANDLE=NULL;
 float * Vecs=0;
+float * Nors=0;
+float * Texs=0;
 int VecSize=0;
 float WHEEL=0.0f;
 LRESULT	CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);	// Declaration For WndProc
@@ -56,6 +58,9 @@ int w;
 int h;
 float msize=200.0f;
 float mpos[3]={0.0f,0.0f,0.0f};
+GLfloat LightAmbient[]= { 0.5f, 0.5f, 0.5f, 1.0f };
+GLfloat LightDiffuse[]= { 1.0f, 1.0f, 1.0f, 1.0f };
+GLfloat LightPosition[]= { 0.0f, 0.0f, 0.0f, 1.0f };
 GLvoid ReSizeGLScene(GLsizei width, GLsizei height)		// Resize And Initialize The GL Window
 {
 	w=width;
@@ -86,6 +91,12 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	glEnable(GL_DEPTH_TEST);							// Enables Depth Testing
 	glDepthFunc(GL_LEQUAL);								// The Type Of Depth Testing To Do
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);	// Really Nice Perspective Calculations
+	glLightfv(GL_LIGHT1, GL_AMBIENT, LightAmbient);	
+	glLightfv(GL_LIGHT1, GL_DIFFUSE, LightDiffuse);
+	glLightfv(GL_LIGHT1, GL_SPECULAR, LightDiffuse);
+	//glLightfv(GL_LIGHT1, GL_POSITION,LightPosition);
+	glEnable(GL_LIGHT1);
+	glEnable(GL_LIGHTING);
 	return TRUE;										// Initialization Went OK
 }
 
@@ -106,6 +117,7 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	for(int i=0;i<VecSize/3;i++)
 	{
 		glVertex3f(Vecs[i*3+0],-Vecs[i*3+1], Vecs[i*3+2]);
+		glNormal3f(Nors[i*3+0],-Nors[i*3+1], Nors[i*3+2]);
 	}
 	glEnd();
 	ReleaseMutex(Mutex);
@@ -459,13 +471,17 @@ extern "C" _declspec(dllexport) void InitRenderThread(HWND EditerHWND)
 	RenderThreadHANDLE = (HANDLE)_beginthreadex(0,0,(unsigned int (__stdcall *)(void *))RenderThread,0,CREATE_SUSPENDED,0);
 	ResumeThread(RenderThreadHANDLE);
 }
-extern "C" _declspec(dllexport) void Set3DData(float * VecsIn,int VecSizeIn)
+extern "C" _declspec(dllexport) void Set3DData(float * VecsIn,float * NorsIn,int VecSizeIn)
 {
 	WaitForSingleObject(Mutex,INFINITE);
 	if(Vecs) delete [] Vecs;
+	if(Nors) delete [] Nors;
+	if(Texs) delete [] Texs;
 	VecSize=VecSizeIn;
-	Vecs=new float [VecSizeIn];
+	Vecs=new float [VecSize];
+	Nors=new float [VecSize];
 	memcpy_s(Vecs,sizeof(float)*VecSizeIn,VecsIn,sizeof(float)*VecSizeIn);
+	memcpy_s(Nors,sizeof(float)*VecSizeIn,NorsIn,sizeof(float)*VecSizeIn);
 	for(int i=0;i<VecSizeIn;i++)
 		msize=max(msize,abs(Vecs[i]));
 	WHEEL=0.0f;
