@@ -119,7 +119,7 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	for(int i=0;i<VecSize/3;i++)
 	{
 		glVertex3f(Vecs[i*3+0],-Vecs[i*3+1], Vecs[i*3+2]);
-		glNormal3f(Nors[i*3+0],-Nors[i*3+1], Nors[i*3+2]);
+		glNormal3f(Nors[i*3+0]*2.0f,-Nors[i*3+1]*2.0f, Nors[i*3+2]*2.0f);
 	}
 	glEnd();
 	ReleaseMutex(Mutex);
@@ -482,6 +482,7 @@ extern "C" _declspec(dllexport) void Set3DData(float * VecsIn,float * NorsIn,int
 	memcpy_s(Nors,sizeof(float)*VecSizeIn,NorsIn,sizeof(float)*VecSizeIn);
 	for(int i=0;i<VecSizeIn;i++)
 		msize=max(msize,abs(Vecs[i]));
+	msize=min(1000.0f,msize);
 	WHEEL=0.0f;
 	ReleaseMutex(Mutex);
 }
