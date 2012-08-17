@@ -25,6 +25,7 @@ HWND ParentHWND=0;
 HANDLE RenderThreadHANDLE=NULL;
 float * Vecs=0;
 int VecSize=0;
+float WHEEL=0.0f;
 LRESULT	CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);	// Declaration For WndProc
 inline void EastPerspective(float fovyInDegrees, float aspectRatio,
                       float znear, float zfar,float * Matrix)
@@ -53,7 +54,7 @@ inline void EastPerspective(float fovyInDegrees, float aspectRatio,
 float Pmat[16];
 int w;
 int h;
-float msize=1000.0f;
+float msize=200.0f;
 float mpos[3]={0.0f,0.0f,0.0f};
 GLvoid ReSizeGLScene(GLsizei width, GLsizei height)		// Resize And Initialize The GL Window
 {
@@ -71,7 +72,7 @@ GLvoid ReSizeGLScene(GLsizei width, GLsizei height)		// Resize And Initialize Th
 
 	// Calculate The Aspect Ratio Of The Window
 	//gluPerspective(45.0f,(GLfloat)width/(GLfloat)height,0.1f,100.0f);
-	EastPerspective(45.0f,(GLfloat)width/(GLfloat)height,1.0f,msize*10.0f,Pmat);
+	EastPerspective(45.0f,(GLfloat)width/(GLfloat)height,10.0f,1000000.0f,Pmat);
 	glLoadMatrixf(Pmat);
 	glMatrixMode(GL_MODELVIEW);							// Select The Modelview Matrix
 	glLoadIdentity();									// Reset The Modelview Matrix
@@ -93,19 +94,18 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	
 	WaitForSingleObject(Mutex,INFINITE);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear Screen And Depth Buffer
-	glLoadIdentity();									// Reset The Current Modelview Matrix
 											// Done Drawing The Triangle
-	glLoadIdentity();									// Reset The Current Modelview Matrix
-	glTranslatef(0.0f,0.0f,-msize);						// Move Right 1.5 Units And Into The Screen 6.0
-	glRotatef(rquad,0.0f,1.0f,0.0f);					// Rotate The Quad On The X axis ( NEW )
-											// Done Drawing The Quad
+	glLoadIdentity();
+	glTranslatef(0.0f,0.0f,-msize*((100.0f+WHEEL)/100.0f));	
+	glRotatef(45.0f,1.0f,0.0f,0.0f);
+	glRotatef(rquad,0.0f,1.0f,0.0f);// Done Drawing The Quad
 	rtri+=1.2f;											// Increase The Rotation Variable For The Triangle ( NEW )
 	rquad-=1.15f;										// Decrease The Rotation Variable For The Quad ( NEW )
 	glColor3f(1.0f,1.0f,1.0f);
 	glBegin(GL_TRIANGLES);
 	for(int i=0;i<VecSize/3;i++)
 	{
-		glVertex3f(Vecs[i*3+0],Vecs[i*3+2], -Vecs[i*3+1]);
+		glVertex3f(Vecs[i*3+0],-Vecs[i*3+1], Vecs[i*3+2]);
 	}
 	glEnd();
 	ReleaseMutex(Mutex);
@@ -221,7 +221,7 @@ BOOL CreateGLWindow(char* title, int width, int height, int bits, bool fullscree
 
 	//if (fullscreen)												// Are We Still In Fullscreen Mode?
 	{
-		dwExStyle=WS_EX_APPWINDOW;								// Window Extended Style
+		dwExStyle=WS_EX_APPWINDOW|WS_EX_TOPMOST;								// Window Extended Style
 		dwStyle=WS_POPUP;										// Windows Style
 		//ShowCursor(FALSE);										// Hide Mouse Pointer
 	}
@@ -265,7 +265,7 @@ BOOL CreateGLWindow(char* title, int width, int height, int bits, bool fullscree
 		0,											// Shift Bit Ignored
 		0,											// No Accumulation Buffer
 		0, 0, 0, 0,									// Accumulation Bits Ignored
-		16,											// 16Bit Z-Buffer (Depth Buffer)  
+		24,											// 16Bit Z-Buffer (Depth Buffer)  
 		0,											// No Stencil Buffer
 		0,											// No Auxiliary Buffer
 		PFD_MAIN_PLANE,								// Main Drawing Layer
@@ -309,8 +309,8 @@ BOOL CreateGLWindow(char* title, int width, int height, int bits, bool fullscree
 	}
 
 	ShowWindow(hWnd,SW_SHOW);						// Show The Window
-	SetForegroundWindow(hWnd);						// Slightly Higher Priority
-	SetFocus(hWnd);									// Sets Keyboard Focus To The Window
+	//SetForegroundWindow(hWnd);						// Slightly Higher Priority
+	//SetFocus(hWnd);									// Sets Keyboard Focus To The Window
 	ReSizeGLScene(width, height);					// Set Up Our Perspective GL Screen
 
 	if (!InitGL())									// Initialize Our Newly Created GL Window
@@ -360,7 +360,17 @@ LRESULT CALLBACK WndProc(	HWND	hWnd,			// Handle For This Window
 			PostQuitMessage(0);						// Send A Quit Message
 			return 0;								// Jump Back
 		}
-
+		case WM_LBUTTONUP:
+			{
+				SetFocus(hWnd);
+				return 0;
+			}
+		
+		case WM_MOUSEWHEEL:
+			{
+			WHEEL-=(float)(short)HIWORD (wParam)*0.1f;
+			return 0;
+			}
 		case WM_KEYDOWN:							// Is A Key Being Held Down?
 		{
 			keys[wParam] = TRUE;					// If So, Mark It As TRUE
@@ -424,18 +434,6 @@ unsigned int __stdcall RenderThread(LPVOID lpvoid)
 			{
 				SwapBuffers(hDC);					// Swap Buffers (Double Buffering)
 			}
-
-			if (keys[VK_F1])						// Is F1 Being Pressed?
-			{
-				keys[VK_F1]=FALSE;					// If So Make Key FALSE
-				KillGLWindow();						// Kill Our Current Window
-				fullscreen=!fullscreen;				// Toggle Fullscreen / Windowed Mode
-				// Recreate Our OpenGL Window
-				if (!CreateGLWindow("NeHe's Rotation Tutorial",640,480,16,fullscreen))
-				{
-					return 0;						// Quit If Window Was Not Created
-				}
-			}
 		}
 		Sleep(10);
 	}
@@ -470,6 +468,6 @@ extern "C" _declspec(dllexport) void Set3DData(float * VecsIn,int VecSizeIn)
 	memcpy_s(Vecs,sizeof(float)*VecSizeIn,VecsIn,sizeof(float)*VecSizeIn);
 	for(int i=0;i<VecSizeIn;i++)
 		msize=max(msize,abs(Vecs[i]));
+	WHEEL=0.0f;
 	ReleaseMutex(Mutex);
-	ReSizeGLScene(w,h);
 }

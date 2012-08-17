@@ -25,7 +25,7 @@ namespace AC4Analysis
         {
             InitializeComponent();
             Notes.load();
-            InitRenderThread(smwin.Handle);
+            InitRenderThread(smwin.GetHwnd());
         }
         [DllImport("AC4_3DWIN.DLL", CallingConvention = CallingConvention.Cdecl)]
         public static extern void InitRenderThread(IntPtr hwnd);
