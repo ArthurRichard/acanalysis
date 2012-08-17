@@ -49,34 +49,34 @@ namespace AC4Analysis
                     for (Int32 i = 0; i < 3; i++)
                     {
                         Int32 mTexCoordsOffset = mOffset + 20 + i * 8;      // UV数据起始位置
-                        TexCoords.Add((Single)BitConverter.ToInt16(data, mTexCoordsOffset) / 0x7FFF);
-                        TexCoords.Add((Single)BitConverter.ToInt16(data, mTexCoordsOffset + 2) / 0x7FFF);
+                        TexCoords.Add((Single)BitConverter.ToUInt16(data, mTexCoordsOffset) / 0x1000);
+                        TexCoords.Add((Single)BitConverter.ToUInt16(data, mTexCoordsOffset + 2) / 0x1000);
 
                         Int32 mNormalsOffset = mOffset + 144 + i * 8;        // Normal数据起始位置
-                        Normals.Add((Single)BitConverter.ToInt16(data, mNormalsOffset) / 0x7FFF);
-                        Normals.Add((Single)BitConverter.ToInt16(data, mNormalsOffset + 2) / 0x7FFF);
-                        Normals.Add((Single)BitConverter.ToInt16(data, mNormalsOffset + 4) / 0x7FFF);
+                        Normals.Add((Single)BitConverter.ToUInt16(data, mNormalsOffset) / 0xF000);
+                        Normals.Add((Single)BitConverter.ToUInt16(data, mNormalsOffset + 2) / 0xF000);
+                        Normals.Add((Single)BitConverter.ToUInt16(data, mNormalsOffset + 4) / 0xF000);
 
                         Int32 mVertsOffset = mOffset + 76 + i * 16;        // Vertex数据起始位置
                         Verts.Add(BitConverter.ToSingle(data, mVertsOffset));
-                        Verts.Add(BitConverter.ToSingle(data, mVertsOffset + 4));
+                        Verts.Add(0-BitConverter.ToSingle(data, mVertsOffset + 4));
                         Verts.Add(BitConverter.ToSingle(data, mVertsOffset + 8));                        
                     }
                     
                     for (Int32 i = 3; i > 0 ; i--)
                     {
                         Int32 mTexCoordsOffset = mOffset + 20 + i * 8;      // UV数据起始位置
-                        TexCoords.Add((Single)BitConverter.ToInt16(data, mTexCoordsOffset) / 0x7FFF);
-                        TexCoords.Add((Single)BitConverter.ToInt16(data, mTexCoordsOffset + 2) / 0x7FFF);
+                        TexCoords.Add((Single)BitConverter.ToUInt16(data, mTexCoordsOffset) / 0x1000);
+                        TexCoords.Add((Single)BitConverter.ToUInt16(data, mTexCoordsOffset + 2) / 0x1000);
 
                         Int32 mNormalsOffset = mOffset + 144 + i * 8;        // Normal数据起始位置
-                        Normals.Add((Single)BitConverter.ToInt16(data, mNormalsOffset) / 0x7FFF);
-                        Normals.Add((Single)BitConverter.ToInt16(data, mNormalsOffset + 2) / 0x7FFF);
-                        Normals.Add((Single)BitConverter.ToInt16(data, mNormalsOffset + 4) / 0x7FFF);
+                        Normals.Add((Single)BitConverter.ToUInt16(data, mNormalsOffset) / 0xF000);
+                        Normals.Add((Single)BitConverter.ToUInt16(data, mNormalsOffset + 2) / 0xF000);
+                        Normals.Add((Single)BitConverter.ToUInt16(data, mNormalsOffset + 4) / 0xF000);
 
                         Int32 mVertsOffset = mOffset + 76 + i * 16;        // Vertex数据起始位置
                         Verts.Add(BitConverter.ToSingle(data, mVertsOffset));
-                        Verts.Add(BitConverter.ToSingle(data, mVertsOffset + 4));
+                        Verts.Add(0-BitConverter.ToSingle(data, mVertsOffset + 4));
                         Verts.Add(BitConverter.ToSingle(data, mVertsOffset + 8));
                     }
                     /*
@@ -102,20 +102,20 @@ namespace AC4Analysis
                 {
                     if(data[mOffset] == 0x08)
                     {
-                        for (Int32 i = 0; i < 3; i++)
+                        for (Int32 i = 0; i <3; i++)
                         {
                             Int32 mTexCoordsOffset = mOffset + 24 + i * 8;      // UV数据起始位置
-                            TexCoords.Add((Single)BitConverter.ToInt16(data, mTexCoordsOffset) / 0x7FFF);
-                            TexCoords.Add((Single)BitConverter.ToInt16(data, mTexCoordsOffset + 2) / 0x7FFF);
+                            TexCoords.Add((Single)BitConverter.ToUInt16(data, mTexCoordsOffset) / 0x1000);
+                            TexCoords.Add((Single)BitConverter.ToUInt16(data, mTexCoordsOffset + 2) / 0x1000);
 
                             Int32 mNormalsOffset = mOffset + 120 + i * 8;        // Normal数据起始位置
-                            Normals.Add((Single)BitConverter.ToInt16(data, mNormalsOffset) / 0x7FFF);
-                            Normals.Add((Single)BitConverter.ToInt16(data, mNormalsOffset + 2) / 0x7FFF);
-                            Normals.Add((Single)BitConverter.ToInt16(data, mNormalsOffset + 4) / 0x7FFF);
+                            Normals.Add((Single)BitConverter.ToUInt16(data, mNormalsOffset) / 0xF000);
+                            Normals.Add((Single)BitConverter.ToUInt16(data, mNormalsOffset + 2) / 0xF000);
+                            Normals.Add((Single)BitConverter.ToUInt16(data, mNormalsOffset + 4) / 0xF000);
 
                             Int32 mVertsOffset = mOffset + 68 + i * 16;        // Vertex数据起始位置
                             Verts.Add(BitConverter.ToSingle(data, mVertsOffset));
-                            Verts.Add(BitConverter.ToSingle(data, mVertsOffset + 4));
+                            Verts.Add(0-BitConverter.ToSingle(data, mVertsOffset + 4));
                             Verts.Add(BitConverter.ToSingle(data, mVertsOffset + 8));
                         }
                         mOffset += 224;
