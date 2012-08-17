@@ -91,8 +91,11 @@ namespace AC4Analysis
             }
             float[] Vesout = new float[Verts.Count];
             float[] Norout = new float[Verts.Count];
-            Verts.CopyTo(Vesout);
-            Normals.CopyTo(Norout);
+            for (int i = 0; i < Verts.Count; i++)
+            {
+                Vesout[i] = Verts[i];
+                Norout[i] = Normals[i];
+            }
             Set3DData(Vesout, Norout, Vesout.Length);
         }
     }
