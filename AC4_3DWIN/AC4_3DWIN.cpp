@@ -134,8 +134,11 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	glLoadIdentity();
 	//glLightfv(GL_LIGHT0, GL_POSITION,LightPosition);
 	glTranslatef(0.0f,0.0f,-msize*((100.0f+WHEEL)/100.0f));	
+	
 	glRotatef(45.0f,1.0f,0.0f,0.0f);
+	glRotatef(180.0f,1.0f,0.0f,0.0f); // 模型方向反的
 	glRotatef(rquad,0.0f,1.0f,0.0f);// Done Drawing The Quad
+	
 	rtri+=1.2f;											// Increase The Rotation Variable For The Triangle ( NEW )
 	rquad-=1.15f;										// Decrease The Rotation Variable For The Quad ( NEW )
 	glColor3f(1.0f,1.0f,1.0f);
