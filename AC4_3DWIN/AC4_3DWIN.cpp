@@ -91,10 +91,33 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	glEnable(GL_DEPTH_TEST);							// Enables Depth Testing
 	glDepthFunc(GL_LEQUAL);								// The Type Of Depth Testing To Do
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);	// Really Nice Perspective Calculations
-	glLightfv(GL_LIGHT0, GL_AMBIENT, LightDiffuse);	
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, LightDiffuse);
-	glLightfv(GL_LIGHT0, GL_SPECULAR, LightDiffuse);
+	//glLightfv(GL_LIGHT0, GL_AMBIENT, LightDiffuse);	
+	//glLightfv(GL_LIGHT0, GL_DIFFUSE, LightDiffuse);
+	//glLightfv(GL_LIGHT0, GL_SPECULAR, LightDiffuse);
 	//glLightfv(GL_LIGHT0, GL_POSITION,LightPosition);
+	GLfloat light_ambient[] = { 1.0, 1.0, 1.0, 1.0 };
+
+GLfloat light_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
+
+GLfloat light_specular[] = { 1.0, 1.0, 1.0, 1.0 };
+
+GLfloat light_position[] = { 1.0, 1.0, 1.0, 0.0 };
+
+glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
+
+glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
+
+glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
+
+glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+	GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0 };
+
+GLfloat mat_shininess[] = { 50.0 };
+
+
+glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+
+glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
 	glEnable(GL_LIGHT0);
 	glEnable(GL_LIGHTING);
 	return TRUE;										// Initialization Went OK
@@ -102,7 +125,7 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 
 int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 {
-	
+	glDisable(GL_TEXTURE_2D);
 	WaitForSingleObject(Mutex,INFINITE);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear Screen And Depth Buffer
 											// Done Drawing The Triangle
@@ -114,9 +137,9 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	rtri+=1.2f;											// Increase The Rotation Variable For The Triangle ( NEW )
 	rquad-=1.15f;										// Decrease The Rotation Variable For The Quad ( NEW )
 	glColor3f(1.0f,1.0f,1.0f);
-	glMaterialf(GL_FRONT_AND_BACK,GL_SHININESS,40.0f);
-	glMaterialfv(GL_FRONT_AND_BACK,GL_DIFFUSE,LightDiffuse);
-	glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR,LightDiffuse);
+	//glMaterialf(GL_FRONT_AND_BACK,GL_SHININESS,40.0f);
+	//glMaterialfv(GL_FRONT_AND_BACK,GL_DIFFUSE,LightDiffuse);
+	//glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR,LightDiffuse);
 	glBegin(GL_TRIANGLES);
 	for(int i=0;i<VecSize/3;i++)
 	{
@@ -420,7 +443,7 @@ unsigned int __stdcall RenderThread(LPVOID lpvoid)
 
 	fullscreen=FALSE;
 	// Create Our OpenGL Window
-	if (!CreateGLWindow("NeHe's Rotation Tutorial",640,480,16,fullscreen))
+	if (!CreateGLWindow("NeHe's Rotation Tutorial",640,480,32,fullscreen))
 	{
 		return 0;									// Quit If Window Was Not Created
 	}
