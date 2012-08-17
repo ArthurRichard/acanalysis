@@ -23,7 +23,10 @@ namespace AC4Analysis
         {
             InitializeComponent();
         }
-
+        public IntPtr GetHwnd()
+        {
+            return panel1.Handle;
+        }
         public void Analysis_SM()
         {
             if (data == null)
