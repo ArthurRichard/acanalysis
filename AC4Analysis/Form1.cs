@@ -29,6 +29,8 @@ namespace AC4Analysis
         }
         [DllImport("AC4_3DWIN.DLL", CallingConvention = CallingConvention.Cdecl)]
         public static extern void InitRenderThread(IntPtr hwnd);
+        [DllImport("AC4_3DWIN.DLL", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void CloseRenderThread();
         uint culsize = 0;
         uint culadd = 0;
         public string cdpfilename;
@@ -296,6 +298,11 @@ namespace AC4Analysis
             Notes.Set(tb绝对地址.Text, tbNote.Text);
             Notes.Save();
             treeView1.SelectedNode.Text += tbNote.Text;
+        }
+
+        private void AC4Analysis_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            CloseRenderThread();
         }
     }
 }

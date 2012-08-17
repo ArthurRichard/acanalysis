@@ -91,40 +91,18 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	glEnable(GL_DEPTH_TEST);							// Enables Depth Testing
 	glDepthFunc(GL_LEQUAL);								// The Type Of Depth Testing To Do
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);	// Really Nice Perspective Calculations
-	//glLightfv(GL_LIGHT0, GL_AMBIENT, LightDiffuse);	
-	//glLightfv(GL_LIGHT0, GL_DIFFUSE, LightDiffuse);
-	//glLightfv(GL_LIGHT0, GL_SPECULAR, LightDiffuse);
-	//glLightfv(GL_LIGHT0, GL_POSITION,LightPosition);
-	GLfloat light_ambient[] = { 1.0, 1.0, 1.0, 1.0 };
 
-GLfloat light_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
-
-GLfloat light_specular[] = { 1.0, 1.0, 1.0, 1.0 };
-
-GLfloat light_position[] = { 1.0, 1.0, 1.0, 0.0 };
-
-glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
-
-glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
-
-glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
-
-glLightfv(GL_LIGHT0, GL_POSITION, light_position);
-	GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0 };
-
-GLfloat mat_shininess[] = { 50.0 };
-
-
-glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
-
-glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
-	glEnable(GL_LIGHT0);
+	glLightfv(GL_LIGHT1, GL_AMBIENT, LightAmbient);		// Setup The Ambient Light
+	glLightfv(GL_LIGHT1, GL_DIFFUSE, LightDiffuse);		// Setup The Diffuse Light
+	glLightfv(GL_LIGHT1, GL_POSITION,LightPosition);	// Position The Light
+	glEnable(GL_LIGHT1);								// Enable Light One
 	glEnable(GL_LIGHTING);
 	return TRUE;										// Initialization Went OK
 }
 
 int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 {
+	glBindTexture(GL_TEXTURE_2D,0);
 	glDisable(GL_TEXTURE_2D);
 	WaitForSingleObject(Mutex,INFINITE);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear Screen And Depth Buffer
@@ -137,9 +115,6 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	rtri+=1.2f;											// Increase The Rotation Variable For The Triangle ( NEW )
 	rquad-=1.15f;										// Decrease The Rotation Variable For The Quad ( NEW )
 	glColor3f(1.0f,1.0f,1.0f);
-	//glMaterialf(GL_FRONT_AND_BACK,GL_SHININESS,40.0f);
-	//glMaterialfv(GL_FRONT_AND_BACK,GL_DIFFUSE,LightDiffuse);
-	//glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR,LightDiffuse);
 	glBegin(GL_TRIANGLES);
 	for(int i=0;i<VecSize/3;i++)
 	{
@@ -153,11 +128,7 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 
 GLvoid KillGLWindow(GLvoid)								// Properly Kill The Window
 {
-	if (fullscreen)										// Are We In Fullscreen Mode?
-	{
-		ChangeDisplaySettings(NULL,0);					// If So Switch Back To The Desktop
-		ShowCursor(TRUE);								// Show Mouse Pointer
-	}
+
 
 	if (hRC)											// Do We Have A Rendering Context?
 	{
@@ -433,12 +404,12 @@ LRESULT CALLBACK WndProc(	HWND	hWnd,			// Handle For This Window
 	return DefWindowProc(hWnd,uMsg,wParam,lParam);
 }
 
-
+BOOL	done=FALSE;	
 
 unsigned int __stdcall RenderThread(LPVOID lpvoid)
 {
 	MSG		msg;									// Windows Message Structure
-	BOOL	done=FALSE;								// Bool Variable To Exit Loop
+							// Bool Variable To Exit Loop
 
 
 	fullscreen=FALSE;
@@ -465,7 +436,7 @@ unsigned int __stdcall RenderThread(LPVOID lpvoid)
 		else										// If There Are No Messages
 		{
 			// Draw The Scene.  Watch For ESC Key And Quit Messages From DrawGLScene()
-			if ((active && !DrawGLScene()) || keys[VK_ESCAPE])	// Active?  Was There A Quit Received?
+			if (active && !DrawGLScene()) 	// Active?  Was There A Quit Received?
 			{
 				done=TRUE;							// ESC or DrawGLScene Signalled A Quit
 			}
@@ -513,4 +484,8 @@ extern "C" _declspec(dllexport) void Set3DData(float * VecsIn,float * NorsIn,int
 		msize=max(msize,abs(Vecs[i]));
 	WHEEL=0.0f;
 	ReleaseMutex(Mutex);
+}
+extern "C" _declspec(dllexport) void CloseRenderThread()
+{
+	done=1;
 }
