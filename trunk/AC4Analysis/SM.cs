@@ -59,7 +59,7 @@ namespace AC4Analysis
 
                         Int32 mVertsOffset = mOffset + 76 + i * 16;        // Vertex数据起始位置
                         Verts.Add(BitConverter.ToSingle(data, mVertsOffset));
-                        Verts.Add(0-BitConverter.ToSingle(data, mVertsOffset + 4));
+                        Verts.Add(BitConverter.ToSingle(data, mVertsOffset + 4));
                         Verts.Add(BitConverter.ToSingle(data, mVertsOffset + 8));                        
                     }
                     
@@ -76,7 +76,7 @@ namespace AC4Analysis
 
                         Int32 mVertsOffset = mOffset + 76 + i * 16;        // Vertex数据起始位置
                         Verts.Add(BitConverter.ToSingle(data, mVertsOffset));
-                        Verts.Add(0-BitConverter.ToSingle(data, mVertsOffset + 4));
+                        Verts.Add(BitConverter.ToSingle(data, mVertsOffset + 4));
                         Verts.Add(BitConverter.ToSingle(data, mVertsOffset + 8));
                     }
                     /*
@@ -115,7 +115,7 @@ namespace AC4Analysis
 
                             Int32 mVertsOffset = mOffset + 68 + i * 16;        // Vertex数据起始位置
                             Verts.Add(BitConverter.ToSingle(data, mVertsOffset));
-                            Verts.Add(0-BitConverter.ToSingle(data, mVertsOffset + 4));
+                            Verts.Add(BitConverter.ToSingle(data, mVertsOffset + 4));
                             Verts.Add(BitConverter.ToSingle(data, mVertsOffset + 8));
                         }
                         mOffset += 224;
