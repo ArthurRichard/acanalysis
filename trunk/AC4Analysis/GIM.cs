@@ -6,6 +6,7 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 
+using System.Runtime.InteropServices;
 using System.IO;
 namespace AC4Analysis
 {
@@ -83,6 +84,7 @@ namespace AC4Analysis
             this.Visible = true;
             btn导入图像.Enabled = true;
             btn保存非调色板图像.Enabled = true;
+            btn在3D窗口里使用.Enabled = true;
         }
         void Analysis_GIM4bit()
         {
@@ -174,6 +176,7 @@ namespace AC4Analysis
         {
             btn保存非调色板图像.Enabled = false;
             btn导入图像.Enabled = false;
+            btn在3D窗口里使用.Enabled = false;
             this.Visible = false;
             if (data == null)
                 return;
@@ -318,7 +321,7 @@ namespace AC4Analysis
             if (gb.PixelFormat == System.Drawing.Imaging.PixelFormat.Format8bppIndexed)
             {
                 System.Drawing.Bitmap newb = new Bitmap(w,h, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-                for(int y=0;y<w;y++)
+                for(int y=0;y<h;y++)
                     for (int x = 0; x < w; x++)
                     { 
                         newb.SetPixel(x,y,gb.GetPixel(x,y));
@@ -342,6 +345,25 @@ namespace AC4Analysis
                         }
                 }
             }
+        }
+
+        [DllImport("AC4_3DWIN.DLL", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void InputTex(byte[] TexDataIn, int SizeX, int SizeY, int DataSize);
+        private void btn在3D窗口里使用_Click(object sender, EventArgs e)
+        {
+            System.Drawing.Bitmap gb = (System.Drawing.Bitmap)pictureBox1.Image;
+            System.Drawing.Bitmap newb = new Bitmap(w, h, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            for (int y = 0; y < h; y++)
+                for (int x = 0; x < w; x++)
+                {
+                    newb.SetPixel(x, y, gb.GetPixel(x, y));
+                }
+            byte[] TexDataIn = new byte[w * h * 4];
+            System.Drawing.Imaging.BitmapData bdata = newb.LockBits(Rectangle.FromLTRB(0, 0, w, h), System.Drawing.Imaging.ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+
+            System.Runtime.InteropServices.Marshal.Copy(bdata.Scan0, TexDataIn, 0, w * h*4);
+            newb.UnlockBits(bdata);
+            InputTex(TexDataIn, w, h, w * h * 4);
         }
     }
 }

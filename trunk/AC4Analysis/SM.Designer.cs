@@ -29,22 +29,34 @@
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
+            this.btn开关灯 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // panel1
             // 
-            this.panel1.Location = new System.Drawing.Point(4, 4);
+            this.panel1.Location = new System.Drawing.Point(3, 32);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(591, 483);
+            this.panel1.Size = new System.Drawing.Size(650, 490);
             this.panel1.TabIndex = 0;
+            // 
+            // btn开关灯
+            // 
+            this.btn开关灯.Location = new System.Drawing.Point(3, 3);
+            this.btn开关灯.Name = "btn开关灯";
+            this.btn开关灯.Size = new System.Drawing.Size(75, 23);
+            this.btn开关灯.TabIndex = 1;
+            this.btn开关灯.Text = "button1";
+            this.btn开关灯.UseVisualStyleBackColor = true;
+            this.btn开关灯.Click += new System.EventHandler(this.btn开关灯_Click);
             // 
             // SM
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.btn开关灯);
             this.Controls.Add(this.panel1);
             this.Name = "SM";
-            this.Size = new System.Drawing.Size(650, 490);
+            this.Size = new System.Drawing.Size(663, 528);
             this.ResumeLayout(false);
 
         }
@@ -52,6 +64,7 @@
         #endregion
 
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Button btn开关灯;
 
     }
 }

@@ -12,16 +12,19 @@ namespace AC4Analysis
     public partial class SM : UserControl
     {
         public byte[] data;
-
+        bool OpenLight = false;
         List<Single> Verts = new List<Single>();
         List<Single> Normals = new List<Single>();
         List<Single> TexCoords = new List<Single>();
 
         [DllImport("AC4_3DWIN.DLL", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void Set3DData(float[] VecsIn, float[] NorsIn, int VecSizeIn);
+        public static extern void Set3DData(float[] VecsIn, float[] NorsIn, int VecSizeIn, float[] TexsIn, int TexsSizeIn);
+        [DllImport("AC4_3DWIN.DLL", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void LightSwitch(bool Use);
         public SM()
         {
             InitializeComponent();
+            btn开关灯.Text = "Turn On Light";
         }
         public IntPtr GetHwnd()
         {
@@ -125,12 +128,27 @@ namespace AC4Analysis
             }
             float[] Vesout = new float[Verts.Count];
             float[] Norout = new float[Verts.Count];
+            float[] Texout = new float[TexCoords.Count];
+            for (int i = 0; i < TexCoords.Count; i++)
+            {
+                Texout[i] = TexCoords[i];
+            }
             for (int i = 0; i < Verts.Count; i++)
             {
                 Vesout[i] = Verts[i];
                 Norout[i] = Normals[i];
             }
-            Set3DData(Vesout, Norout, Vesout.Length);
+            Set3DData(Vesout, Norout, Vesout.Length, Texout, TexCoords.Count);
+        }
+
+        private void btn开关灯_Click(object sender, EventArgs e)
+        {
+            OpenLight = !OpenLight;
+            if (OpenLight)
+                btn开关灯.Text = "Turn Off Light";
+            else
+                btn开关灯.Text = "Turn On Light";
+            LightSwitch(OpenLight);
         }
     }
 }

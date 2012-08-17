@@ -34,6 +34,7 @@
             this.btn保存图像 = new System.Windows.Forms.Button();
             this.btn导入图像 = new System.Windows.Forms.Button();
             this.btn保存非调色板图像 = new System.Windows.Forms.Button();
+            this.btn在3D窗口里使用 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -49,7 +50,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(89, 4);
+            this.label2.Location = new System.Drawing.Point(70, 4);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(41, 12);
             this.label2.TabIndex = 1;
@@ -57,18 +58,18 @@
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureBox1.Location = new System.Drawing.Point(0, 35);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(561, 522);
+            this.pictureBox1.Size = new System.Drawing.Size(605, 522);
             this.pictureBox1.TabIndex = 2;
             this.pictureBox1.TabStop = false;
             // 
             // btn保存图像
             // 
-            this.btn保存图像.Location = new System.Drawing.Point(183, 6);
+            this.btn保存图像.Location = new System.Drawing.Point(133, 6);
             this.btn保存图像.Name = "btn保存图像";
             this.btn保存图像.Size = new System.Drawing.Size(75, 23);
             this.btn保存图像.TabIndex = 3;
@@ -78,7 +79,7 @@
             // 
             // btn导入图像
             // 
-            this.btn导入图像.Location = new System.Drawing.Point(264, 6);
+            this.btn导入图像.Location = new System.Drawing.Point(214, 6);
             this.btn导入图像.Name = "btn导入图像";
             this.btn导入图像.Size = new System.Drawing.Size(86, 23);
             this.btn导入图像.TabIndex = 4;
@@ -88,7 +89,7 @@
             // 
             // btn保存非调色板图像
             // 
-            this.btn保存非调色板图像.Location = new System.Drawing.Point(357, 6);
+            this.btn保存非调色板图像.Location = new System.Drawing.Point(307, 6);
             this.btn保存非调色板图像.Name = "btn保存非调色板图像";
             this.btn保存非调色板图像.Size = new System.Drawing.Size(155, 23);
             this.btn保存非调色板图像.TabIndex = 5;
@@ -96,10 +97,21 @@
             this.btn保存非调色板图像.UseVisualStyleBackColor = true;
             this.btn保存非调色板图像.Click += new System.EventHandler(this.btn保存非调色板图像_Click);
             // 
+            // btn在3D窗口里使用
+            // 
+            this.btn在3D窗口里使用.Location = new System.Drawing.Point(469, 5);
+            this.btn在3D窗口里使用.Name = "btn在3D窗口里使用";
+            this.btn在3D窗口里使用.Size = new System.Drawing.Size(75, 23);
+            this.btn在3D窗口里使用.TabIndex = 6;
+            this.btn在3D窗口里使用.Text = "Use In 3D";
+            this.btn在3D窗口里使用.UseVisualStyleBackColor = true;
+            this.btn在3D窗口里使用.Click += new System.EventHandler(this.btn在3D窗口里使用_Click);
+            // 
             // GIM
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.btn在3D窗口里使用);
             this.Controls.Add(this.btn保存非调色板图像);
             this.Controls.Add(this.btn导入图像);
             this.Controls.Add(this.btn保存图像);
@@ -107,7 +119,7 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Name = "GIM";
-            this.Size = new System.Drawing.Size(561, 557);
+            this.Size = new System.Drawing.Size(605, 557);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -122,5 +134,6 @@
         private System.Windows.Forms.Button btn保存图像;
         private System.Windows.Forms.Button btn导入图像;
         private System.Windows.Forms.Button btn保存非调色板图像;
+        private System.Windows.Forms.Button btn在3D窗口里使用;
     }
 }
