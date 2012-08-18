@@ -114,6 +114,11 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA   );
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);	// Really Nice Perspective Calculations
 
+    GLfloat mat_shininess[]={50.0};
+    glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT,LightAmbient);
+	glMaterialfv(GL_FRONT_AND_BACK,GL_DIFFUSE,LightDiffuse);
+    glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR,LightDiffuse);
+    glMaterialfv(GL_FRONT_AND_BACK,GL_SHININESS,mat_shininess);
 	glLightfv(GL_LIGHT1, GL_AMBIENT, LightAmbient);		// Setup The Ambient Light
 	glLightfv(GL_LIGHT1, GL_DIFFUSE, LightDiffuse);		// Setup The Diffuse Light
 	glLightfv(GL_LIGHT1, GL_POSITION,LightPosition);	// Position The Light
