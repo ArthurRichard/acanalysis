@@ -20,6 +20,7 @@ bool	active=TRUE;		// Window Active Flag Set To TRUE By Default
 bool	fullscreen=TRUE;	// Fullscreen Flag Set To Fullscreen Mode By Default
 
 bool UseLight=false;
+bool UseAlpha=false;
 unsigned int TexID=0;
 int TexW=0;
 int TexH=0;
@@ -106,10 +107,11 @@ GLvoid ReSizeGLScene(GLsizei width, GLsizei height)		// Resize And Initialize Th
 int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 {
 	glShadeModel(GL_SMOOTH);							// Enable Smooth Shading
-	glClearColor(0.0f, 0.0f, 0.0f, 0.5f);				// Black Background
+	glClearColor(0.0f, 0.5f, 1.0f, 0.5f);				// Black Background
 	glClearDepth(1.0f);									// Depth Buffer Setup
 	glEnable(GL_DEPTH_TEST);							// Enables Depth Testing
 	glDepthFunc(GL_LEQUAL);								// The Type Of Depth Testing To Do
+	glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA   );
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);	// Really Nice Perspective Calculations
 
 	glLightfv(GL_LIGHT1, GL_AMBIENT, LightAmbient);		// Setup The Ambient Light
@@ -126,6 +128,10 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 		glEnable(GL_LIGHTING);
 	else
 		glDisable(GL_LIGHTING);
+	if(UseAlpha)
+		glEnable(GL_BLEND);
+	else
+		glDisable(GL_BLEND);
 	ChangeTex();
 	glEnable(GL_TEXTURE_2D);
 	WaitForSingleObject(Mutex,INFINITE);
@@ -536,4 +542,8 @@ extern "C" _declspec(dllexport) void InputTex(unsigned char * TexDataIn,int Size
 extern "C" _declspec(dllexport) void LightSwitch(bool Use)
 {
 	UseLight=Use;
+}
+extern "C" _declspec(dllexport) void AlphaSwitch(bool Use)
+{
+	UseAlpha=Use;
 }
