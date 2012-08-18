@@ -30,6 +30,7 @@
         {
             this.panel1 = new System.Windows.Forms.Panel();
             this.btn开关灯 = new System.Windows.Forms.Button();
+            this.btn开关透明 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // panel1
@@ -43,16 +44,27 @@
             // 
             this.btn开关灯.Location = new System.Drawing.Point(3, 3);
             this.btn开关灯.Name = "btn开关灯";
-            this.btn开关灯.Size = new System.Drawing.Size(75, 23);
+            this.btn开关灯.Size = new System.Drawing.Size(112, 23);
             this.btn开关灯.TabIndex = 1;
             this.btn开关灯.Text = "button1";
             this.btn开关灯.UseVisualStyleBackColor = true;
             this.btn开关灯.Click += new System.EventHandler(this.btn开关灯_Click);
             // 
+            // btn开关透明
+            // 
+            this.btn开关透明.Location = new System.Drawing.Point(121, 3);
+            this.btn开关透明.Name = "btn开关透明";
+            this.btn开关透明.Size = new System.Drawing.Size(126, 23);
+            this.btn开关透明.TabIndex = 2;
+            this.btn开关透明.Text = "button1";
+            this.btn开关透明.UseVisualStyleBackColor = true;
+            this.btn开关透明.Click += new System.EventHandler(this.btn开关透明_Click);
+            // 
             // SM
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.btn开关透明);
             this.Controls.Add(this.btn开关灯);
             this.Controls.Add(this.panel1);
             this.Name = "SM";
@@ -65,6 +77,7 @@
 
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button btn开关灯;
+        private System.Windows.Forms.Button btn开关透明;
 
     }
 }

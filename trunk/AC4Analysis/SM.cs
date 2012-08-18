@@ -13,6 +13,7 @@ namespace AC4Analysis
     {
         public byte[] data;
         bool OpenLight = false;
+        bool OpenAlpha = false;
         List<Single> Verts = new List<Single>();
         List<Single> Normals = new List<Single>();
         List<Single> TexCoords = new List<Single>();
@@ -21,10 +22,13 @@ namespace AC4Analysis
         public static extern void Set3DData(float[] VecsIn, float[] NorsIn, int VecSizeIn, float[] TexsIn, int TexsSizeIn);
         [DllImport("AC4_3DWIN.DLL", CallingConvention = CallingConvention.Cdecl)]
         public static extern void LightSwitch(bool Use);
+        [DllImport("AC4_3DWIN.DLL", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void AlphaSwitch(bool Use);
         public SM()
         {
             InitializeComponent();
             btn开关灯.Text = "Turn On Light";
+            btn开关透明.Text = "Turn On Alpha";
         }
         public IntPtr GetHwnd()
         {
@@ -149,6 +153,17 @@ namespace AC4Analysis
             else
                 btn开关灯.Text = "Turn On Light";
             LightSwitch(OpenLight);
+        }
+
+        private void btn开关透明_Click(object sender, EventArgs e)
+        {
+
+            OpenAlpha = !OpenAlpha;
+            if (OpenAlpha)
+                btn开关透明.Text = "Turn Off Alpha";
+            else
+                btn开关透明.Text = "Turn On Alpha";
+            AlphaSwitch(OpenAlpha);
         }
     }
 }
