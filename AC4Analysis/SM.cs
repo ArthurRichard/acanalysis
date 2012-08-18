@@ -49,8 +49,8 @@ namespace AC4Analysis
                     for (Int32 i = 2; i > -1; i--)
                     {
                         Int32 mTexCoordsOffset = mOffset + 20 + i * 8;      // UV数据起始位置
-                        TexCoords.Add(-(Single)BitConverter.ToInt16(data, mTexCoordsOffset) / 0x1000);
-                        TexCoords.Add(-(Single)BitConverter.ToInt16(data, mTexCoordsOffset + 2) / 0x1000);
+                        TexCoords.Add((Single)BitConverter.ToInt16(data, mTexCoordsOffset) / 0x1000);
+                        TexCoords.Add((Single)BitConverter.ToInt16(data, mTexCoordsOffset + 2) / 0x1000);
 
                         Int32 mNormalsOffset = mOffset + 144 + i * 8;        // Normal数据起始位置
                         Normals.Add(-(Single)BitConverter.ToInt16(data, mNormalsOffset) / 0x1000);
@@ -66,8 +66,8 @@ namespace AC4Analysis
                     for (Int32 i = 1; i < 4 ; i++)
                     {
                         Int32 mTexCoordsOffset = mOffset + 20 + i * 8;      // UV数据起始位置
-                        TexCoords.Add(-(Single)BitConverter.ToInt16(data, mTexCoordsOffset) / 0x1000);
-                        TexCoords.Add(-(Single)BitConverter.ToInt16(data, mTexCoordsOffset + 2) / 0x1000);
+                        TexCoords.Add((Single)BitConverter.ToInt16(data, mTexCoordsOffset) / 0x1000);
+                        TexCoords.Add((Single)BitConverter.ToInt16(data, mTexCoordsOffset + 2) / 0x1000);
 
                         Int32 mNormalsOffset = mOffset + 144 + i * 8;        // Normal数据起始位置
                         Normals.Add(-(Single)BitConverter.ToInt16(data, mNormalsOffset) / 0x1000);
@@ -105,8 +105,8 @@ namespace AC4Analysis
                         for (Int32 i = 2; i > -1; i--)
                         {
                             Int32 mTexCoordsOffset = mOffset + 24 + i * 8;      // UV数据起始位置
-                            TexCoords.Add(-(Single)BitConverter.ToInt16(data, mTexCoordsOffset) / 0x1000);
-                            TexCoords.Add(-(Single)BitConverter.ToInt16(data, mTexCoordsOffset + 2) / 0x1000);
+                            TexCoords.Add((Single)BitConverter.ToInt16(data, mTexCoordsOffset) / 0x1000);
+                            TexCoords.Add((Single)BitConverter.ToInt16(data, mTexCoordsOffset + 2) / 0x1000);
 
                             Int32 mNormalsOffset = mOffset + 120 + i * 8;        // Normal数据起始位置
                             Normals.Add(-(Single)BitConverter.ToInt16(data, mNormalsOffset) / 0x1000);
