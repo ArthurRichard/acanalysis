@@ -99,6 +99,12 @@
     <Compile Include="SM.Designer.cs">
       <DependentUpon>SM.cs</DependentUpon>
     </Compile>
+    <Compile Include="Text.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Text.Designer.cs">
+      <DependentUpon>Text.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="EE.resx">
       <DependentUpon>EE.cs</DependentUpon>
     </EmbeddedResource>
@@ -123,6 +129,9 @@
     </Compile>
     <EmbeddedResource Include="SM.resx">
       <DependentUpon>SM.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Text.resx">
+      <DependentUpon>Text.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="Properties\Settings.settings">

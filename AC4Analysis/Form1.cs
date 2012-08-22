@@ -38,6 +38,7 @@ namespace AC4Analysis
         GIM gimwin = new GIM();
         SM smwin = new SM();
         EE eewin = new EE();
+        Text textwin = new Text();
         public static _Mode mode = _Mode.AC4;
         private void 打开tbl_Click(object sender, EventArgs e)
         {
@@ -135,6 +136,26 @@ namespace AC4Analysis
                 return "Images";
             return "";
         }
+        byte[] GetNextNodeData(TreeNode node)
+        {
+            if (node.NextNode == null)
+                return null;
+            _L1 tmp = (_L1)node.NextNode.Tag;
+            TreeNode pnode = node.NextNode.Parent;
+            uint totaladd = tmp.add;
+            while (pnode != null)
+            {
+                _L1 tmpp = (_L1)pnode.Tag;
+                totaladd += tmpp.add;
+                pnode = pnode.Parent;
+            }
+            FileStream fsc = new FileStream(cdpfilename, FileMode.Open);
+            byte[] NextNodeData = new byte[(int)tmp.size];
+            fsc.Seek((int)totaladd, SeekOrigin.Begin);
+            fsc.Read(NextNodeData, 0, (int)tmp.size);
+            fsc.Close();
+            return NextNodeData;
+        }
         private void treeView1_DoubleClick(object sender, EventArgs e)
         {
             if (treeView1.SelectedNode == null)
@@ -172,6 +193,13 @@ namespace AC4Analysis
                     }
                 case "GIM\0":
                     {
+                        if (textwin.check(culdata))
+                        {
+                            textwin.TextData = GetNextNodeData(treeView1.SelectedNode);
+                            textwin.FontData = culdata;
+                            panel1.Controls.Add(textwin);
+                            return;
+                        }
                         gimwin.data = culdata;
                         gimwin.Analysis_GIM();
                         gimwin.add = totaladd;
