@@ -9,17 +9,17 @@ using System.IO;
 using System.Runtime.InteropServices;
 namespace AC4Analysis
 {
+    public struct _L1
+    {
+        public uint add;
+        public uint size;
+    }
     public partial class AC4Analysis : Form
     {
         public enum _Mode
         {
             AC4,
             AC0
-        }
-        struct _L1
-        {
-            public uint add;
-            public uint size;
         }
         public AC4Analysis()
         {
@@ -184,6 +184,7 @@ namespace AC4Analysis
             fsc.Close();
 
             panel1.Controls.Clear();
+            mapwin.CulData = culdata;
             if (mapwin.Check(treeView1.SelectedNode))
             {
                 return;
