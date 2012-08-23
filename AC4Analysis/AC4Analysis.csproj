@@ -90,6 +90,12 @@
       <DependentUpon>GIM.cs</DependentUpon>
     </Compile>
     <Compile Include="ini.cs" />
+    <Compile Include="map.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="map.Designer.cs">
+      <DependentUpon>map.cs</DependentUpon>
+    </Compile>
     <Compile Include="Notes.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -116,6 +122,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GIM.resx">
       <DependentUpon>GIM.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="map.resx">
+      <DependentUpon>map.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
