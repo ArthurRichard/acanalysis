@@ -39,6 +39,7 @@ namespace AC4Analysis
         SM smwin = new SM();
         EE eewin = new EE();
         Text textwin = new Text();
+        map mapwin = new map();
         public static _Mode mode = _Mode.AC4;
         private void 打开tbl_Click(object sender, EventArgs e)
         {
@@ -183,6 +184,10 @@ namespace AC4Analysis
             fsc.Close();
 
             panel1.Controls.Clear();
+            if (mapwin.Check(treeView1.SelectedNode))
+            {
+                return;
+            }
             string Head = System.Text.Encoding.ASCII.GetString(culdata,0,4).ToString();
             switch (Head)
             {
