@@ -29,6 +29,7 @@ namespace AC4Analysis
         }
         public void Analysis()
         {
+            Controls.Clear();
             bmps = new Bitmap[FontNum];
             int paladd = FontNum * 0x90 + 0x40;
             for (int i = 0; i < cols.Length; i++)
@@ -40,8 +41,8 @@ namespace AC4Analysis
                     alpha = (byte)(alpha * 2);
                 cols[i] = Color.FromArgb(
                     alpha,
-                    127,
-                    127,
+                    200,
+                    200,
                     255);
             }
             for (int i = 0; i < FontNum; i++)
@@ -70,6 +71,76 @@ namespace AC4Analysis
                 tmp.UnlockBits(bdata);
                 bmps[i] = tmp;
             }
+            List<short> WordList = new List<short>();
+            int sizex = 0, sizex2 = 0, sizey = 0x10, pos = 0;
+            for (int i = 2; i < TextData.Length / 2; i++)
+            {
+
+                if (TextData[i * 2 + 1] == 0xFF)
+                {
+                    if (TextData[i * 2] == 0xFF)
+                    {
+
+                        if (TextData[i * 2] == 0xFE)
+                        {
+                            sizex2 = Math.Max(sizex, sizex2);
+                            sizex = 0;
+                            sizey += 16;
+                            short Word = (short)(TextData[i * 2] + TextData[i * 2 + 1] * 0x100);
+                            WordList.Add(Word);
+                            sizex += 16;
+                        }
+                        if (WordList.Count > 0)
+                        {
+                            sizex2 = Math.Max(sizex, sizex2);
+                            GetTextImage(WordList, sizex2, sizey, pos);
+                            pos += (sizey + 1);
+                            this.Width = Math.Max(sizex2, this.Width);
+                            this.Height = pos;
+                            sizey = 0x10;
+                            sizex2=sizex = 0;
+                        }
+                        WordList = new List<short>();
+                    }
+                }
+                else
+                {
+                    short Word = (short)(TextData[i * 2] + TextData[i * 2 + 1] * 0x100);
+                    WordList.Add(Word);
+                    sizex += 16;
+                }
+            }
+        }
+        void GetTextImage(List<short> WordList,int sizex, int sizey,int pos)
+        {
+            Bitmap tmp = new Bitmap(sizex, sizey, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            int posx = 0, posy = 0;
+            for (int i = 0; i < WordList.Count; i++)
+            {
+                if (WordList[i] >= FontNum || WordList[i]<0)
+                {
+                    posx = 0;
+                    posy += 16;
+                    continue;
+                }
+                for(int x=0;x<16;x++)
+                    for (int y = 0; y < 16; y++)
+                    { 
+                        Bitmap wordbmp=bmps[WordList[i]];
+                        tmp.SetPixel(posx+x,posy+y,wordbmp.GetPixel(x,y));
+                    }
+                posx += 16;
+            }
+            PictureBox pb=new PictureBox();
+            pb.Image=tmp;
+            pb.Width = sizex;
+            pb.Height = sizey;
+            pb.BackColor = Color.FromArgb(255, 0, 0, 0);
+            Point point=new Point();
+            point.X=0;
+            point.Y=pos;
+            pb.Location=point;
+            Controls.Add(pb);
         }
     }
 }

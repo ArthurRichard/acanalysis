@@ -160,6 +160,8 @@ namespace AC4Analysis
         {
             if (treeView1.SelectedNode == null)
                 return;
+            panel1.VerticalScroll.Value = 0;
+            panel1.HorizontalScroll.Value = 0;
             _L1 tmp = (_L1)treeView1.SelectedNode.Tag;
             culsize = tmp.size;
             tb大小.Text = string.Format("{0:X8}",tmp.size);
@@ -193,10 +195,12 @@ namespace AC4Analysis
                     }
                 case "GIM\0":
                     {
+                        textwin = new Text();
                         if (textwin.check(culdata))
                         {
                             textwin.TextData = GetNextNodeData(treeView1.SelectedNode);
                             textwin.FontData = culdata;
+                            textwin.Analysis();
                             panel1.Controls.Add(textwin);
                             return;
                         }
