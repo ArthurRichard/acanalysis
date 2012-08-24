@@ -26,6 +26,11 @@ namespace AC4Analysis
             w = datain[0x1C] + datain[0x1D] * 0x100;
             h = datain[0x1E] + datain[0x1F] * 0x100;
             FontNum = datain[0x8] + datain[0x9] * 0x100 + datain[0xA] * 0x10000 + datain[0xB] * 1000000;
+            if (FontNum > 0 && FontNum < 0x10000 && w == 0 && h == 0)
+            {
+                w = 16;
+                h = 16;
+            }
             if (datain.Length == (FontNum *(0x10+w * h / 2) +0x80 ))
                 return true;
             else
