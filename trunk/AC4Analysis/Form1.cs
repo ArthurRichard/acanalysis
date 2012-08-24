@@ -187,6 +187,7 @@ namespace AC4Analysis
             mapwin.CulData = culdata;
             if (mapwin.Check(treeView1.SelectedNode))
             {
+                panel1.Controls.Add(mapwin);
                 return;
             }
             string Head = System.Text.Encoding.ASCII.GetString(culdata,0,4).ToString();
