@@ -10,6 +10,12 @@ namespace AC4Analysis
 {
     public partial class map : UserControl
     {
+        struct _Mesh
+        {
+            public float[] Vecs;
+            public float[] Nors;
+            public float[] Texs;
+        }
         public map()
         {
             InitializeComponent();
@@ -19,6 +25,8 @@ namespace AC4Analysis
         List<ushort[]> SubMapList = new List<ushort[]>();
         int TexDataAdd;
         int TexCount;
+        Bitmap[] Images;
+        _Mesh[] Meshs;
         System.Drawing.Imaging.ColorPalette tempPalette;
         public bool Check(TreeNode node)
         {
@@ -38,8 +46,66 @@ namespace AC4Analysis
             GetTexs(TexsNode);
             TreeNode MapPalNode = node.Nodes[8];
             GetPal(MapPalNode);
+            TreeNode MeshNode = node.Nodes[9];
+            GetMesh(MeshNode);
+
             GetSubMaps();
             return true;
+        }
+        void SetPos(int x, int y, int z, int VecID, int FaceID, float[] Data, int add)
+        {
+            Data[add + VecID * 3 + FaceID * 9 + 0] = (float)x * 100.0f;
+            Data[add + VecID * 3 + FaceID * 9 + 1] = (float)y * 100.0f;
+            Data[add + VecID * 3 + FaceID * 9 + 2] = (float)z * 100.0f;
+        }
+        void SetTex(int x, int y, int VecID, int FaceID, float[] Data, int add)
+        {
+            Data[add + VecID * 2 + FaceID * 6 + 0] = (float)x / 32.0f;
+            Data[add + VecID * 2 + FaceID * 6 + 1] = (float)y / 32.0f;
+        }
+        void GetMesh(TreeNode node)
+        {
+            _L1 tmp = (_L1)node.Tag;
+            int add = (int)tmp.add;
+            int SubMeshCount = (int)tmp.size / 0x400;
+            Meshs = new _Mesh[SubMeshCount];
+            for (int i = 0; i < 1; i++)
+            {
+                _Mesh MeshTmp = new _Mesh();
+                MeshTmp.Vecs = new float[32 * 32 * 3 * 3 * 2];
+                MeshTmp.Nors = new float[32 * 32 * 3 * 3 * 2];
+                MeshTmp.Texs = new float[32 * 32 * 3 * 2 * 2];
+                for (int j = 0; j < 32 * 32 * 3 * 2;j++ )
+                {
+                    MeshTmp.Nors[j * 3 + 0] = 0.0f;
+                    MeshTmp.Nors[j * 3 + 1] = 1.0f;
+                    MeshTmp.Nors[j * 3 + 2] = 0.0f;
+                }
+                int addtmp = add + i * 0x400;
+                for (int y = 0; y < 31; y++)
+                    for (int x = 0; x < 31; x++)
+                    {
+                        int VecAdd = (x + y * 32) * 3 * 3 * 2;
+                        SetPos(x, CulData[add + i * 0x400 + x + y * 32], y, 0, 0, MeshTmp.Vecs, VecAdd);
+                        SetPos(x + 1, CulData[add + i * 0x400 + x + 1 + y * 32], y, 1, 0, MeshTmp.Vecs, VecAdd);
+                        SetPos(x, CulData[add + i * 0x400 + x + (y + 1) * 32], y + 1, 2, 0, MeshTmp.Vecs, VecAdd);
+
+                        SetPos(x + 1, CulData[add + i * 0x400 + x + 1 + y * 32], y, 0, 1, MeshTmp.Vecs, VecAdd);
+                        SetPos(x, CulData[add + i * 0x400 + x + (y + 1) * 32], y + 1, 1, 1, MeshTmp.Vecs, VecAdd);
+                        SetPos(x + 1, CulData[add + i * 0x400 + x + 1 + (y + 1) * 32], y + 1, 2, 1, MeshTmp.Vecs, VecAdd);
+
+
+                        int TexAdd = (x + y * 32) * 3 * 2 * 2;
+                        SetTex(x, y, 0, 0, MeshTmp.Texs, TexAdd);
+                        SetTex(x+1, y, 1, 0, MeshTmp.Texs, TexAdd);
+                        SetTex(x, y+1, 2, 0, MeshTmp.Texs, TexAdd);
+
+                        SetTex(x+1, y, 0, 1, MeshTmp.Texs, TexAdd);
+                        SetTex(x, y+1, 1, 1, MeshTmp.Texs, TexAdd);
+                        SetTex(x+1, y+1, 2, 1, MeshTmp.Texs, TexAdd);
+
+                    }
+            }
         }
         void GetSubMapList(TreeNode node)
         {
@@ -55,6 +121,7 @@ namespace AC4Analysis
                 }
                 SubMapList.Add(SubMap);
             }
+            Images = new Bitmap[SubMapCount];
         }
         void GetTexs(TreeNode node)
         { 
@@ -116,6 +183,7 @@ namespace AC4Analysis
                         TurnedX = 63 - x;
                     else
                         TurnedX = x;
+                    //if (!turnX)
                     TexDataTmp[PosX + x + (PosY + y) * 1024] = CulData[Add + TurnedY * 64 + TurnedX];
                 }
         }
@@ -123,8 +191,8 @@ namespace AC4Analysis
         {
             Height = 1024;
             Width = 1024;
-            Height = SubMapList.Count * 1024;
-            for (int i = 0; i < SubMapList.Count; i++)
+            //Height = SubMapList.Count * 1024;
+            for (int i = 0; i < 1; i++)
             {
                 ushort[] SubMap = SubMapList[i];
                 for (int y = 0; y < 16; y++)
@@ -158,6 +226,7 @@ namespace AC4Analysis
 
                 pb.BackColor = Color.FromArgb(255, 0, 0, 0);
                 Controls.Add(pb);
+                Images[i] = tmp;
             }
         }
     }
