@@ -88,7 +88,7 @@ GLfloat LightPosition[]= { 0.0f, 0.0f, 0.0f, 1.0f };
 
 int RenderPart(int PartID)
 {
-	int nextPartID = PartID;
+	int nextPartID = PartID + 1;
 	if(PartSize>0)
 	{
 		glPushMatrix();
@@ -96,7 +96,7 @@ int RenderPart(int PartID)
 		glTranslatef(PartTR[PartID*6],PartTR[PartID*6+1],PartTR[PartID*6+2]);
 
 		//glRotatef(PartTR[PartID*6+3]*180.0f,1.0f,0.0f,0.0f);
-		//glRotatef(PartTR[PartID*6+4]*-180.0f,0.0f,1.0f,0.0f);
+		//glRotatef(PartTR[PartID*6+4]*180.0f,0.0f,1.0f,0.0f);
 		//glRotatef(PartTR[PartID*6+5]*180.0f,0.0f,0.0f,1.0f);
 
 		
@@ -111,7 +111,7 @@ int RenderPart(int PartID)
 	
 		for(int i=0;i<PartInfo[PartID*3];i++)
 		{
-			nextPartID = RenderPart(nextPartID+1);
+			nextPartID = RenderPart(nextPartID);
 		}
 		
 		/*
