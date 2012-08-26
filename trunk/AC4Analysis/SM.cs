@@ -32,6 +32,8 @@ namespace AC4Analysis
             public Int32 unknowData5;      // 不明 多为0xFF
 
             public Int32 parentID;          // 父对象索引
+            public Int32 vertStartID;       // 起始顶点
+            public Int32 vertCount;         // 顶点数
 
             public void LoadPart(Byte[] data, Int32 startOffset, Int32 pID)
             {
@@ -62,6 +64,8 @@ namespace AC4Analysis
         [DllImport("AC4_3DWIN.DLL", CallingConvention = CallingConvention.Cdecl)]
         public static extern void Set3DData(float[] VecsIn, float[] NorsIn, int VecSizeIn, float[] TexsIn, int TexsSizeIn);
         [DllImport("AC4_3DWIN.DLL", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void SetPartData(float[] PartTRIn, int[] PartInfoIn, int PartSizeIn);
+        [DllImport("AC4_3DWIN.DLL", CallingConvention = CallingConvention.Cdecl)]
         public static extern void LightSwitch(bool Use);
         [DllImport("AC4_3DWIN.DLL", CallingConvention = CallingConvention.Cdecl)]
         public static extern void AlphaSwitch(bool Use);
@@ -73,7 +77,11 @@ namespace AC4Analysis
             Parts.Add(mPart);
 
             Int32 mID = Parts.Count - 1;
+
+            Parts[mID].vertStartID = Verts.Count / 3;
             LoadSMMesh(mPart.meshOffset);
+            Parts[mID].vertCount = Verts.Count / 3 - Parts[mID].vertStartID;
+
             for (Int32 i = 0; i < mPart.subPartCount; i++)
             {
                 LoadSMPart(BitConverter.ToInt32(data, mPart.subPartOffset + sizeof(Int32) * i), mID);
@@ -166,9 +174,11 @@ namespace AC4Analysis
         {
             if (data == null)
                 return;
+
             Verts = new List<Single>();
             Normals = new List<Single>();
             TexCoords = new List<Single>();
+            Parts = new List<SMPart>();
             Int32 mOffset = 0;
             mOffset = BitConverter.ToInt32(data, 20);              // Model.Offset
 
@@ -177,6 +187,9 @@ namespace AC4Analysis
             float[] Vesout = new float[Verts.Count];
             float[] Norout = new float[Verts.Count];
             float[] Texout = new float[TexCoords.Count];
+            float[] PartTR = new float[Parts.Count*6];
+            int[] PartInfo = new int[Parts.Count*3];
+
             for (int i = 0; i < TexCoords.Count; i++)
             {
                 Texout[i] = TexCoords[i];
@@ -186,8 +199,29 @@ namespace AC4Analysis
                 Vesout[i] = Verts[i];
                 Norout[i] = Normals[i];
             }
-            Set3DData(Vesout, Norout, Vesout.Length, Texout, TexCoords.Count);
+            for (int i = 0; i < Parts.Count; i++)
+            {
+                PartTR[i * 6] = Parts[i].Pos[0];
+                PartTR[i * 6 + 1] = Parts[i].Pos[1];
+                PartTR[i * 6 + 2] = Parts[i].Pos[2];
+
+                PartTR[i * 6 + 3] = Parts[i].Rot[0];
+                PartTR[i * 6 + 4] = Parts[i].Rot[1];
+                PartTR[i * 6 + 5] = Parts[i].Rot[2];
+
+                PartInfo[i * 3] = Parts[i].subPartCount;
+                PartInfo[i * 3 + 1] = Parts[i].vertStartID;
+                PartInfo[i * 3 + 2] = Parts[i].vertCount;
+            }
             
+            
+            Set3DData(Vesout, Norout, Vesout.Length, Texout, TexCoords.Count);
+            SetPartData(PartTR, PartInfo, Parts.Count);
+
+            Verts.Clear();
+            Normals.Clear();
+            TexCoords.Clear();
+            Parts.Clear();
 
         }
 

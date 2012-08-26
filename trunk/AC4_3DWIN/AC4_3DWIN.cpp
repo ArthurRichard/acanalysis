@@ -46,8 +46,11 @@ HANDLE RenderThreadHANDLE=NULL;
 float * Vecs=0;
 float * Nors=0;
 float * Texs=0;
+float * PartTR=0;
+int * PartInfo=0;
 int VecSize=0;
 int TexsSize=0;
+int PartSize=0;
 float WHEEL=0.0f;
 LRESULT	CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);	// Declaration For WndProc
 inline void EastPerspective(float fovyInDegrees, float aspectRatio,
@@ -82,6 +85,66 @@ float mpos[3]={0.0f,0.0f,0.0f};
 GLfloat LightAmbient[]= { 0.5f, 0.5f, 0.5f, 1.0f };
 GLfloat LightDiffuse[]= { 1.0f, 1.0f, 1.0f, 1.0f };
 GLfloat LightPosition[]= { 0.0f, 0.0f, 0.0f, 1.0f };
+
+int RenderPart(int PartID)
+{
+	int nextPartID = PartID;
+	if(PartSize>0)
+	{
+		glPushMatrix();
+
+		glTranslatef(PartTR[PartID*6],PartTR[PartID*6+1],PartTR[PartID*6+2]);
+
+		//glRotatef(PartTR[PartID*6+3]*180.0f,1.0f,0.0f,0.0f);
+		//glRotatef(PartTR[PartID*6+4]*-180.0f,0.0f,1.0f,0.0f);
+		//glRotatef(PartTR[PartID*6+5]*180.0f,0.0f,0.0f,1.0f);
+
+		
+		glBegin(GL_TRIANGLES);
+		for(int i=PartInfo[PartID*3+1];i<PartInfo[PartID*3+1]+PartInfo[PartID*3+2];i++)
+		{
+			glNormal3f(Nors[i*3+0],Nors[i*3+1], Nors[i*3+2]);
+			glTexCoord2f(Texs[i*2+0],Texs[i*2+1]);
+			glVertex3f(Vecs[i*3+0],Vecs[i*3+1], Vecs[i*3+2]);
+		}
+		glEnd();
+	
+		for(int i=0;i<PartInfo[PartID*3];i++)
+		{
+			nextPartID = RenderPart(nextPartID+1);
+		}
+		
+		/*
+		for(int j=0;j<PartSize;j++)
+		{
+			glBegin(GL_TRIANGLES);
+			for(int i=PartInfo[j*3+1];i<PartInfo[j*3+1]+PartInfo[j*3+2];i++)
+			{
+				glNormal3f(Nors[i*3+0],Nors[i*3+1], Nors[i*3+2]);
+				glTexCoord2f(Texs[i*2+0],Texs[i*2+1]);
+				glVertex3f(Vecs[i*3+0],Vecs[i*3+1], Vecs[i*3+2]);
+			}
+			glEnd();
+		}
+		*/
+		glPopMatrix();
+		return nextPartID;
+	}
+	else
+	{
+		glBegin(GL_TRIANGLES);
+		for(int i=0;i<VecSize/3;i++)
+		{
+			glNormal3f(Nors[i*3+0],Nors[i*3+1], Nors[i*3+2]);
+			glTexCoord2f(Texs[i*2+0],Texs[i*2+1]);
+			glVertex3f(Vecs[i*3+0],Vecs[i*3+1], Vecs[i*3+2]);
+		}
+		glEnd();
+		return 0;
+	}
+
+}
+
 GLvoid ReSizeGLScene(GLsizei width, GLsizei height)		// Resize And Initialize The GL Window
 {
 	w=width;
@@ -153,17 +216,14 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	rtri+=1.2f;											// Increase The Rotation Variable For The Triangle ( NEW )
 	rquad-=1.15f;										// Decrease The Rotation Variable For The Quad ( NEW )
 	glColor3f(1.0f,1.0f,1.0f);
-	glBegin(GL_TRIANGLES);
-	for(int i=0;i<VecSize/3;i++)
-	{
-		glNormal3f(Nors[i*3+0],Nors[i*3+1], Nors[i*3+2]);
-		glTexCoord2f(Texs[i*2+0],Texs[i*2+1]);
-		glVertex3f(Vecs[i*3+0],Vecs[i*3+1], Vecs[i*3+2]);
-	}
-	glEnd();
+	
+	RenderPart(0);
+
 	ReleaseMutex(Mutex);
 	return TRUE;										// Keep Going
 }
+
+
 
 GLvoid KillGLWindow(GLvoid)								// Properly Kill The Window
 {
@@ -519,15 +579,34 @@ extern "C" _declspec(dllexport) void Set3DData(float * VecsIn,float * NorsIn,int
 	Vecs=new float [VecSize];
 	Nors=new float [VecSize];
 	Texs=new float [TexsSize];
+
 	memcpy_s(Vecs,sizeof(float)*VecSizeIn,VecsIn,sizeof(float)*VecSizeIn);
 	memcpy_s(Nors,sizeof(float)*VecSizeIn,NorsIn,sizeof(float)*VecSizeIn);
 	memcpy_s(Texs,sizeof(float)*TexsSizeIn,TexsIn,sizeof(float)*TexsSizeIn);
+
 	for(int i=0;i<VecSizeIn;i++)
 		msize=max(msize,abs(Vecs[i]));
 	msize=min(1000.0f,msize);
 	WHEEL=0.0f;
 	ReleaseMutex(Mutex);
 }
+extern "C" _declspec(dllexport) void SetPartData(float * PartTRIn,int * PartInfoIn,int PartSizeIn)
+{
+	WaitForSingleObject(Mutex,INFINITE);
+
+	if(PartTR) delete [] PartTR;
+	if(PartInfo) delete [] PartInfo;
+	PartSize=PartSizeIn;
+
+	PartTR=new float [PartSizeIn*6];
+	PartInfo=new int [PartSizeIn*3];
+
+	memcpy_s(PartTR,sizeof(float)*PartSizeIn*6,PartTRIn,sizeof(float)*PartSizeIn*6);
+	memcpy_s(PartInfo,sizeof(int)*PartSizeIn*3,PartInfoIn,sizeof(int)*PartSizeIn*3);
+	WHEEL=0.0f;
+	ReleaseMutex(Mutex);
+}
+
 extern "C" _declspec(dllexport) void CloseRenderThread()
 {
 	done=1;
