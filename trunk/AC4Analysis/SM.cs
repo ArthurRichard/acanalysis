@@ -212,6 +212,7 @@ namespace AC4Analysis
                 Vesout[i] = Verts[i];
                 Norout[i] = Normals[i];
             }
+            cboxPart.Items.Clear();
             cboxPart.Items.Add("All Part, Verts:" + (Verts.Count / 3).ToString() + ", Parts:" + Parts.Count.ToString());
             cboxPart.SelectedIndex = 0;
             for (int i = 0; i < Parts.Count; i++)
