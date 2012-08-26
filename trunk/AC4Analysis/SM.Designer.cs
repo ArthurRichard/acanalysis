@@ -31,6 +31,7 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.btn开关灯 = new System.Windows.Forms.Button();
             this.btn开关透明 = new System.Windows.Forms.Button();
+            this.cboxPart = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // panel1
@@ -60,10 +61,21 @@
             this.btn开关透明.UseVisualStyleBackColor = true;
             this.btn开关透明.Click += new System.EventHandler(this.btn开关透明_Click);
             // 
+            // cboxPart
+            // 
+            this.cboxPart.Font = new System.Drawing.Font("宋体", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cboxPart.FormattingEnabled = true;
+            this.cboxPart.Location = new System.Drawing.Point(253, 5);
+            this.cboxPart.Name = "cboxPart";
+            this.cboxPart.Size = new System.Drawing.Size(400, 19);
+            this.cboxPart.TabIndex = 3;
+            this.cboxPart.SelectedIndexChanged += new System.EventHandler(this.cboxPart_SelectedIndexChanged);
+            // 
             // SM
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.cboxPart);
             this.Controls.Add(this.btn开关透明);
             this.Controls.Add(this.btn开关灯);
             this.Controls.Add(this.panel1);
@@ -78,6 +90,7 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button btn开关灯;
         private System.Windows.Forms.Button btn开关透明;
+        private System.Windows.Forms.ComboBox cboxPart;
 
     }
 }

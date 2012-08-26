@@ -60,6 +60,12 @@ namespace AC4Analysis
         List<Single> Normals = new List<Single>();
         List<Single> TexCoords = new List<Single>();
         List<SMPart> Parts = new List<SMPart>();
+
+        float[] Vesout;
+        float[] Norout;
+        float[] Texout;
+        float[] PartTR;
+        int[] PartInfo;
         
         [DllImport("AC4_3DWIN.DLL", CallingConvention = CallingConvention.Cdecl)]
         public static extern void Set3DData(float[] VecsIn, float[] NorsIn, int VecSizeIn, float[] TexsIn, int TexsSizeIn);
@@ -183,12 +189,19 @@ namespace AC4Analysis
             mOffset = BitConverter.ToInt32(data, 20);              // Model.Offset
 
             LoadSMPart(mOffset, -1);
-            
+            /*
             float[] Vesout = new float[Verts.Count];
             float[] Norout = new float[Verts.Count];
             float[] Texout = new float[TexCoords.Count];
             float[] PartTR = new float[Parts.Count*6];
             int[] PartInfo = new int[Parts.Count*3];
+            */
+
+            Vesout = new float[Verts.Count];
+            Norout = new float[Verts.Count];
+            Texout = new float[TexCoords.Count];
+            PartTR = new float[Parts.Count * 6];
+            PartInfo = new int[Parts.Count * 3];
 
             for (int i = 0; i < TexCoords.Count; i++)
             {
@@ -199,6 +212,8 @@ namespace AC4Analysis
                 Vesout[i] = Verts[i];
                 Norout[i] = Normals[i];
             }
+            cboxPart.Items.Add("All Part, Verts:" + (Verts.Count / 3).ToString() + ", Parts:" + Parts.Count.ToString());
+            cboxPart.SelectedIndex = 0;
             for (int i = 0; i < Parts.Count; i++)
             {
                 PartTR[i * 6] = Parts[i].Pos[0];
@@ -212,17 +227,40 @@ namespace AC4Analysis
                 PartInfo[i * 3] = Parts[i].subPartCount;
                 PartInfo[i * 3 + 1] = Parts[i].vertStartID;
                 PartInfo[i * 3 + 2] = Parts[i].vertCount;
+
+                cboxPart.Items.Add("Part_" + i.ToString() + 
+                                 ", Verts:" + Parts[i].vertCount.ToString() + 
+                                 ", PID:" + Parts[i].parentID.ToString() + 
+                                 ", Sub:" + Parts[i].subPartCount.ToString() + 
+                                 ", POS:" + Parts[i].Pos[0] + ", " + Parts[i].Pos[1] + ", " + Parts[i].Pos[2] + 
+                                 ", ROT:" + Parts[i].Rot[0] + ", " + Parts[i].Rot[1] + ", " + Parts[i].Rot[2] + 
+                                 ";");
             }
+            
             
             
             Set3DData(Vesout, Norout, Vesout.Length, Texout, TexCoords.Count);
             SetPartData(PartTR, PartInfo, Parts.Count);
 
-            Verts.Clear();
-            Normals.Clear();
-            TexCoords.Clear();
-            Parts.Clear();
+            RenderPart(0);
 
+            //Verts.Clear();
+            //Normals.Clear();
+            //TexCoords.Clear();
+            //Parts.Clear();
+
+        }
+
+        private Int32 RenderPart(Int32 PartID)
+        {
+            Int32 mNextID = PartID + 1;
+            Int32 mSubCount = PartInfo[PartID*3];
+
+            for (Int32 i = 0; i < mSubCount; i++)
+            {
+                mNextID = RenderPart(mNextID);
+            }
+            return mNextID;
         }
 
         private void btn开关灯_Click(object sender, EventArgs e)
@@ -244,6 +282,38 @@ namespace AC4Analysis
             else
                 btn开关透明.Text = "Turn On Alpha";
             AlphaSwitch(OpenAlpha);
+        }
+
+        private void cboxPart_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cboxPart.SelectedIndex > 0)
+            {
+                Int32 sel = cboxPart.SelectedIndex - 1;
+                if (sel > Parts.Count -1)
+                    sel = Parts.Count -1;
+
+                float[] mPartTR = new float[6];
+                int[] mPartInfo = new int[3];
+
+                mPartTR[0] = Parts[sel].Pos[0];
+                mPartTR[1] = Parts[sel].Pos[1];
+                mPartTR[2] = Parts[sel].Pos[2];
+
+                mPartTR[3] = Parts[sel].Rot[0];
+                mPartTR[4] = Parts[sel].Rot[1];
+                mPartTR[5] = Parts[sel].Rot[2];
+
+                mPartInfo[0] = 0;
+                mPartInfo[1] = Parts[sel].vertStartID;
+                mPartInfo[2] = Parts[sel].vertCount;
+
+                SetPartData(mPartTR, mPartInfo, 1);
+            }
+            else
+            {
+                SetPartData(PartTR, PartInfo, Parts.Count);
+            }
+
         }
     }
 }
