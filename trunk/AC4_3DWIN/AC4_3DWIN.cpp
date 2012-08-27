@@ -230,8 +230,19 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	rtri+=1.2f;											// Increase The Rotation Variable For The Triangle ( NEW )
 	rquad-=1.15f;										// Decrease The Rotation Variable For The Quad ( NEW )
 	glColor3f(1.0f,1.0f,1.0f);
-	
-	RenderPart(0);
+	if(!UseAlpha)
+		RenderPart(0);
+	else
+	{
+		glEnable(GL_ALPHA_TEST);
+		glAlphaFunc(GL_GREATER, 0.99f);
+		RenderPart(0);
+		glAlphaFunc(GL_LEQUAL, 0.99f);
+		glDepthMask(GL_FALSE);
+		RenderPart(0);
+		glDisable(GL_ALPHA_TEST); 
+		glDepthMask(GL_TRUE);
+	}
 
 	ReleaseMutex(Mutex);
 	return TRUE;										// Keep Going
