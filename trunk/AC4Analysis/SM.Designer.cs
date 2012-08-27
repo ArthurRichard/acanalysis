@@ -36,9 +36,10 @@
             // 
             // panel1
             // 
+            this.panel1.AutoScroll = true;
             this.panel1.Location = new System.Drawing.Point(3, 32);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(650, 490);
+            this.panel1.Size = new System.Drawing.Size(650, 549);
             this.panel1.TabIndex = 0;
             // 
             // btn开关灯
@@ -49,6 +50,7 @@
             this.btn开关灯.TabIndex = 1;
             this.btn开关灯.Text = "button1";
             this.btn开关灯.UseVisualStyleBackColor = true;
+            this.btn开关灯.Visible = false;
             this.btn开关灯.Click += new System.EventHandler(this.btn开关灯_Click);
             // 
             // btn开关透明
@@ -59,6 +61,7 @@
             this.btn开关透明.TabIndex = 2;
             this.btn开关透明.Text = "button1";
             this.btn开关透明.UseVisualStyleBackColor = true;
+            this.btn开关透明.Visible = false;
             this.btn开关透明.Click += new System.EventHandler(this.btn开关透明_Click);
             // 
             // cboxPart
@@ -80,7 +83,7 @@
             this.Controls.Add(this.btn开关灯);
             this.Controls.Add(this.panel1);
             this.Name = "SM";
-            this.Size = new System.Drawing.Size(663, 528);
+            this.Size = new System.Drawing.Size(663, 584);
             this.ResumeLayout(false);
 
         }
