@@ -43,7 +43,7 @@
             // 
             // btn开关透明
             // 
-            this.btn开关透明.Location = new System.Drawing.Point(4, 487);
+            this.btn开关透明.Location = new System.Drawing.Point(4, 519);
             this.btn开关透明.Name = "btn开关透明";
             this.btn开关透明.Size = new System.Drawing.Size(124, 23);
             this.btn开关透明.TabIndex = 0;
@@ -53,7 +53,7 @@
             // 
             // btn开关灯
             // 
-            this.btn开关灯.Location = new System.Drawing.Point(4, 458);
+            this.btn开关灯.Location = new System.Drawing.Point(4, 490);
             this.btn开关灯.Name = "btn开关灯";
             this.btn开关灯.Size = new System.Drawing.Size(124, 23);
             this.btn开关灯.TabIndex = 1;
@@ -63,7 +63,7 @@
             // 
             // btn向左旋转
             // 
-            this.btn向左旋转.Location = new System.Drawing.Point(144, 475);
+            this.btn向左旋转.Location = new System.Drawing.Point(144, 507);
             this.btn向左旋转.Name = "btn向左旋转";
             this.btn向左旋转.Size = new System.Drawing.Size(44, 23);
             this.btn向左旋转.TabIndex = 2;
@@ -73,7 +73,7 @@
             // 
             // btn向上旋转
             // 
-            this.btn向上旋转.Location = new System.Drawing.Point(194, 458);
+            this.btn向上旋转.Location = new System.Drawing.Point(194, 490);
             this.btn向上旋转.Name = "btn向上旋转";
             this.btn向上旋转.Size = new System.Drawing.Size(42, 23);
             this.btn向上旋转.TabIndex = 3;
@@ -83,7 +83,7 @@
             // 
             // btn向右旋转
             // 
-            this.btn向右旋转.Location = new System.Drawing.Point(242, 475);
+            this.btn向右旋转.Location = new System.Drawing.Point(242, 507);
             this.btn向右旋转.Name = "btn向右旋转";
             this.btn向右旋转.Size = new System.Drawing.Size(45, 23);
             this.btn向右旋转.TabIndex = 4;
@@ -93,7 +93,7 @@
             // 
             // btn向下旋转
             // 
-            this.btn向下旋转.Location = new System.Drawing.Point(194, 487);
+            this.btn向下旋转.Location = new System.Drawing.Point(194, 519);
             this.btn向下旋转.Name = "btn向下旋转";
             this.btn向下旋转.Size = new System.Drawing.Size(42, 23);
             this.btn向下旋转.TabIndex = 5;
@@ -103,7 +103,7 @@
             // 
             // btn拉近
             // 
-            this.btn拉近.Location = new System.Drawing.Point(293, 458);
+            this.btn拉近.Location = new System.Drawing.Point(293, 490);
             this.btn拉近.Name = "btn拉近";
             this.btn拉近.Size = new System.Drawing.Size(45, 23);
             this.btn拉近.TabIndex = 6;
@@ -113,7 +113,7 @@
             // 
             // btn拉远
             // 
-            this.btn拉远.Location = new System.Drawing.Point(293, 487);
+            this.btn拉远.Location = new System.Drawing.Point(293, 519);
             this.btn拉远.Name = "btn拉远";
             this.btn拉远.Size = new System.Drawing.Size(45, 23);
             this.btn拉远.TabIndex = 7;
@@ -125,7 +125,7 @@
             // 
             this.panel1.Location = new System.Drawing.Point(4, 4);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(540, 448);
+            this.panel1.Size = new System.Drawing.Size(640, 480);
             this.panel1.TabIndex = 8;
             // 
             // timer旋转停止
@@ -147,7 +147,7 @@
             this.Controls.Add(this.btn开关灯);
             this.Controls.Add(this.btn开关透明);
             this.Name = "Win3D";
-            this.Size = new System.Drawing.Size(562, 513);
+            this.Size = new System.Drawing.Size(646, 546);
             this.ResumeLayout(false);
 
         }

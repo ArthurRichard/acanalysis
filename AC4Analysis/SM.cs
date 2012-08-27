@@ -12,8 +12,6 @@ namespace AC4Analysis
     public partial class SM : UserControl
     {
         public byte[] data;
-        bool OpenLight = false;
-        bool OpenAlpha = false;
         public class SMPart
         {
             // 0x00
@@ -71,10 +69,6 @@ namespace AC4Analysis
         public static extern void Set3DData(float[] VecsIn, float[] NorsIn, int VecSizeIn, float[] TexsIn, int TexsSizeIn);
         [DllImport("AC4_3DWIN.DLL", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetPartData(float[] PartTRIn, int[] PartInfoIn, int PartSizeIn);
-        [DllImport("AC4_3DWIN.DLL", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void LightSwitch(bool Use);
-        [DllImport("AC4_3DWIN.DLL", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void AlphaSwitch(bool Use);
 
         private void LoadSMPart(Int32 startOffset, Int32 pID)
         {
@@ -169,8 +163,6 @@ namespace AC4Analysis
         public SM()
         {
             InitializeComponent();
-            btn开关灯.Text = "Turn On Light";
-            btn开关透明.Text = "Turn On Alpha";
         }
         public IntPtr GetHwnd()
         {
@@ -264,26 +256,7 @@ namespace AC4Analysis
             return mNextID;
         }
 
-        private void btn开关灯_Click(object sender, EventArgs e)
-        {
-            OpenLight = !OpenLight;
-            if (OpenLight)
-                btn开关灯.Text = "Turn Off Light";
-            else
-                btn开关灯.Text = "Turn On Light";
-            LightSwitch(OpenLight);
-        }
 
-        private void btn开关透明_Click(object sender, EventArgs e)
-        {
-
-            OpenAlpha = !OpenAlpha;
-            if (OpenAlpha)
-                btn开关透明.Text = "Turn Off Alpha";
-            else
-                btn开关透明.Text = "Turn On Alpha";
-            AlphaSwitch(OpenAlpha);
-        }
 
         private void cboxPart_SelectedIndexChanged(object sender, EventArgs e)
         {
