@@ -103,9 +103,9 @@ void SetMatrix(int PartID)
 										 0.0f,1.0f,0.0f,0.0f,
 										 0.0f,0.0f,1.0f,0.0f,
 										 0.0f,0.0f,0.0f,1.0f};
-	float theta_z = -PartTR[PartID*6+5];
-	float theta_y = -PartTR[PartID*6+4];
-	float theta_x = -PartTR[PartID*6+3];
+	float theta_z = PartTR[PartID*6+5];
+	float theta_y = PartTR[PartID*6+4];
+	float theta_x = PartTR[PartID*6+3];
 
 	float cos_z_2 = cos(0.5f*theta_z);
 	float cos_y_2 = cos(0.5f*theta_y);
