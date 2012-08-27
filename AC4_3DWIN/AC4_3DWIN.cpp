@@ -96,14 +96,53 @@ extern "C" _declspec(dllexport) void ClearViewTurn()
 	ViewChanging[1]=0.0f;
 	ViewChanging[2]=0.0f;
 }
+void SetMatrix(int PartID)
+{
+	float Q[4];
+	float T[4][4]={1.0f,0.0f,0.0f,0.0f,
+										 0.0f,1.0f,0.0f,0.0f,
+										 0.0f,0.0f,1.0f,0.0f,
+										 0.0f,0.0f,0.0f,1.0f};
+	float theta_z = -PartTR[PartID*6+5];
+	float theta_y = -PartTR[PartID*6+4];
+	float theta_x = -PartTR[PartID*6+3];
+
+	float cos_z_2 = cos(0.5f*theta_z);
+	float cos_y_2 = cos(0.5f*theta_y);
+	float cos_x_2 = cos(0.5f*theta_x);
+
+	float sin_z_2 = sin(0.5f*theta_z);
+	float sin_y_2 = sin(0.5f*theta_y);
+	float sin_x_2 = sin(0.5f*theta_x);
+
+Q[0] = cos_z_2*cos_y_2*cos_x_2 + sin_z_2*sin_y_2*sin_x_2;
+Q[1] = cos_z_2*cos_y_2*sin_x_2 - sin_z_2*sin_y_2*cos_x_2;
+Q[2] = cos_z_2*sin_y_2*cos_x_2 + sin_z_2*cos_y_2*sin_x_2;
+Q[3] = sin_z_2*cos_y_2*cos_x_2 - cos_z_2*sin_y_2*sin_x_2;
+    T[0][0] =   Q[0]*Q[0]+Q[1]*Q[1]-Q[2]*Q[2]-Q[3]*Q[3] ;
+    T[0][1] =                    2*(Q[1]*Q[2]-Q[0]*Q[3]);
+    T[0][2] =                    2*(Q[1]*Q[3]+Q[0]*Q[2]);
+
+    T[1][0] =                    2*(Q[1]*Q[2]+Q[0]*Q[3]);
+    T[1][1] =   Q[0]*Q[0]-Q[1]*Q[1]+Q[2]*Q[2]-Q[3]*Q[3] ;
+    T[1][2] =                    2*(Q[2]*Q[3]-Q[0]*Q[1]);
+
+    T[2][0] =                    2*(Q[1]*Q[3]-Q[0]*Q[2]);
+    T[2][1] =                    2*(Q[2]*Q[3]+Q[0]*Q[1]);
+    T[2][2] =   Q[0]*Q[0]-Q[1]*Q[1]-Q[2]*Q[2]+Q[3]*Q[3] ;
+    T[3][0] =   PartTR[PartID*6];
+    T[3][1] =   PartTR[PartID*6+1];
+    T[3][2] =   PartTR[PartID*6+2];
+	glMultMatrixf(&(T[0][0]));
+}
 int RenderPart(int PartID)
 {
 	int nextPartID = PartID + 1;
 	if(PartSize>0)
 	{
 		glPushMatrix();
-
-		glTranslatef(PartTR[PartID*6],PartTR[PartID*6+1],PartTR[PartID*6+2]);
+		SetMatrix(PartID);
+		//glTranslatef(PartTR[PartID*6],PartTR[PartID*6+1],PartTR[PartID*6+2]);
 
 		//glRotatef(PartTR[PartID*6+3]*180.0f,1.0f,0.0f,0.0f);
 		//glRotatef(PartTR[PartID*6+4]*180.0f,0.0f,1.0f,0.0f);
