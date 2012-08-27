@@ -18,7 +18,7 @@ HANDLE Mutex=0;
 bool	keys[256];			// Array Used For The Keyboard Routine
 bool	active=TRUE;		// Window Active Flag Set To TRUE By Default
 bool	fullscreen=TRUE;	// Fullscreen Flag Set To Fullscreen Mode By Default
-
+float ViewTurnX=45.0f,ViewTurnY=45.0f;
 bool UseLight=false;
 bool UseAlpha=false;
 unsigned int TexID=0;
@@ -209,9 +209,9 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	//glLightfv(GL_LIGHT0, GL_POSITION,LightPosition);
 	glTranslatef(0.0f,0.0f,-msize*((100.0f+WHEEL)/100.0f));	
 	
-	glRotatef(45.0f,1.0f,0.0f,0.0f);
+	glRotatef(ViewTurnY,1.0f,0.0f,0.0f);
 	glRotatef(180.0f,1.0f,0.0f,0.0f); // 模型方向反的
-	glRotatef(rquad,0.0f,1.0f,0.0f);// Done Drawing The Quad
+	glRotatef(ViewTurnX,0.0f,1.0f,0.0f);// Done Drawing The Quad
 	
 	rtri+=1.2f;											// Increase The Rotation Variable For The Triangle ( NEW )
 	rquad-=1.15f;										// Decrease The Rotation Variable For The Quad ( NEW )
@@ -630,4 +630,12 @@ extern "C" _declspec(dllexport) void LightSwitch(bool Use)
 extern "C" _declspec(dllexport) void AlphaSwitch(bool Use)
 {
 	UseAlpha=Use;
+}
+extern "C" _declspec(dllexport) void ChangeView(float TurnX,float TurnY,float TurnZ)
+{
+	WaitForSingleObject(Mutex,INFINITE);
+	WHEEL+=TurnZ;
+	ViewTurnX+=TurnX;
+	ViewTurnY+=TurnY;
+	ReleaseMutex(Mutex);
 }

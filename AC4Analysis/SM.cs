@@ -316,5 +316,13 @@ namespace AC4Analysis
             }
 
         }
+        public void Set3Dwin(Control control)
+        {
+            panel1.Controls.Add(control);
+        }
+        public void Unset3Dwin()
+        {
+            panel1.Controls.Clear();
+        }
     }
 }

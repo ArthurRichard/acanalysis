@@ -111,6 +111,12 @@
     <Compile Include="Text.Designer.cs">
       <DependentUpon>Text.cs</DependentUpon>
     </Compile>
+    <Compile Include="Win3D.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Win3D.Designer.cs">
+      <DependentUpon>Win3D.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="EE.resx">
       <DependentUpon>EE.cs</DependentUpon>
     </EmbeddedResource>
@@ -141,6 +147,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Text.resx">
       <DependentUpon>Text.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Win3D.resx">
+      <DependentUpon>Win3D.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="Properties\Settings.settings">

@@ -25,7 +25,8 @@ namespace AC4Analysis
         {
             InitializeComponent();
             Notes.load();
-            InitRenderThread(smwin.GetHwnd());
+            //InitRenderThread(smwin.GetHwnd());
+            InitRenderThread(win3d.GetHwnd());
         }
         [DllImport("AC4_3DWIN.DLL", CallingConvention = CallingConvention.Cdecl)]
         public static extern void InitRenderThread(IntPtr hwnd);
@@ -40,6 +41,7 @@ namespace AC4Analysis
         EE eewin = new EE();
         Text textwin = new Text();
         map mapwin = new map();
+        Win3D win3d = new Win3D();
         public static _Mode mode = _Mode.AC4;
         private void 打开tbl_Click(object sender, EventArgs e)
         {
@@ -191,12 +193,14 @@ namespace AC4Analysis
                 return;
             }
             string Head = System.Text.Encoding.ASCII.GetString(culdata,0,4).ToString();
+            smwin.Unset3Dwin();
             switch (Head)
             {
                 case "SM \0":
                     {
                         smwin.data = culdata;
                         smwin.Analysis_SM();
+                        smwin.Set3Dwin(win3d);
                         panel1.Controls.Add(smwin);
                         return;
                     }
