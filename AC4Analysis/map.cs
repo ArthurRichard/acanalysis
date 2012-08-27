@@ -6,6 +6,7 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 
+using System.Runtime.InteropServices;
 namespace AC4Analysis
 {
     public partial class map : UserControl
@@ -228,6 +229,25 @@ namespace AC4Analysis
                 Controls.Add(pb);
                 Images[i] = tmp;
             }
+        }
+
+        [DllImport("AC4_3DWIN.DLL", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void InputTex(byte[] TexDataIn, int SizeX, int SizeY, int DataSize);
+        void SetDataTo3DWin()
+        {
+            System.Drawing.Bitmap gb = Images[0];
+            System.Drawing.Bitmap newb = new Bitmap(gb.Width, gb.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            for (int y = 0; y < gb.Height; y++)
+                for (int x = 0; x < gb.Width; x++)
+                {
+                    newb.SetPixel(x, y, gb.GetPixel(x, y));
+                }
+            byte[] TexDataIn = new byte[gb.Width * gb.Height * 4];
+            System.Drawing.Imaging.BitmapData bdata = newb.LockBits(Rectangle.FromLTRB(0, 0, gb.Width, gb.Height), System.Drawing.Imaging.ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+
+            System.Runtime.InteropServices.Marshal.Copy(bdata.Scan0, TexDataIn, 0, gb.Width * gb.Height * 4);
+            newb.UnlockBits(bdata);
+            InputTex(TexDataIn, gb.Width, gb.Height, gb.Width * gb.Height * 4);
         }
     }
 }

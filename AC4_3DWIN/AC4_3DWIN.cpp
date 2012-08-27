@@ -703,3 +703,6 @@ extern "C" _declspec(dllexport) void ChangeView(float TurnX,float TurnY,float Tu
 	ViewChanging[2]=TurnZ;
 	ReleaseMutex(Mutex);
 }
+extern "C" _declspec(dllexport) void InputMap(unsigned char Data,int Size)
+{
+}
