@@ -19,6 +19,7 @@ bool	keys[256];			// Array Used For The Keyboard Routine
 bool	active=TRUE;		// Window Active Flag Set To TRUE By Default
 bool	fullscreen=TRUE;	// Fullscreen Flag Set To Fullscreen Mode By Default
 float ViewTurnX=45.0f,ViewTurnY=45.0f;
+float ViewChanging[]={0.0f,0.0f,0.0f};
 bool UseLight=false;
 bool UseAlpha=false;
 unsigned int TexID=0;
@@ -86,6 +87,15 @@ GLfloat LightAmbient[]= { 0.5f, 0.5f, 0.5f, 1.0f };
 GLfloat LightDiffuse[]= { 1.0f, 1.0f, 1.0f, 1.0f };
 GLfloat LightPosition[]= { 0.0f, 0.0f, 0.0f, 1.0f };
 
+extern "C" _declspec(dllexport) void ClearViewTurn()
+{
+	ViewTurnX=45.0f;
+	ViewTurnY=45.0f;
+	WHEEL=0.0f;
+	ViewChanging[0]=0.0f;
+	ViewChanging[1]=0.0f;
+	ViewChanging[2]=0.0f;
+}
 int RenderPart(int PartID)
 {
 	int nextPartID = PartID + 1;
@@ -192,6 +202,10 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 
 int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 {
+	
+	ViewTurnX+=ViewChanging[0];
+	ViewTurnY+=ViewChanging[1];
+	WHEEL+=ViewChanging[2];
 	if(UseLight)
 		glEnable(GL_LIGHTING);
 	else
@@ -587,7 +601,7 @@ extern "C" _declspec(dllexport) void Set3DData(float * VecsIn,float * NorsIn,int
 	for(int i=0;i<VecSizeIn;i++)
 		msize=max(msize,abs(Vecs[i]));
 	msize=min(1000.0f,msize);
-	WHEEL=0.0f;
+	ClearViewTurn();
 	ReleaseMutex(Mutex);
 }
 extern "C" _declspec(dllexport) void SetPartData(float * PartTRIn,int * PartInfoIn,int PartSizeIn)
@@ -603,7 +617,7 @@ extern "C" _declspec(dllexport) void SetPartData(float * PartTRIn,int * PartInfo
 
 	memcpy_s(PartTR,sizeof(float)*PartSizeIn*6,PartTRIn,sizeof(float)*PartSizeIn*6);
 	memcpy_s(PartInfo,sizeof(int)*PartSizeIn*3,PartInfoIn,sizeof(int)*PartSizeIn*3);
-	WHEEL=0.0f;
+	ClearViewTurn();
 	ReleaseMutex(Mutex);
 }
 
@@ -634,8 +648,8 @@ extern "C" _declspec(dllexport) void AlphaSwitch(bool Use)
 extern "C" _declspec(dllexport) void ChangeView(float TurnX,float TurnY,float TurnZ)
 {
 	WaitForSingleObject(Mutex,INFINITE);
-	WHEEL+=TurnZ;
-	ViewTurnX+=TurnX;
-	ViewTurnY+=TurnY;
+	ViewChanging[0]=TurnX;
+	ViewChanging[1]=TurnY;
+	ViewChanging[2]=TurnZ;
 	ReleaseMutex(Mutex);
 }
