@@ -62,13 +62,18 @@ namespace AC4Analysis
                 }
             }
         }
-        public class 关键帧数据
+        public struct 关键帧
         {
-            public Int32 关键帧数量;
+            public Int32 关键帧数;
             public Int32 不明关键帧信息偏址1;
             public Int32 关键帧数据偏址;
             public Int32 预留;
+
+            public V3F[] 位置;
+            public V3F[] 旋转;
+            public V3F[] 缩放;
         }
+
         public class 部件信息
         {
             // 0x00
@@ -83,13 +88,15 @@ namespace AC4Analysis
             // 0x30
             public Int32 子部件数;     // 子部件数量
             public Int32 子部件列表偏址;    // 子部件偏址
-            public Int32 关键帧动画数量;      // 不明 多为0x00
+            public Int32 关键帧动画数;      // 不明 多为0x00
             public Int32 不明整数参数2;      // 不明 多为0xFF
 
             // 以下数据非模型数据，分析后记录得出
             public Int32 父部件索引;          // 父对象索引
             public Int32 顶点起始索引;       // 起始顶点
             public Int32 顶点数;         // 顶点数
+
+            public 关键帧 关键帧数据 = new 关键帧(); 
 
             public void 读取部件信息(Byte[] _数据, Int32 _起始偏址, Int32 _父部件索引)
             {
@@ -106,15 +113,37 @@ namespace AC4Analysis
 
                 子部件数 = BitConverter.ToInt32(_数据, _起始偏址 + 0x30);
                 子部件列表偏址 = BitConverter.ToInt32(_数据, _起始偏址 + 0x30 + 4);
-                关键帧动画数量 = BitConverter.ToInt32(_数据, _起始偏址 + 0x30 + 8);
+                关键帧动画数 = BitConverter.ToInt32(_数据, _起始偏址 + 0x30 + 8);
                 不明整数参数2 = BitConverter.ToInt32(_数据, _起始偏址 + 0x30 + 12);
 
                 父部件索引 = _父部件索引;
+
+                if (关键帧动画信息偏址 > 0)
+                {
+                    关键帧数据.关键帧数 = BitConverter.ToInt32(_数据, 关键帧动画信息偏址);
+                    关键帧数据.不明关键帧信息偏址1 = BitConverter.ToInt32(_数据, 关键帧动画信息偏址 + 4);
+                    关键帧数据.关键帧数据偏址  = BitConverter.ToInt32(_数据, 关键帧动画信息偏址 + 8);
+                    关键帧数据.预留 = BitConverter.ToInt32(_数据, 关键帧动画信息偏址 + 12);
+
+                    关键帧数据.位置 = new V3F[关键帧数据.关键帧数];
+                    关键帧数据.旋转 = new V3F[关键帧数据.关键帧数];
+                    关键帧数据.缩放 = new V3F[关键帧数据.关键帧数];
+
+                    for(Int32 i=0;i<关键帧数据.关键帧数;i++)
+                    {
+                        for (Int32 j = 0; j < 3; j++)
+                        {
+                            关键帧数据.位置[i].设置(j, BitConverter.ToSingle(_数据, 关键帧数据.关键帧数据偏址 + i * 36 + 0  + sizeof(Single)*j));
+                            关键帧数据.旋转[i].设置(j, BitConverter.ToSingle(_数据, 关键帧数据.关键帧数据偏址 + i * 36 + 12 + sizeof(Single) * j));
+                            关键帧数据.缩放[i].设置(j, BitConverter.ToSingle(_数据, 关键帧数据.关键帧数据偏址 + i * 36 + 24 + sizeof(Single) * j));
+                        }
+                    }
+                }
             }
         }
         List<Single> 顶点列表 = new List<Single>();
         List<Single> 法线列表 = new List<Single>();
-        List<Single> 纹理坐标列表 = new List<Single>();
+        List<Single> 纹理位置列表 = new List<Single>();
         List<部件信息> 部件列表 = new List<部件信息>();
 
         float[] Vesout;
@@ -155,9 +184,9 @@ namespace AC4Analysis
                 {
                     for (Int32 i = 2; i > -1; i--)
                     {
-                        Int32 纹理坐标偏址 = 网格偏址 + 20 + i * 8;      // UV数据起始位置
-                        纹理坐标列表.Add((Single)BitConverter.ToInt16(data, 纹理坐标偏址) / 0x1000);
-                        纹理坐标列表.Add((Single)BitConverter.ToInt16(data, 纹理坐标偏址 + 2) / 0x1000);
+                        Int32 纹理位置偏址 = 网格偏址 + 20 + i * 8;      // UV数据起始位置
+                        纹理位置列表.Add((Single)BitConverter.ToInt16(data, 纹理位置偏址) / 0x1000);
+                        纹理位置列表.Add((Single)BitConverter.ToInt16(data, 纹理位置偏址 + 2) / 0x1000);
 
                         Int32 法线偏址 = 网格偏址 + 144 + i * 8;        // Normal数据起始位置
                         法线列表.Add(-(Single)BitConverter.ToInt16(data, 法线偏址) / 0x1000);
@@ -172,9 +201,9 @@ namespace AC4Analysis
 
                     for (Int32 i = 1; i < 4; i++)
                     {
-                        Int32 纹理坐标偏址 = 网格偏址 + 20 + i * 8;      // UV数据起始位置
-                        纹理坐标列表.Add((Single)BitConverter.ToInt16(data, 纹理坐标偏址) / 0x1000);
-                        纹理坐标列表.Add((Single)BitConverter.ToInt16(data, 纹理坐标偏址 + 2) / 0x1000);
+                        Int32 纹理位置偏址 = 网格偏址 + 20 + i * 8;      // UV数据起始位置
+                        纹理位置列表.Add((Single)BitConverter.ToInt16(data, 纹理位置偏址) / 0x1000);
+                        纹理位置列表.Add((Single)BitConverter.ToInt16(data, 纹理位置偏址 + 2) / 0x1000);
 
                         Int32 法线偏址 = 网格偏址 + 144 + i * 8;        // Normal数据起始位置
                         法线列表.Add(-(Single)BitConverter.ToInt16(data, 法线偏址) / 0x1000);
@@ -194,9 +223,9 @@ namespace AC4Analysis
                     {
                         for (Int32 i = 2; i > -1; i--)
                         {
-                            Int32 纹理坐标偏址 = 网格偏址 + 24 + i * 8;      // UV数据起始位置
-                            纹理坐标列表.Add((Single)BitConverter.ToInt16(data, 纹理坐标偏址) / 0x1000);
-                            纹理坐标列表.Add((Single)BitConverter.ToInt16(data, 纹理坐标偏址 + 2) / 0x1000);
+                            Int32 纹理位置偏址 = 网格偏址 + 24 + i * 8;      // UV数据起始位置
+                            纹理位置列表.Add((Single)BitConverter.ToInt16(data, 纹理位置偏址) / 0x1000);
+                            纹理位置列表.Add((Single)BitConverter.ToInt16(data, 纹理位置偏址 + 2) / 0x1000);
 
                             Int32 法线偏址 = 网格偏址 + 120 + i * 8;        // Normal数据起始位置
                             法线列表.Add(-(Single)BitConverter.ToInt16(data, 法线偏址) / 0x1000);
@@ -233,7 +262,7 @@ namespace AC4Analysis
 
             顶点列表  = new List<Single>();
             法线列表 = new List<Single>();
-            纹理坐标列表 = new List<Single>();
+            纹理位置列表 = new List<Single>();
             部件列表 = new List<部件信息>();
             Int32 临时偏址 = 0;
             临时偏址 = BitConverter.ToInt32(data, 20);              // Model.Offset
@@ -249,13 +278,13 @@ namespace AC4Analysis
 
             Vesout = new float[顶点列表.Count];
             Norout = new float[法线列表.Count];
-            Texout = new float[纹理坐标列表.Count];
+            Texout = new float[纹理位置列表.Count];
             PartTR = new float[部件列表.Count * 6];
             PartInfo = new int[部件列表.Count * 3];
 
-            for (int i = 0; i < 纹理坐标列表.Count; i++)
+            for (int i = 0; i < 纹理位置列表.Count; i++)
             {
-                Texout[i] = 纹理坐标列表[i];
+                Texout[i] = 纹理位置列表[i];
             }
             for (int i = 0; i < 顶点列表.Count; i++)
             {
