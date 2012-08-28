@@ -12,52 +12,110 @@ namespace AC4Analysis
     public partial class SM : UserControl
     {
         public byte[] data;
-        public class SMPart
+        public struct V3F
+        {
+            public float x, y, z;
+            public void 设置(Int32 _索引, Single _数值)
+            {
+                switch(_索引)
+                {
+                    case 0: x = _数值; break;
+                    case 1: y = _数值; break;
+                    case 2: z = _数值; break;
+                    default: break;
+                }
+            }
+            public float 获取(Int32 _索引)
+            {
+                switch (_索引)
+                {
+                    case 0: return x;
+                    case 1: return y;
+                    case 2: return z;
+                    default: return x;
+                }
+            }
+        }
+        public struct V4F
+        {
+            public float x, y, z, w;
+            public void 设置(Int32 _索引, Single _数值)
+            {
+                switch (_索引)
+                {
+                    case 0: x = _数值; break;
+                    case 1: y = _数值; break;
+                    case 2: z = _数值; break;
+                    case 3: w = _数值; break;
+                    default: break;
+                }
+            }
+            public float 获取(Int32 _索引)
+            {
+                switch (_索引)
+                {
+                    case 0: return x;
+                    case 1: return y;
+                    case 2: return z;
+                    case 3: return w;
+                    default: return x;
+                }
+            }
+        }
+        public class 关键帧数据
+        {
+            public Int32 关键帧数量;
+            public Int32 不明关键帧信息偏址1;
+            public Int32 关键帧数据偏址;
+            public Int32 预留;
+        }
+        public class 部件信息
         {
             // 0x00
-            public Single[] Pos = new Single[4];
+            public V4F 初始位置 = new V4F();
             // 0x10
-            public Single[] Rot = new Single[4];
+            public V4F 初始旋转 = new V4F();
             // 0x20
-            public Int32 unknowData1;      // 不明 多为0x00
-            public Int32 meshOffset;       // 网格数据偏址
-            public Single unknowData2;     // 不明 一个单精浮点
-            public Single unknowData3;     // 不明 多为0x00
+            public Int32 关键帧动画信息偏址;      // 不明 多为0x00
+            public Int32 网格数据列表偏址;       // 网格数据偏址
+            public Single 不明浮点参数1;     // 不明 一个单精浮点
+            public Int32 不明整数参数1;     // 不明 多为0x00
             // 0x30
-            public Int32 subPartCount;     // 子部件数量
-            public Int32 subPartOffset;    // 子部件偏址
-            public Int32 unknowData4;      // 不明 多为0x00
-            public Int32 unknowData5;      // 不明 多为0xFF
+            public Int32 子部件数;     // 子部件数量
+            public Int32 子部件列表偏址;    // 子部件偏址
+            public Int32 关键帧动画数量;      // 不明 多为0x00
+            public Int32 不明整数参数2;      // 不明 多为0xFF
 
-            public Int32 parentID;          // 父对象索引
-            public Int32 vertStartID;       // 起始顶点
-            public Int32 vertCount;         // 顶点数
+            // 以下数据非模型数据，分析后记录得出
+            public Int32 父部件索引;          // 父对象索引
+            public Int32 顶点起始索引;       // 起始顶点
+            public Int32 顶点数;         // 顶点数
 
-            public void LoadPart(Byte[] data, Int32 startOffset, Int32 pID)
+            public void 读取部件信息(Byte[] _数据, Int32 _起始偏址, Int32 _父部件索引)
             {
                 for (Int32 i = 0; i < 4; i++)
                 {
-                    Pos[i] = BitConverter.ToSingle(data, startOffset + sizeof(Single) * i);
-                    Rot[i] = BitConverter.ToSingle(data, startOffset + 0x10 + sizeof(Single) * i);
+                    初始位置.设置(i, BitConverter.ToSingle(_数据, _起始偏址 + sizeof(Single) * i));
+                    初始旋转.设置(i, BitConverter.ToSingle(_数据, _起始偏址 + 0x10 + sizeof(Single) * i));
                 }
 
-                unknowData1 = BitConverter.ToInt32(data, startOffset + 0x20);
-                meshOffset = BitConverter.ToInt32(data, startOffset + 0x20 + 4);
-                unknowData2 = BitConverter.ToInt32(data, startOffset + 0x20 + 8);
-                unknowData3 = BitConverter.ToInt32(data, startOffset + 0x20 + 12);
+                关键帧动画信息偏址 = BitConverter.ToInt32(_数据, _起始偏址 + 0x20);
+                网格数据列表偏址 = BitConverter.ToInt32(_数据, _起始偏址 + 0x20 + 4);
+                不明浮点参数1 = BitConverter.ToInt32(_数据, _起始偏址 + 0x20 + 8);
+                不明整数参数1 = BitConverter.ToInt32(_数据, _起始偏址 + 0x20 + 12);
 
-                subPartCount = BitConverter.ToInt32(data, startOffset + 0x30);
-                subPartOffset = BitConverter.ToInt32(data, startOffset + 0x30 + 4);
-                unknowData4 = BitConverter.ToInt32(data, startOffset + 0x30 + 8);
-                unknowData5 = BitConverter.ToInt32(data, startOffset + 0x30 + 12);
+                子部件数 = BitConverter.ToInt32(_数据, _起始偏址 + 0x30);
+                子部件列表偏址 = BitConverter.ToInt32(_数据, _起始偏址 + 0x30 + 4);
+                关键帧动画数量 = BitConverter.ToInt32(_数据, _起始偏址 + 0x30 + 8);
+                不明整数参数2 = BitConverter.ToInt32(_数据, _起始偏址 + 0x30 + 12);
 
-                parentID = pID;
+                父部件索引 = _父部件索引;
             }
-        };
-        List<Single> Verts = new List<Single>();
-        List<Single> Normals = new List<Single>();
-        List<Single> TexCoords = new List<Single>();
-        List<SMPart> Parts = new List<SMPart>();
+        }
+        List<Single> 顶点列表 = new List<Single>();
+        List<Single> 法线列表 = new List<Single>();
+        List<Single> 纹理坐标列表 = new List<Single>();
+        List<部件信息> 部件列表 = new List<部件信息>();
 
         float[] Vesout;
         float[] Norout;
@@ -70,87 +128,87 @@ namespace AC4Analysis
         [DllImport("AC4_3DWIN.DLL", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetPartData(float[] PartTRIn, int[] PartInfoIn, int PartSizeIn);
 
-        private void LoadSMPart(Int32 startOffset, Int32 pID)
+        private void 载入部件(Int32 _起始偏址, Int32 _父部件索引)
         {
-            SMPart mPart = new SMPart();
-            mPart.LoadPart(data, startOffset, pID);
-            Parts.Add(mPart);
+            部件信息 当前部件 = new 部件信息();
+            当前部件.读取部件信息(data, _起始偏址, _父部件索引);
+            部件列表.Add(当前部件);
 
-            Int32 mID = Parts.Count - 1;
+            Int32 当前索引 = 部件列表.Count - 1;
 
-            Parts[mID].vertStartID = Verts.Count / 3;
-            LoadSMMesh(mPart.meshOffset);
-            Parts[mID].vertCount = Verts.Count / 3 - Parts[mID].vertStartID;
+            部件列表[当前索引].顶点起始索引= 顶点列表.Count / 3;
+            载入网格(当前部件.网格数据列表偏址 );
+            部件列表[当前索引].顶点数 = 顶点列表.Count / 3 - 部件列表[当前索引].顶点起始索引;
 
-            for (Int32 i = 0; i < mPart.subPartCount; i++)
+            for (Int32 i = 0; i < 当前部件.子部件数 ; i++)
             {
-                LoadSMPart(BitConverter.ToInt32(data, mPart.subPartOffset + sizeof(Int32) * i), mID);
+                载入部件(BitConverter.ToInt32(data, 当前部件.子部件列表偏址  + sizeof(Int32) * i), 当前索引);
             }
         }
 
-        private void LoadSMMesh(Int32 startOffset)
+        private void 载入网格(Int32 _起始偏址)
         {
-            Int32 mOffset = BitConverter.ToInt32(data, startOffset + 4);
-            while (BitConverter.ToInt32(data, mOffset) == 0x1000000A || BitConverter.ToInt32(data, mOffset) == 0x10000008)
+            Int32 网格偏址 = BitConverter.ToInt32(data, _起始偏址 + 4);
+            while (BitConverter.ToInt32(data, 网格偏址) == 0x1000000A || BitConverter.ToInt32(data, 网格偏址) == 0x10000008)
             {
-                if (data[mOffset] == 0x0A)
+                if (data[网格偏址] == 0x0A)
                 {
                     for (Int32 i = 2; i > -1; i--)
                     {
-                        Int32 mTexCoordsOffset = mOffset + 20 + i * 8;      // UV数据起始位置
-                        TexCoords.Add((Single)BitConverter.ToInt16(data, mTexCoordsOffset) / 0x1000);
-                        TexCoords.Add((Single)BitConverter.ToInt16(data, mTexCoordsOffset + 2) / 0x1000);
+                        Int32 纹理坐标偏址 = 网格偏址 + 20 + i * 8;      // UV数据起始位置
+                        纹理坐标列表.Add((Single)BitConverter.ToInt16(data, 纹理坐标偏址) / 0x1000);
+                        纹理坐标列表.Add((Single)BitConverter.ToInt16(data, 纹理坐标偏址 + 2) / 0x1000);
 
-                        Int32 mNormalsOffset = mOffset + 144 + i * 8;        // Normal数据起始位置
-                        Normals.Add(-(Single)BitConverter.ToInt16(data, mNormalsOffset) / 0x1000);
-                        Normals.Add(-(Single)BitConverter.ToInt16(data, mNormalsOffset + 2) / 0x1000);
-                        Normals.Add(-(Single)BitConverter.ToInt16(data, mNormalsOffset + 4) / 0x1000);
+                        Int32 法线偏址 = 网格偏址 + 144 + i * 8;        // Normal数据起始位置
+                        法线列表.Add(-(Single)BitConverter.ToInt16(data, 法线偏址) / 0x1000);
+                        法线列表.Add(-(Single)BitConverter.ToInt16(data, 法线偏址 + 2) / 0x1000);
+                        法线列表.Add(-(Single)BitConverter.ToInt16(data, 法线偏址 + 4) / 0x1000);
 
-                        Int32 mVertsOffset = mOffset + 76 + i * 16;        // Vertex数据起始位置
-                        Verts.Add(BitConverter.ToSingle(data, mVertsOffset));
-                        Verts.Add(BitConverter.ToSingle(data, mVertsOffset + 4));
-                        Verts.Add(BitConverter.ToSingle(data, mVertsOffset + 8));
+                        Int32 顶点偏址 = 网格偏址 + 76 + i * 16;        // Vertex数据起始位置
+                        顶点列表.Add(BitConverter.ToSingle(data, 顶点偏址));
+                        顶点列表.Add(BitConverter.ToSingle(data, 顶点偏址 + 4));
+                        顶点列表.Add(BitConverter.ToSingle(data, 顶点偏址 + 8));
                     }
 
                     for (Int32 i = 1; i < 4; i++)
                     {
-                        Int32 mTexCoordsOffset = mOffset + 20 + i * 8;      // UV数据起始位置
-                        TexCoords.Add((Single)BitConverter.ToInt16(data, mTexCoordsOffset) / 0x1000);
-                        TexCoords.Add((Single)BitConverter.ToInt16(data, mTexCoordsOffset + 2) / 0x1000);
+                        Int32 纹理坐标偏址 = 网格偏址 + 20 + i * 8;      // UV数据起始位置
+                        纹理坐标列表.Add((Single)BitConverter.ToInt16(data, 纹理坐标偏址) / 0x1000);
+                        纹理坐标列表.Add((Single)BitConverter.ToInt16(data, 纹理坐标偏址 + 2) / 0x1000);
 
-                        Int32 mNormalsOffset = mOffset + 144 + i * 8;        // Normal数据起始位置
-                        Normals.Add(-(Single)BitConverter.ToInt16(data, mNormalsOffset) / 0x1000);
-                        Normals.Add(-(Single)BitConverter.ToInt16(data, mNormalsOffset + 2) / 0x1000);
-                        Normals.Add(-(Single)BitConverter.ToInt16(data, mNormalsOffset + 4) / 0x1000);
+                        Int32 法线偏址 = 网格偏址 + 144 + i * 8;        // Normal数据起始位置
+                        法线列表.Add(-(Single)BitConverter.ToInt16(data, 法线偏址) / 0x1000);
+                        法线列表.Add(-(Single)BitConverter.ToInt16(data, 法线偏址 + 2) / 0x1000);
+                        法线列表.Add(-(Single)BitConverter.ToInt16(data, 法线偏址 + 4) / 0x1000);
 
-                        Int32 mVertsOffset = mOffset + 76 + i * 16;        // Vertex数据起始位置
-                        Verts.Add(BitConverter.ToSingle(data, mVertsOffset));
-                        Verts.Add(BitConverter.ToSingle(data, mVertsOffset + 4));
-                        Verts.Add(BitConverter.ToSingle(data, mVertsOffset + 8));
+                        Int32 顶点偏址 = 网格偏址 + 76 + i * 16;        // Vertex数据起始位置
+                        顶点列表.Add(BitConverter.ToSingle(data, 顶点偏址));
+                        顶点列表.Add(BitConverter.ToSingle(data, 顶点偏址 + 4));
+                        顶点列表.Add(BitConverter.ToSingle(data, 顶点偏址 + 8));
                     }
-                    mOffset += 256;
+                    网格偏址 += 256;
                 }
                 else
                 {
-                    if (data[mOffset] == 0x08)
+                    if (data[网格偏址] == 0x08)
                     {
                         for (Int32 i = 2; i > -1; i--)
                         {
-                            Int32 mTexCoordsOffset = mOffset + 24 + i * 8;      // UV数据起始位置
-                            TexCoords.Add((Single)BitConverter.ToInt16(data, mTexCoordsOffset) / 0x1000);
-                            TexCoords.Add((Single)BitConverter.ToInt16(data, mTexCoordsOffset + 2) / 0x1000);
+                            Int32 纹理坐标偏址 = 网格偏址 + 24 + i * 8;      // UV数据起始位置
+                            纹理坐标列表.Add((Single)BitConverter.ToInt16(data, 纹理坐标偏址) / 0x1000);
+                            纹理坐标列表.Add((Single)BitConverter.ToInt16(data, 纹理坐标偏址 + 2) / 0x1000);
 
-                            Int32 mNormalsOffset = mOffset + 120 + i * 8;        // Normal数据起始位置
-                            Normals.Add(-(Single)BitConverter.ToInt16(data, mNormalsOffset) / 0x1000);
-                            Normals.Add(-(Single)BitConverter.ToInt16(data, mNormalsOffset + 2) / 0x1000);
-                            Normals.Add(-(Single)BitConverter.ToInt16(data, mNormalsOffset + 4) / 0x1000);
+                            Int32 法线偏址 = 网格偏址 + 120 + i * 8;        // Normal数据起始位置
+                            法线列表.Add(-(Single)BitConverter.ToInt16(data, 法线偏址) / 0x1000);
+                            法线列表.Add(-(Single)BitConverter.ToInt16(data, 法线偏址 + 2) / 0x1000);
+                            法线列表.Add(-(Single)BitConverter.ToInt16(data, 法线偏址 + 4) / 0x1000);
 
-                            Int32 mVertsOffset = mOffset + 68 + i * 16;        // Vertex数据起始位置
-                            Verts.Add(BitConverter.ToSingle(data, mVertsOffset));
-                            Verts.Add(BitConverter.ToSingle(data, mVertsOffset + 4));
-                            Verts.Add(BitConverter.ToSingle(data, mVertsOffset + 8));
+                            Int32 顶点偏址 = 网格偏址 + 68 + i * 16;        // Vertex数据起始位置
+                            顶点列表.Add(BitConverter.ToSingle(data, 顶点偏址));
+                            顶点列表.Add(BitConverter.ToSingle(data, 顶点偏址 + 4));
+                            顶点列表.Add(BitConverter.ToSingle(data, 顶点偏址 + 8));
                         }
-                        mOffset += 224;
+                        网格偏址 += 224;
                     }
                     else
                     {
@@ -173,14 +231,14 @@ namespace AC4Analysis
             if (data == null)
                 return;
 
-            Verts = new List<Single>();
-            Normals = new List<Single>();
-            TexCoords = new List<Single>();
-            Parts = new List<SMPart>();
-            Int32 mOffset = 0;
-            mOffset = BitConverter.ToInt32(data, 20);              // Model.Offset
+            顶点列表  = new List<Single>();
+            法线列表 = new List<Single>();
+            纹理坐标列表 = new List<Single>();
+            部件列表 = new List<部件信息>();
+            Int32 临时偏址 = 0;
+            临时偏址 = BitConverter.ToInt32(data, 20);              // Model.Offset
 
-            LoadSMPart(mOffset, -1);
+            载入部件(临时偏址, -1);
             /*
             float[] Vesout = new float[Verts.Count];
             float[] Norout = new float[Verts.Count];
@@ -189,51 +247,51 @@ namespace AC4Analysis
             int[] PartInfo = new int[Parts.Count*3];
             */
 
-            Vesout = new float[Verts.Count];
-            Norout = new float[Verts.Count];
-            Texout = new float[TexCoords.Count];
-            PartTR = new float[Parts.Count * 6];
-            PartInfo = new int[Parts.Count * 3];
+            Vesout = new float[顶点列表.Count];
+            Norout = new float[法线列表.Count];
+            Texout = new float[纹理坐标列表.Count];
+            PartTR = new float[部件列表.Count * 6];
+            PartInfo = new int[部件列表.Count * 3];
 
-            for (int i = 0; i < TexCoords.Count; i++)
+            for (int i = 0; i < 纹理坐标列表.Count; i++)
             {
-                Texout[i] = TexCoords[i];
+                Texout[i] = 纹理坐标列表[i];
             }
-            for (int i = 0; i < Verts.Count; i++)
+            for (int i = 0; i < 顶点列表.Count; i++)
             {
-                Vesout[i] = Verts[i];
-                Norout[i] = Normals[i];
+                Vesout[i] = 顶点列表[i];
+                Norout[i] = 法线列表[i];
             }
             cboxPart.Items.Clear();
-            cboxPart.Items.Add("All Part, Verts:" + (Verts.Count / 3).ToString() + ", Parts:" + Parts.Count.ToString());
+            cboxPart.Items.Add("整体显示, 顶点:" + (顶点列表.Count / 3) + ", 部件:" + 顶点列表.Count);
             cboxPart.SelectedIndex = 0;
-            for (int i = 0; i < Parts.Count; i++)
+            for (int i = 0; i < 部件列表.Count; i++)
             {
-                PartTR[i * 6] = Parts[i].Pos[0];
-                PartTR[i * 6 + 1] = Parts[i].Pos[1];
-                PartTR[i * 6 + 2] = Parts[i].Pos[2];
+                PartTR[i * 6 + 0] = 部件列表[i].初始位置.x;
+                PartTR[i * 6 + 1] = 部件列表[i].初始位置.y;
+                PartTR[i * 6 + 2] = 部件列表[i].初始位置.z;
 
-                PartTR[i * 6 + 3] = Parts[i].Rot[0];
-                PartTR[i * 6 + 4] = Parts[i].Rot[1];
-                PartTR[i * 6 + 5] = Parts[i].Rot[2];
+                PartTR[i * 6 + 3] = 部件列表[i].初始旋转.x;
+                PartTR[i * 6 + 4] = 部件列表[i].初始旋转.y;
+                PartTR[i * 6 + 5] = 部件列表[i].初始旋转.z;
 
-                PartInfo[i * 3] = Parts[i].subPartCount;
-                PartInfo[i * 3 + 1] = Parts[i].vertStartID;
-                PartInfo[i * 3 + 2] = Parts[i].vertCount;
+                PartInfo[i * 3] = 部件列表[i].子部件数;
+                PartInfo[i * 3 + 1] = 部件列表[i].顶点起始索引;
+                PartInfo[i * 3 + 2] = 部件列表[i].顶点数;
 
-                cboxPart.Items.Add("Part_" + i.ToString() + 
-                                 ", Verts:" + Parts[i].vertCount.ToString() + 
-                                 ", PID:" + Parts[i].parentID.ToString() + 
-                                 ", Sub:" + Parts[i].subPartCount.ToString() + 
-                                 ", POS:" + Parts[i].Pos[0] + ", " + Parts[i].Pos[1] + ", " + Parts[i].Pos[2] + 
-                                 ", ROT:" + Parts[i].Rot[0] + ", " + Parts[i].Rot[1] + ", " + Parts[i].Rot[2] + 
+                cboxPart.Items.Add("部件_" + i +
+                                 ", 顶点数:" + 部件列表[i].顶点数 +
+                                 ", 父:" + 部件列表[i].父部件索引 +
+                                 ", 子:" + 部件列表[i].子部件数 +
+                                 ", 位置:" + 部件列表[i].初始位置.x + ", " + 部件列表[i].初始位置.y + ", " + 部件列表[i].初始位置.z +
+                                 ", 旋转:" + 部件列表[i].初始旋转.x + ", " + 部件列表[i].初始旋转.y + ", " + 部件列表[i].初始旋转.z + 
                                  ";");
             }
-            
-            
-            
-            Set3DData(Vesout, Norout, Vesout.Length, Texout, TexCoords.Count);
-            SetPartData(PartTR, PartInfo, Parts.Count);
+
+
+
+            Set3DData(Vesout, Norout, Vesout.Length, Texout, Texout.Length);
+            SetPartData(PartTR, PartInfo, 部件列表.Count);
 
             RenderPart(0);
 
@@ -263,29 +321,29 @@ namespace AC4Analysis
             if (cboxPart.SelectedIndex > 0)
             {
                 Int32 sel = cboxPart.SelectedIndex - 1;
-                if (sel > Parts.Count -1)
-                    sel = Parts.Count -1;
+                if (sel > 部件列表.Count - 1)
+                    sel = 部件列表.Count - 1;
 
                 float[] mPartTR = new float[6];
                 int[] mPartInfo = new int[3];
 
-                mPartTR[0] = Parts[sel].Pos[0];
-                mPartTR[1] = Parts[sel].Pos[1];
-                mPartTR[2] = Parts[sel].Pos[2];
+                mPartTR[0] = 部件列表[sel].初始位置.x;
+                mPartTR[1] = 部件列表[sel].初始位置.y;
+                mPartTR[2] = 部件列表[sel].初始位置.z;
 
-                mPartTR[3] = Parts[sel].Rot[0];
-                mPartTR[4] = Parts[sel].Rot[1];
-                mPartTR[5] = Parts[sel].Rot[2];
+                mPartTR[3] = 部件列表[sel].初始旋转.x;
+                mPartTR[4] = 部件列表[sel].初始旋转.y;
+                mPartTR[5] = 部件列表[sel].初始旋转.z;
 
                 mPartInfo[0] = 0;
-                mPartInfo[1] = Parts[sel].vertStartID;
-                mPartInfo[2] = Parts[sel].vertCount;
+                mPartInfo[1] = 部件列表[sel].顶点起始索引;
+                mPartInfo[2] = 部件列表[sel].顶点数;
 
                 SetPartData(mPartTR, mPartInfo, 1);
             }
             else
             {
-                SetPartData(PartTR, PartInfo, Parts.Count);
+                SetPartData(PartTR, PartInfo, 部件列表.Count);
             }
 
         }
