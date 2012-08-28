@@ -667,7 +667,7 @@ extern "C" _declspec(dllexport) void SetPartData(float * PartTRIn,int * PartInfo
 
 	memcpy_s(PartTR,sizeof(float)*PartSizeIn*6,PartTRIn,sizeof(float)*PartSizeIn*6);
 	memcpy_s(PartInfo,sizeof(int)*PartSizeIn*3,PartInfoIn,sizeof(int)*PartSizeIn*3);
-	ClearViewTurn();
+	//ClearViewTurn();
 	ReleaseMutex(Mutex);
 }
 
