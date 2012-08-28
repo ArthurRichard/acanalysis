@@ -64,12 +64,21 @@ namespace AC4Analysis
             Data[add + VecID * 2 + FaceID * 6 + 0] = (float)x / 32.0f;
             Data[add + VecID * 2 + FaceID * 6 + 1] = (float)y / 32.0f;
         }
+        [DllImport("AC4_3DWIN.DLL", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void InputMap(byte[] Data,int Size);
         void GetMesh(TreeNode node)
         {
             _L1 tmp = (_L1)node.Tag;
             int add = (int)tmp.add;
             int SubMeshCount = (int)tmp.size / 0x400;
             Meshs = new _Mesh[SubMeshCount];
+            byte [] datatmp=new byte[0x400];
+
+            for (int i = 0; i < 0x400; i++)
+            {
+                datatmp[i]=CulData[add + i];
+            }
+            InputMap(datatmp, 0x400);
             for (int i = 0; i < 1; i++)
             {
                 _Mesh MeshTmp = new _Mesh();
