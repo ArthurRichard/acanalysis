@@ -30,6 +30,22 @@
         {
             this.panel1 = new System.Windows.Forms.Panel();
             this.cboxPart = new System.Windows.Forms.ComboBox();
+            this.txt旋转Z = new System.Windows.Forms.TextBox();
+            this.txt旋转Y = new System.Windows.Forms.TextBox();
+            this.txt旋转X = new System.Windows.Forms.TextBox();
+            this.txt位置Z = new System.Windows.Forms.TextBox();
+            this.txt位置Y = new System.Windows.Forms.TextBox();
+            this.txt位置X = new System.Windows.Forms.TextBox();
+            this.btn导出 = new System.Windows.Forms.Button();
+            this.btn应用位置旋转 = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.cbox单独设置 = new System.Windows.Forms.ComboBox();
+            this.label7 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // panel1
@@ -40,7 +56,7 @@
             this.panel1.AutoScroll = true;
             this.panel1.Location = new System.Drawing.Point(0, 23);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(663, 561);
+            this.panel1.Size = new System.Drawing.Size(647, 561);
             this.panel1.TabIndex = 0;
             // 
             // cboxPart
@@ -51,19 +67,175 @@
             this.cboxPart.FormattingEnabled = true;
             this.cboxPart.Location = new System.Drawing.Point(3, 3);
             this.cboxPart.Name = "cboxPart";
-            this.cboxPart.Size = new System.Drawing.Size(657, 19);
+            this.cboxPart.Size = new System.Drawing.Size(734, 19);
             this.cboxPart.TabIndex = 3;
             this.cboxPart.SelectedIndexChanged += new System.EventHandler(this.cboxPart_SelectedIndexChanged);
+            // 
+            // txt旋转Z
+            // 
+            this.txt旋转Z.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.txt旋转Z.Location = new System.Drawing.Point(676, 199);
+            this.txt旋转Z.Name = "txt旋转Z";
+            this.txt旋转Z.Size = new System.Drawing.Size(61, 21);
+            this.txt旋转Z.TabIndex = 11;
+            // 
+            // txt旋转Y
+            // 
+            this.txt旋转Y.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.txt旋转Y.Location = new System.Drawing.Point(676, 172);
+            this.txt旋转Y.Name = "txt旋转Y";
+            this.txt旋转Y.Size = new System.Drawing.Size(61, 21);
+            this.txt旋转Y.TabIndex = 10;
+            // 
+            // txt旋转X
+            // 
+            this.txt旋转X.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.txt旋转X.Location = new System.Drawing.Point(676, 145);
+            this.txt旋转X.Name = "txt旋转X";
+            this.txt旋转X.Size = new System.Drawing.Size(61, 21);
+            this.txt旋转X.TabIndex = 9;
+            // 
+            // txt位置Z
+            // 
+            this.txt位置Z.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.txt位置Z.Location = new System.Drawing.Point(676, 107);
+            this.txt位置Z.Name = "txt位置Z";
+            this.txt位置Z.Size = new System.Drawing.Size(61, 21);
+            this.txt位置Z.TabIndex = 8;
+            // 
+            // txt位置Y
+            // 
+            this.txt位置Y.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.txt位置Y.Location = new System.Drawing.Point(676, 80);
+            this.txt位置Y.Name = "txt位置Y";
+            this.txt位置Y.Size = new System.Drawing.Size(61, 21);
+            this.txt位置Y.TabIndex = 7;
+            // 
+            // txt位置X
+            // 
+            this.txt位置X.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.txt位置X.Location = new System.Drawing.Point(676, 53);
+            this.txt位置X.Name = "txt位置X";
+            this.txt位置X.Size = new System.Drawing.Size(61, 21);
+            this.txt位置X.TabIndex = 6;
+            // 
+            // btn导出
+            // 
+            this.btn导出.Location = new System.Drawing.Point(655, 253);
+            this.btn导出.Name = "btn导出";
+            this.btn导出.Size = new System.Drawing.Size(82, 21);
+            this.btn导出.TabIndex = 12;
+            this.btn导出.Text = "Export";
+            this.btn导出.UseVisualStyleBackColor = true;
+            // 
+            // btn应用位置旋转
+            // 
+            this.btn应用位置旋转.Location = new System.Drawing.Point(655, 226);
+            this.btn应用位置旋转.Name = "btn应用位置旋转";
+            this.btn应用位置旋转.Size = new System.Drawing.Size(82, 21);
+            this.btn应用位置旋转.TabIndex = 13;
+            this.btn应用位置旋转.Text = "Apply";
+            this.btn应用位置旋转.UseVisualStyleBackColor = true;
+            this.btn应用位置旋转.Click += new System.EventHandler(this.btn应用位置旋转_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(653, 148);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(17, 12);
+            this.label1.TabIndex = 14;
+            this.label1.Text = "RX";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(653, 175);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(17, 12);
+            this.label2.TabIndex = 15;
+            this.label2.Text = "RY";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(653, 56);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(17, 12);
+            this.label4.TabIndex = 17;
+            this.label4.Text = "TX";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(653, 83);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(17, 12);
+            this.label5.TabIndex = 18;
+            this.label5.Text = "TY";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(653, 110);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(17, 12);
+            this.label6.TabIndex = 19;
+            this.label6.Text = "TZ";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(653, 202);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(17, 12);
+            this.label3.TabIndex = 16;
+            this.label3.Text = "RZ";
+            // 
+            // cbox单独设置
+            // 
+            this.cbox单独设置.FormattingEnabled = true;
+            this.cbox单独设置.Location = new System.Drawing.Point(676, 27);
+            this.cbox单独设置.Name = "cbox单独设置";
+            this.cbox单独设置.Size = new System.Drawing.Size(61, 20);
+            this.cbox单独设置.TabIndex = 20;
+            this.cbox单独设置.SelectedIndexChanged += new System.EventHandler(this.cbox单独设置_SelectedIndexChanged);
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(653, 30);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(23, 12);
+            this.label7.TabIndex = 21;
+            this.label7.Text = "SET";
             // 
             // SM
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.cbox单独设置);
+            this.Controls.Add(this.txt旋转Z);
+            this.Controls.Add(this.txt旋转Y);
+            this.Controls.Add(this.txt旋转X);
+            this.Controls.Add(this.txt位置Z);
+            this.Controls.Add(this.txt位置Y);
+            this.Controls.Add(this.txt位置X);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.btn应用位置旋转);
+            this.Controls.Add(this.btn导出);
             this.Controls.Add(this.cboxPart);
             this.Controls.Add(this.panel1);
             this.Name = "SM";
-            this.Size = new System.Drawing.Size(663, 584);
+            this.Size = new System.Drawing.Size(740, 584);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -71,6 +243,22 @@
 
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.ComboBox cboxPart;
+        private System.Windows.Forms.TextBox txt旋转Z;
+        private System.Windows.Forms.TextBox txt旋转Y;
+        private System.Windows.Forms.TextBox txt旋转X;
+        private System.Windows.Forms.TextBox txt位置Z;
+        private System.Windows.Forms.TextBox txt位置Y;
+        private System.Windows.Forms.TextBox txt位置X;
+        private System.Windows.Forms.Button btn导出;
+        private System.Windows.Forms.Button btn应用位置旋转;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.ComboBox cbox单独设置;
+        private System.Windows.Forms.Label label7;
 
     }
 }

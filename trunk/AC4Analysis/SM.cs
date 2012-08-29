@@ -105,6 +105,7 @@ namespace AC4Analysis
                     初始位置.设置(i, BitConverter.ToSingle(_数据, _起始偏址 + sizeof(Single) * i));
                     初始旋转.设置(i, BitConverter.ToSingle(_数据, _起始偏址 + 0x10 + sizeof(Single) * i));
                 }
+                初始旋转.y = -初始旋转.y;
 
                 关键帧动画信息偏址 = BitConverter.ToInt32(_数据, _起始偏址 + 0x20);
                 网格数据列表偏址 = BitConverter.ToInt32(_数据, _起始偏址 + 0x20 + 4);
@@ -293,6 +294,7 @@ namespace AC4Analysis
             }
             cboxPart.Items.Clear();
             cboxPart.Items.Add("整体显示, 顶点:" + (顶点列表.Count / 3) + ", 部件:" + 顶点列表.Count);
+            cbox单独设置.Items.Add("");
             cboxPart.SelectedIndex = 0;
             for (int i = 0; i < 部件列表.Count; i++)
             {
@@ -308,13 +310,14 @@ namespace AC4Analysis
                 PartInfo[i * 3 + 1] = 部件列表[i].顶点起始索引;
                 PartInfo[i * 3 + 2] = 部件列表[i].顶点数;
 
-                cboxPart.Items.Add("部件_" + i +
+                cboxPart.Items.Add("部件" + i +
                                  ", 顶点数:" + 部件列表[i].顶点数 +
                                  ", 父:" + 部件列表[i].父部件索引 +
                                  ", 子:" + 部件列表[i].子部件数 +
                                  ", 位置:" + 部件列表[i].初始位置.x + ", " + 部件列表[i].初始位置.y + ", " + 部件列表[i].初始位置.z +
                                  ", 旋转:" + 部件列表[i].初始旋转.x + ", " + 部件列表[i].初始旋转.y + ", " + 部件列表[i].初始旋转.z + 
                                  ";");
+                cbox单独设置.Items.Add("部件" + i);
             }
 
 
@@ -353,6 +356,8 @@ namespace AC4Analysis
                 if (sel > 部件列表.Count - 1)
                     sel = 部件列表.Count - 1;
 
+                cbox单独设置.SelectedIndex = cboxPart.SelectedIndex;
+
                 float[] mPartTR = new float[6];
                 int[] mPartInfo = new int[3];
 
@@ -368,6 +373,14 @@ namespace AC4Analysis
                 mPartInfo[1] = 部件列表[sel].顶点起始索引;
                 mPartInfo[2] = 部件列表[sel].顶点数;
 
+                txt位置X.Text = 部件列表[sel].初始位置.x.ToString();
+                txt位置Y.Text = 部件列表[sel].初始位置.y.ToString();
+                txt位置Z.Text = 部件列表[sel].初始位置.z.ToString();
+
+                txt旋转X.Text = 部件列表[sel].初始旋转.x.ToString();
+                txt旋转Y.Text = 部件列表[sel].初始旋转.y.ToString();
+                txt旋转Z.Text = 部件列表[sel].初始旋转.z.ToString();
+                
                 SetPartData(mPartTR, mPartInfo, 1);
             }
             else
@@ -384,5 +397,60 @@ namespace AC4Analysis
         {
             panel1.Controls.Clear();
         }
+
+        private void btn应用位置旋转_Click(object sender, EventArgs e)
+        {
+            if (cbox单独设置.SelectedIndex > 0)
+            {
+                Int32 sel = cbox单独设置.SelectedIndex - 1;
+                if (sel > 部件列表.Count - 1)
+                    sel = 部件列表.Count - 1;
+
+                PartTR[sel * 6 + 0] = Convert.ToSingle(txt位置X.Text);
+                PartTR[sel * 6 + 1] = Convert.ToSingle(txt位置Y.Text);
+                PartTR[sel * 6 + 2] = Convert.ToSingle(txt位置Z.Text);
+
+                PartTR[sel * 6 + 3] = Convert.ToSingle(txt旋转X.Text);
+                PartTR[sel * 6 + 4] = Convert.ToSingle(txt旋转Y.Text);
+                PartTR[sel * 6 + 5] = Convert.ToSingle(txt旋转Z.Text);
+
+                SetPartData(PartTR, PartInfo, 部件列表.Count);
+            }
+        }
+
+        private void cbox单独设置_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if ((cbox单独设置.SelectedIndex != cboxPart.SelectedIndex) && cbox单独设置.SelectedIndex != 0)
+            {
+                Int32 sel = cbox单独设置.SelectedIndex - 1;
+                if (sel > 部件列表.Count - 1)
+                    sel = 部件列表.Count - 1;
+
+                float[] mPartTR = new float[6];
+                int[] mPartInfo = new int[3];
+
+                mPartTR[0] = 部件列表[sel].初始位置.x;
+                mPartTR[1] = 部件列表[sel].初始位置.y;
+                mPartTR[2] = 部件列表[sel].初始位置.z;
+
+                mPartTR[3] = 部件列表[sel].初始旋转.x;
+                mPartTR[4] = 部件列表[sel].初始旋转.y;
+                mPartTR[5] = 部件列表[sel].初始旋转.z;
+
+                mPartInfo[0] = 0;
+                mPartInfo[1] = 部件列表[sel].顶点起始索引;
+                mPartInfo[2] = 部件列表[sel].顶点数;
+
+                txt位置X.Text = 部件列表[sel].初始位置.x.ToString();
+                txt位置Y.Text = 部件列表[sel].初始位置.y.ToString();
+                txt位置Z.Text = 部件列表[sel].初始位置.z.ToString();
+
+                txt旋转X.Text = 部件列表[sel].初始旋转.x.ToString();
+                txt旋转Y.Text = 部件列表[sel].初始旋转.y.ToString();
+                txt旋转Z.Text = 部件列表[sel].初始旋转.z.ToString();
+            }
+        }
+
+
     }
 }
