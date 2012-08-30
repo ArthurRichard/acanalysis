@@ -49,6 +49,7 @@ namespace AC4Analysis
             {
                 OpenFileDialog ofd = new OpenFileDialog();
                 ofd.FileName = "Data.TBL";
+                ofd.Filter = "AC4 and AC0 TBL(*.tbl)|*.tbl|所有文件(*.*)|*.*";
                 if (!ofd.ShowDialog().Equals(DialogResult.OK))
                     return;
                 cdpfilename = System.IO.Path.GetDirectoryName(ofd.FileName) + "\\" + System.IO.Path.GetFileNameWithoutExtension(ofd.FileName) + ".cdp";
