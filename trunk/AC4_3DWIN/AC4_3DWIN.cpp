@@ -141,12 +141,13 @@ int RenderPart(int PartID)
 	if(PartSize>0)
 	{
 		glPushMatrix();
-		SetMatrix(PartID);
-		//glTranslatef(PartTR[PartID*6],PartTR[PartID*6+1],PartTR[PartID*6+2]);
-
-		//glRotatef(PartTR[PartID*6+3]*180.0f,1.0f,0.0f,0.0f);
-		//glRotatef(PartTR[PartID*6+4]*180.0f,0.0f,1.0f,0.0f);
-		//glRotatef(PartTR[PartID*6+5]*180.0f,0.0f,0.0f,1.0f);
+		//SetMatrix(PartID);
+		glTranslatef(PartTR[PartID*6],PartTR[PartID*6+1],PartTR[PartID*6+2]);
+		glRotatef((PartTR[PartID*6+5]/3.1415926f)*180.0f,0.0f,0.0f,1.0f);
+		glRotatef((PartTR[PartID*6+4]/3.1415926f)*180.0f,0.0f,1.0f,0.0f);
+		glRotatef((PartTR[PartID*6+3]/3.1415926f)*180.0f,1.0f,0.0f,0.0f);
+		
+		
 
 		
 		glBegin(GL_TRIANGLES);

@@ -11,6 +11,7 @@ namespace AC4Analysis
 {
     public partial class SM : UserControl
     {
+        
         public byte[] data;
         public struct V3F
         {
@@ -105,7 +106,9 @@ namespace AC4Analysis
                     初始位置.设置(i, BitConverter.ToSingle(_数据, _起始偏址 + sizeof(Single) * i));
                     初始旋转.设置(i, BitConverter.ToSingle(_数据, _起始偏址 + 0x10 + sizeof(Single) * i));
                 }
-                初始旋转.y = -初始旋转.y;
+                //初始旋转.x = -初始旋转.x;
+                //初始旋转.y = -初始旋转.y;
+
 
                 关键帧动画信息偏址 = BitConverter.ToInt32(_数据, _起始偏址 + 0x20);
                 网格数据列表偏址 = BitConverter.ToInt32(_数据, _起始偏址 + 0x20 + 4);
@@ -315,7 +318,7 @@ namespace AC4Analysis
                                  ", 父:" + 部件列表[i].父部件索引 +
                                  ", 子:" + 部件列表[i].子部件数 +
                                  ", 位置:" + 部件列表[i].初始位置.x + ", " + 部件列表[i].初始位置.y + ", " + 部件列表[i].初始位置.z +
-                                 ", 旋转:" + 部件列表[i].初始旋转.x + ", " + 部件列表[i].初始旋转.y + ", " + 部件列表[i].初始旋转.z + 
+                                 ", 旋转:" + ((部件列表[i].初始旋转.x / Math.PI)*180f).ToString("f2") + ", " + ((部件列表[i].初始旋转.y / Math.PI)*180f).ToString("f2") + ", " + ((部件列表[i].初始旋转.z / Math.PI)*180f).ToString("f2") + 
                                  ";");
                 cbox单独设置.Items.Add("部件" + i);
             }
@@ -449,6 +452,12 @@ namespace AC4Analysis
                 txt旋转Y.Text = 部件列表[sel].初始旋转.y.ToString();
                 txt旋转Z.Text = 部件列表[sel].初始旋转.z.ToString();
             }
+        }
+
+        private void btn导出_Click(object sender, EventArgs e)
+        {  
+            //OpenFileDialog 打开文件对话框 = new OpenFileDialog();
+            
         }
 
 

@@ -127,6 +127,7 @@
             this.btn导出.TabIndex = 12;
             this.btn导出.Text = "Export";
             this.btn导出.UseVisualStyleBackColor = true;
+            this.btn导出.Click += new System.EventHandler(this.btn导出_Click);
             // 
             // btn应用位置旋转
             // 
