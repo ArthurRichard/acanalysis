@@ -85,7 +85,7 @@ namespace AC4Analysis
             public Int32 关键帧动画信息偏址;      // 不明 多为0x00
             public Int32 网格数据列表偏址;       // 网格数据偏址
             public Single 不明浮点参数1;     // 不明 一个单精浮点
-            public Int32 不明整数参数1;     // 不明 多为0x00
+            public Int32 部件类型;          
             // 0x30
             public Int32 子部件数;     // 子部件数量
             public Int32 子部件列表偏址;    // 子部件偏址
@@ -106,14 +106,11 @@ namespace AC4Analysis
                     初始位置.设置(i, BitConverter.ToSingle(_数据, _起始偏址 + sizeof(Single) * i));
                     初始旋转.设置(i, BitConverter.ToSingle(_数据, _起始偏址 + 0x10 + sizeof(Single) * i));
                 }
-                //初始旋转.x = -初始旋转.x;
-                //初始旋转.y = -初始旋转.y;
-
 
                 关键帧动画信息偏址 = BitConverter.ToInt32(_数据, _起始偏址 + 0x20);
                 网格数据列表偏址 = BitConverter.ToInt32(_数据, _起始偏址 + 0x20 + 4);
                 不明浮点参数1 = BitConverter.ToInt32(_数据, _起始偏址 + 0x20 + 8);
-                不明整数参数1 = BitConverter.ToInt32(_数据, _起始偏址 + 0x20 + 12);
+                部件类型 = BitConverter.ToInt32(_数据, _起始偏址 + 0x20 + 12);
 
                 子部件数 = BitConverter.ToInt32(_数据, _起始偏址 + 0x30);
                 子部件列表偏址 = BitConverter.ToInt32(_数据, _起始偏址 + 0x30 + 4);
@@ -250,7 +247,46 @@ namespace AC4Analysis
                 }
             }
         }
-
+        public String 获取部件类型名称(Int32 _编号)
+        {
+            switch (_编号)
+            {
+                case 0: return "机体";
+                case 1: return "升降舵_左";
+                case 2: return "升降舵_右";
+                case 3: return "方向舵_左";
+                case 4: return "方向舵_右";
+                case 5: return "低速副翼_左";
+                case 6: return "低速副翼_右";
+                case 7: return "高速副翼_左";
+                case 8: return "高速副翼_右";
+                case 13: return "鸭翼_左";
+                case 14: return "鸭翼_右";
+                case 15: return "尾喷管";
+                case 16: return "阻力板";
+                case 17: return "辅助进气口";
+                case 18: return "前缘襟翼";
+                case 20: return "可变翼关节";
+                case 22: return "发动机风扇";
+                case 30: return "机身发光条";
+                case 31: return "机舱驾驶员";
+                case 33: return "常规武器舱门";
+                case 34: return "特殊兵装舱门";
+                case 40: return "起落架舱门";
+                case 50: return "武器挂架_1_1";
+                case 51: return "武器挂架_1_2";
+                case 52: return "武器挂架_1_3";
+                case 53: return "武器挂架_1_4";
+                case 58: return "武器挂架_2_1";
+                case 59: return "武器挂架_2_2";
+                case 60: return "武器挂架_2_3";
+                case 61: return "武器挂架_2_4";
+                case 62: return "武器挂架_3_1";
+                case 63: return "武器挂架_3_2";
+                case 97: return "空中加油舱门";
+                default: return "未知类型_" + _编号.ToString();
+            }
+        }
         public SM()
         {
             InitializeComponent();
@@ -313,12 +349,21 @@ namespace AC4Analysis
                 PartInfo[i * 3 + 1] = 部件列表[i].顶点起始索引;
                 PartInfo[i * 3 + 2] = 部件列表[i].顶点数;
 
-                cboxPart.Items.Add("部件" + i +
+                /*cboxPart.Items.Add("部件" + i +
                                  ", 顶点数:" + 部件列表[i].顶点数 +
                                  ", 父:" + 部件列表[i].父部件索引 +
                                  ", 子:" + 部件列表[i].子部件数 +
                                  ", 位置:" + 部件列表[i].初始位置.x + ", " + 部件列表[i].初始位置.y + ", " + 部件列表[i].初始位置.z +
                                  ", 旋转:" + ((部件列表[i].初始旋转.x / Math.PI)*180f).ToString("f2") + ", " + ((部件列表[i].初始旋转.y / Math.PI)*180f).ToString("f2") + ", " + ((部件列表[i].初始旋转.z / Math.PI)*180f).ToString("f2") + 
+                                 ";");*/
+                cboxPart.Items.Add("部件" + i +
+                                 ", 类型:" + 获取部件类型名称(部件列表[i].部件类型) +
+                                 ", 父:" + 部件列表[i].父部件索引 +
+                                 ", 子:" + 部件列表[i].子部件数 +
+                                 ", 动画数:" + 部件列表[i].关键帧动画数  +
+                                 ", 整数2:" + 部件列表[i].不明整数参数2 +
+                                 ", 关键帧数:" + 部件列表[i].关键帧数据.关键帧数 +
+                                 ", 浮点1:" + 部件列表[i].不明浮点参数1 +
                                  ";");
                 cbox单独设置.Items.Add("部件" + i);
             }
