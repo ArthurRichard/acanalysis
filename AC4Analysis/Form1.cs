@@ -190,6 +190,8 @@ namespace AC4Analysis
             mapwin.CulData = culdata;
             if (mapwin.Check(treeView1.SelectedNode))
             {
+                smwin.Unset3Dwin();
+                mapwin.Set3Dwin(win3d);
                 panel1.Controls.Add(mapwin);
                 return;
             }
@@ -199,6 +201,7 @@ namespace AC4Analysis
             {
                 case "SM \0":
                     {
+                        mapwin.Unset3Dwin();
                         smwin.data = culdata;
                         smwin.Analysis_SM();
                         smwin.Set3Dwin(win3d);

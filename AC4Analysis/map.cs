@@ -51,6 +51,7 @@ namespace AC4Analysis
             GetMesh(MeshNode);
 
             GetSubMaps();
+            SetDataTo3DWin();
             return true;
         }
         void SetPos(int x, int y, int z, int VecID, int FaceID, float[] Data, int add)
@@ -79,7 +80,6 @@ namespace AC4Analysis
                 datatmp[i]=CulData[add + i];
             }
             InputMap(datatmp, 0x400);
-            SetDataTo3DWin();
             //for (int i = 0; i < 1; i++)
             //{
             //    _Mesh MeshTmp = new _Mesh();
@@ -236,11 +236,19 @@ namespace AC4Analysis
                 pb.Location = point;
 
                 pb.BackColor = Color.FromArgb(255, 0, 0, 0);
-                Controls.Add(pb);
+                //Controls.Add(pb);
                 Images[i] = tmp;
             }
         }
 
+        public void Set3Dwin(Control control)
+        {
+            Controls.Add(control);
+        }
+        public void Unset3Dwin()
+        {
+            Controls.Clear();
+        }
         [DllImport("AC4_3DWIN.DLL", CallingConvention = CallingConvention.Cdecl)]
         public static extern void InputTex(byte[] TexDataIn, int SizeX, int SizeY, int DataSize);
         void SetDataTo3DWin()

@@ -17,7 +17,7 @@ void AC4Map::Set(unsigned char * Data)
 {
 	VecPos.Count=0;
 	TexCood.Count=0;
-	float size=10.0f,texsize=float(1.0/31.0);
+	float size=10.0f,hsize=1.0f,texsize=float(1.0/31.0);
 
 	for(int y=0;y<31;y++)
 	for(int x=0;x<31;x++)
@@ -30,19 +30,19 @@ void AC4Map::Set(unsigned char * Data)
 		_VecPos PosTmp;
 		_TexCood TexTmp;
 		
-		PosTmp.y0=Height00*size;
+		PosTmp.y0=Height00*hsize;
 		PosTmp.x0=x*size;
 		PosTmp.z0=y*size;
 		TexTmp.x0=x*texsize;
 		TexTmp.y0=y*texsize;
 		
-		PosTmp.y1=Height01*size;
+		PosTmp.y1=Height01*hsize;
 		PosTmp.x1=x*size;
 		PosTmp.z1=(y+1)*size;
 		TexTmp.x1=x*texsize;
 		TexTmp.y1=(y+1)*texsize;
 		
-		PosTmp.y2=Height10*size;
+		PosTmp.y2=Height10*hsize;
 		PosTmp.x2=(x+1)*size;
 		PosTmp.z2=y*size;
 		TexTmp.x2=(x+1)*texsize;
@@ -51,19 +51,19 @@ void AC4Map::Set(unsigned char * Data)
 		VecPos.push_back(PosTmp);
 		TexCood.push_back(TexTmp);
 		
-		PosTmp.y0=Height11*size;
+		PosTmp.y0=Height11*hsize;
 		PosTmp.x0=(x+1)*size;
 		PosTmp.z0=(y+1)*size;
 		TexTmp.x0=(x+1)*texsize;
 		TexTmp.y0=(y+1)*texsize;
 		
-		PosTmp.y1=Height01*size;
+		PosTmp.y1=Height01*hsize;
 		PosTmp.x1=x*size;
 		PosTmp.z1=(y+1)*size;
 		TexTmp.x1=x*texsize;
 		TexTmp.y1=(y+1)*texsize;
 		
-		PosTmp.y2=Height10*size;
+		PosTmp.y2=Height10*hsize;
 		PosTmp.x2=(x+1)*size;
 		PosTmp.z2=y*size;
 		TexTmp.x2=(x+1)*texsize;
