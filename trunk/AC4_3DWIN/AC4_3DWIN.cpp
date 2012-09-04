@@ -10,6 +10,8 @@
 #include <windows.h>		// Header File For Windows
 #include <gl\gl.h>			// Header File For The OpenGL32 Library
 #include <math.h>
+#include"AC4Map.h"
+AC4Map * Map=0;
 HDC			hDC=NULL;		// Private GDI Device Context
 HGLRC		hRC=NULL;		// Permanent Rendering Context
 HWND		hWnd=NULL;		// Holds Our Window Handle
@@ -27,6 +29,7 @@ int TexW=0;
 int TexH=0;
 unsigned char * TexData=0;
 bool TexChanged=false;
+bool DrawMap=false;
 void ChangeTex()
 {
 	if(!TexChanged)
@@ -264,26 +267,34 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	glTranslatef(0.0f,0.0f,-msize*((100.0f+WHEEL)/100.0f));	
 	
 	glRotatef(ViewTurnY,1.0f,0.0f,0.0f);
+	if(!DrawMap)
 	glRotatef(180.0f,1.0f,0.0f,0.0f); // 模型方向反的
 	glRotatef(ViewTurnX,0.0f,1.0f,0.0f);// Done Drawing The Quad
 	
 	rtri+=1.2f;											// Increase The Rotation Variable For The Triangle ( NEW )
 	rquad-=1.15f;										// Decrease The Rotation Variable For The Quad ( NEW )
 	glColor3f(1.0f,1.0f,1.0f);
-	if(!UseAlpha)
-		RenderPart(0);
+	if(DrawMap)
+	{
+		if(Map)
+			Map->Draw();
+	}
 	else
 	{
-		glEnable(GL_ALPHA_TEST);
-		glAlphaFunc(GL_GREATER, 0.99f);
-		RenderPart(0);
-		glAlphaFunc(GL_LEQUAL, 0.99f);
-		glDepthMask(GL_FALSE);
-		RenderPart(0);
-		glDisable(GL_ALPHA_TEST); 
-		glDepthMask(GL_TRUE);
+		if(!UseAlpha)
+			RenderPart(0);
+		else
+		{
+			glEnable(GL_ALPHA_TEST);
+			glAlphaFunc(GL_GREATER, 0.99f);
+			RenderPart(0);
+			glAlphaFunc(GL_LEQUAL, 0.99f);
+			glDepthMask(GL_FALSE);
+			RenderPart(0);
+			glDisable(GL_ALPHA_TEST); 
+			glDepthMask(GL_TRUE);
+		}
 	}
-
 	ReleaseMutex(Mutex);
 	return TRUE;										// Keep Going
 }
@@ -658,7 +669,7 @@ extern "C" _declspec(dllexport) void Set3DData(float * VecsIn,float * NorsIn,int
 extern "C" _declspec(dllexport) void SetPartData(float * PartTRIn,int * PartInfoIn,int PartSizeIn)
 {
 	WaitForSingleObject(Mutex,INFINITE);
-
+	DrawMap=false;
 	if(PartTR) delete [] PartTR;
 	if(PartInfo) delete [] PartInfo;
 	PartSize=PartSizeIn;
@@ -706,4 +717,13 @@ extern "C" _declspec(dllexport) void ChangeView(float TurnX,float TurnY,float Tu
 }
 extern "C" _declspec(dllexport) void InputMap(unsigned char * Data,int Size)
 {
+	DrawMap=true;
+	WaitForSingleObject(Mutex,INFINITE);
+	if(Map)
+	{
+		delete Map;
+	}
+	Map=new AC4Map;
+	Map->Set(Data);
+	ReleaseMutex(Mutex);
 }
