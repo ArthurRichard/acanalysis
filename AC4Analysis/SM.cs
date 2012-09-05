@@ -260,12 +260,17 @@ namespace AC4Analysis
                 case 6: return "低速副翼_右";
                 case 7: return "高速副翼_左";
                 case 8: return "高速副翼_右";
-                case 13: return "鸭翼_左";
-                case 14: return "鸭翼_右";
+                case 9: return "矢量尾喷_左";
+                case 10: return "矢量尾喷_右";
+                case 11: return "鸭翼_左";
+                case 12: return "鸭翼_右";
+                case 13: return "扰流板_左";
+                case 14: return "扰流板_右";
                 case 15: return "尾喷管";
                 case 16: return "阻力板";
                 case 17: return "辅助进气口";
-                case 18: return "前缘襟翼";
+                case 18: return "前缘襟翼(缝翼)";
+                case 19: return "可变翼";
                 case 20: return "可变翼关节";
                 case 22: return "发动机风扇";
                 case 30: return "机身发光条";
@@ -273,17 +278,21 @@ namespace AC4Analysis
                 case 33: return "常规武器舱门";
                 case 34: return "特殊兵装舱门";
                 case 40: return "起落架舱门";
+                case 42: return "尾钩";
                 case 50: return "武器挂架_1_1";
                 case 51: return "武器挂架_1_2";
                 case 52: return "武器挂架_1_3";
                 case 53: return "武器挂架_1_4";
-                case 58: return "武器挂架_2_1";
-                case 59: return "武器挂架_2_2";
+                case 54: return "武器挂架_1_5";
+                case 55: return "武器挂架_1_6";
+                case 58: return "特殊兵装挂架_1";
+                case 59: return "特殊兵装挂架_2";
                 case 60: return "武器挂架_2_3";
                 case 61: return "武器挂架_2_4";
                 case 62: return "武器挂架_3_1";
                 case 63: return "武器挂架_3_2";
                 case 97: return "空中加油舱门";
+                case 98: return "尾钩";
                 default: return "未知类型_" + _编号.ToString();
             }
         }
@@ -332,7 +341,8 @@ namespace AC4Analysis
                 Norout[i] = 法线列表[i];
             }
             cboxPart.Items.Clear();
-            cboxPart.Items.Add("整体显示, 顶点:" + (顶点列表.Count / 3) + ", 部件:" + 顶点列表.Count);
+            cbox单独设置.Items.Clear();
+            cboxPart.Items.Add("整体显示, 顶点:" + (顶点列表.Count / 3) + ", 部件:" + 部件列表.Count);
             cbox单独设置.Items.Add("");
             cboxPart.SelectedIndex = 0;
             for (int i = 0; i < 部件列表.Count; i++)
@@ -473,6 +483,14 @@ namespace AC4Analysis
                 Int32 sel = cbox单独设置.SelectedIndex - 1;
                 if (sel > 部件列表.Count - 1)
                     sel = 部件列表.Count - 1;
+                if (sel > -1)
+                {
+                    txt部件类型.Text = 获取部件类型名称(部件列表[sel].部件类型);
+                }
+                else
+                {
+                    txt部件类型.Text = "";
+                }
 
                 float[] mPartTR = new float[6];
                 int[] mPartInfo = new int[3];
@@ -496,6 +514,15 @@ namespace AC4Analysis
                 txt旋转X.Text = 部件列表[sel].初始旋转.x.ToString();
                 txt旋转Y.Text = 部件列表[sel].初始旋转.y.ToString();
                 txt旋转Z.Text = 部件列表[sel].初始旋转.z.ToString();
+
+                if (部件列表[sel].关键帧动画数 > 0)
+                {
+                    tb关键帧.Enabled = true;
+                }
+                else
+                {
+                    tb关键帧.Enabled = false;
+                }
             }
         }
 
@@ -503,6 +530,67 @@ namespace AC4Analysis
         {  
             //OpenFileDialog 打开文件对话框 = new OpenFileDialog();
             
+        }
+
+        private void tb关键帧_Scroll(object sender, EventArgs e)
+        {
+            if (cbox单独设置.SelectedIndex != 0)
+            {
+                Int32 sel = cbox单独设置.SelectedIndex - 1;
+                if (sel > 部件列表.Count - 1)
+                    sel = 部件列表.Count - 1;
+
+                Int32 当前部件类型 = 部件列表[sel].部件类型;
+                
+
+                for (sel = 0; sel < 部件列表.Count; sel++)
+                {
+                    if (部件列表[sel].关键帧动画数 > 0 && 部件列表[sel].部件类型 == 当前部件类型)
+                    {
+                        Single 当前帧 = Convert.ToSingle(tb关键帧.Value) / Convert.ToSingle(tb关键帧.Maximum);
+                        for (Int32 i = 0; i < 部件列表[sel].关键帧数据.关键帧数; i++)
+                        {
+                            Single 关键帧阀值 = Convert.ToSingle(i) / Convert.ToSingle(部件列表[sel].关键帧数据.关键帧数);
+                            if (当前帧 >= 关键帧阀值)
+                            {
+                                Single 过渡点 = (当前帧 - 关键帧阀值) * Convert.ToSingle(部件列表[sel].关键帧数据.关键帧数);
+                                if (i == 部件列表[sel].关键帧数据.关键帧数 - 1)
+                                {
+                                    PartTR[sel * 6 + 0] = 部件列表[sel].关键帧数据.位置[i].x;
+                                    PartTR[sel * 6 + 1] = 部件列表[sel].关键帧数据.位置[i].y;
+                                    PartTR[sel * 6 + 2] = 部件列表[sel].关键帧数据.位置[i].z;
+
+                                    PartTR[sel * 6 + 3] = 部件列表[sel].关键帧数据.旋转[i].x;
+                                    PartTR[sel * 6 + 4] = 部件列表[sel].关键帧数据.旋转[i].y;
+                                    PartTR[sel * 6 + 5] = 部件列表[sel].关键帧数据.旋转[i].z;
+                                }
+                                else
+                                {
+                                    PartTR[sel * 6 + 0] = 部件列表[sel].关键帧数据.位置[i].x + (部件列表[sel].关键帧数据.位置[i + 1].x - 部件列表[sel].关键帧数据.位置[i].x) * 过渡点;
+                                    PartTR[sel * 6 + 1] = 部件列表[sel].关键帧数据.位置[i].y + (部件列表[sel].关键帧数据.位置[i + 1].y - 部件列表[sel].关键帧数据.位置[i].y) * 过渡点;
+                                    PartTR[sel * 6 + 2] = 部件列表[sel].关键帧数据.位置[i].z + (部件列表[sel].关键帧数据.位置[i + 1].z - 部件列表[sel].关键帧数据.位置[i].z) * 过渡点;
+
+                                    PartTR[sel * 6 + 3] = 部件列表[sel].关键帧数据.旋转[i].x + (部件列表[sel].关键帧数据.旋转[i + 1].x - 部件列表[sel].关键帧数据.旋转[i].x) * 过渡点;
+                                    PartTR[sel * 6 + 4] = 部件列表[sel].关键帧数据.旋转[i].y + (部件列表[sel].关键帧数据.旋转[i + 1].y - 部件列表[sel].关键帧数据.旋转[i].y) * 过渡点;
+                                    PartTR[sel * 6 + 5] = 部件列表[sel].关键帧数据.旋转[i].z + (部件列表[sel].关键帧数据.旋转[i + 1].z - 部件列表[sel].关键帧数据.旋转[i].z) * 过渡点;
+                                }
+
+                                txt位置X.Text = PartTR[sel * 6 + 0].ToString();
+                                txt位置Y.Text = PartTR[sel * 6 + 1].ToString();
+                                txt位置Z.Text = PartTR[sel * 6 + 2].ToString();
+
+                                txt旋转X.Text = PartTR[sel * 6 + 3].ToString();
+                                txt旋转Y.Text = PartTR[sel * 6 + 4].ToString();
+                                txt旋转Z.Text = PartTR[sel * 6 + 5].ToString();
+
+                                //break;
+                            }
+                        }
+                    }
+                }
+
+                SetPartData(PartTR, PartInfo, 部件列表.Count);
+            }
         }
 
 
