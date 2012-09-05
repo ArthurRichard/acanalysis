@@ -258,8 +258,8 @@ namespace AC4Analysis
                 case 4: return "方向舵_右";
                 case 5: return "低速副翼_左";
                 case 6: return "低速副翼_右";
-                case 7: return "高速副翼_左";
-                case 8: return "高速副翼_右";
+                case 7: return "高速副翼(襟副翼)_左";
+                case 8: return "高速副翼(襟副翼)_右";
                 case 9: return "矢量尾喷_左";
                 case 10: return "矢量尾喷_右";
                 case 11: return "鸭翼_左";
@@ -270,7 +270,7 @@ namespace AC4Analysis
                 case 16: return "阻力板";
                 case 17: return "辅助进气口";
                 case 18: return "前缘襟翼(缝翼)";
-                case 19: return "可变翼";
+                case 19: return "可变翼(折叠翼)";
                 case 20: return "可变翼关节";
                 case 22: return "发动机风扇";
                 case 30: return "机身发光条";
