@@ -4,12 +4,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include "GL\glew.h"
 #include"GL\glfw.h"
 #include"AC4Map.h"
 AC4Map * Map=0;
 #ifdef _DEBUG
+#pragma comment( lib, "glew32sd.lib" )
 #pragma comment( lib, "GLFWd.lib" )
 #else
+#pragma comment( lib, "glew32s.lib" )
 #pragma comment( lib, "GLFW.lib" )
 #endif
 #pragma comment( lib, "opengl32.lib" )
@@ -191,6 +194,7 @@ int RenderPart(int PartID)
 }
 void InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 {
+	glewInit();
 GLfloat LightAmbient[]= { 0.5f, 0.5f, 0.5f, 1.0f };
 GLfloat LightDiffuse[]= { 1.0f, 1.0f, 1.0f, 1.0f };
 GLfloat LightPosition[]= { 0.0f, 0.0f, 0.0f, 1.0f };
