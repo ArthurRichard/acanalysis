@@ -340,6 +340,8 @@ namespace AC4Analysis
                 Vesout[i] = 顶点列表[i];
                 Norout[i] = 法线列表[i];
             }
+
+            tb关键帧.Visible = false;
             cboxPart.Items.Clear();
             cbox单独设置.Items.Clear();
             cboxPart.Items.Add("整体显示, 顶点:" + (顶点列表.Count / 3) + ", 部件:" + 部件列表.Count);
@@ -377,7 +379,8 @@ namespace AC4Analysis
                                  ";");
                 cbox单独设置.Items.Add("部件" + i);
             }
-
+            cboxPart.SelectedIndex = 0;
+            cbox单独设置.SelectedIndex = 0;
 
 
             Set3DData(Vesout, Norout, Vesout.Length, Texout, Texout.Length);
@@ -518,10 +521,12 @@ namespace AC4Analysis
                 if (部件列表[sel].关键帧动画数 > 0)
                 {
                     tb关键帧.Enabled = true;
+                    tb关键帧.Visible = true;
                 }
                 else
                 {
                     tb关键帧.Enabled = false;
+                    tb关键帧.Visible = false;
                 }
             }
         }
@@ -539,9 +544,16 @@ namespace AC4Analysis
                 Int32 sel = cbox单独设置.SelectedIndex - 1;
                 if (sel > 部件列表.Count - 1)
                     sel = 部件列表.Count - 1;
-
+                if (sel > -1)
+                {
+                    
+                }
+                else
+                {
+                    sel = 0;
+                    tb关键帧.Visible = false;
+                }
                 Int32 当前部件类型 = 部件列表[sel].部件类型;
-                
 
                 for (sel = 0; sel < 部件列表.Count; sel++)
                 {
