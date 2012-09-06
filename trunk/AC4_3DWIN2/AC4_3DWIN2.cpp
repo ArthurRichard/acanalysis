@@ -348,9 +348,14 @@ void GLFWCALL handle_key_down(int key, int action)
 			break;
 	}
 }
+int lastMouseWheel=0;
 void GLFWCALL handle_MouseWheel( int pos )
 {
-	WHEEL=(float)pos;
+	if(pos)
+	{
+		WHEEL+=(float)(pos-lastMouseWheel);
+		lastMouseWheel=pos;
+	}
 }
 unsigned int __stdcall RenderThread(LPVOID lpvoid)
 {
