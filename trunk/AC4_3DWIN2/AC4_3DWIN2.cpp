@@ -363,7 +363,7 @@ unsigned int __stdcall RenderThread(LPVOID lpvoid)
 	{
 		DrawGLScene();
 		glfwSwapBuffers();
-		glfwSleep(0.01);
+		glfwSleep(0.005);
 	}
 	return 0;
 }
@@ -375,6 +375,28 @@ extern "C" _declspec(dllexport) void InitRenderThread(HWND EditerHWND)
 	ResumeThread(RenderThreadHANDLE);
 }
 extern "C" _declspec(dllexport) void Set3DData(float * VecsIn,float * NorsIn,int VecSizeIn,float * TexsIn,int TexsSizeIn)
+{
+	WaitForSingleObject(Mutex,INFINITE);
+	if(Vecs) delete [] Vecs;
+	if(Nors) delete [] Nors;
+	if(Texs) delete [] Texs;
+	VecSize=VecSizeIn;
+	TexsSize=TexsSizeIn;
+	Vecs=new float [VecSize];
+	Nors=new float [VecSize];
+	Texs=new float [TexsSize];
+
+	memcpy_s(Vecs,sizeof(float)*VecSizeIn,VecsIn,sizeof(float)*VecSizeIn);
+	memcpy_s(Nors,sizeof(float)*VecSizeIn,NorsIn,sizeof(float)*VecSizeIn);
+	memcpy_s(Texs,sizeof(float)*TexsSizeIn,TexsIn,sizeof(float)*TexsSizeIn);
+
+	for(int i=0;i<VecSizeIn;i++)
+		msize=max(msize,abs(Vecs[i]));
+	msize=min(1000.0f,msize);
+	ClearViewTurn();
+	ReleaseMutex(Mutex);
+}
+extern "C" _declspec(dllexport) void SetSub3DData(float * VecsIn,float * NorsIn,int VecHeadIn,int VecSizeIn,float * TexsIn,int TexHeadIn,int TexsSizeIn)
 {
 	WaitForSingleObject(Mutex,INFINITE);
 	if(Vecs) delete [] Vecs;
