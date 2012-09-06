@@ -80,43 +80,6 @@ namespace AC4Analysis
                 datatmp[i]=CulData[add + i];
             }
             InputMap(datatmp, 0x400);
-            //for (int i = 0; i < 1; i++)
-            //{
-            //    _Mesh MeshTmp = new _Mesh();
-            //    MeshTmp.Vecs = new float[32 * 32 * 3 * 3 * 2];
-            //    MeshTmp.Nors = new float[32 * 32 * 3 * 3 * 2];
-            //    MeshTmp.Texs = new float[32 * 32 * 3 * 2 * 2];
-            //    for (int j = 0; j < 32 * 32 * 3 * 2;j++ )
-            //    {
-            //        MeshTmp.Nors[j * 3 + 0] = 0.0f;
-            //        MeshTmp.Nors[j * 3 + 1] = 1.0f;
-            //        MeshTmp.Nors[j * 3 + 2] = 0.0f;
-            //    }
-            //    int addtmp = add + i * 0x400;
-            //    for (int y = 0; y < 31; y++)
-            //        for (int x = 0; x < 31; x++)
-            //        {
-            //            int VecAdd = (x + y * 32) * 3 * 3 * 2;
-            //            SetPos(x, CulData[add + i * 0x400 + x + y * 32], y, 0, 0, MeshTmp.Vecs, VecAdd);
-            //            SetPos(x + 1, CulData[add + i * 0x400 + x + 1 + y * 32], y, 1, 0, MeshTmp.Vecs, VecAdd);
-            //            SetPos(x, CulData[add + i * 0x400 + x + (y + 1) * 32], y + 1, 2, 0, MeshTmp.Vecs, VecAdd);
-
-            //            SetPos(x + 1, CulData[add + i * 0x400 + x + 1 + y * 32], y, 0, 1, MeshTmp.Vecs, VecAdd);
-            //            SetPos(x, CulData[add + i * 0x400 + x + (y + 1) * 32], y + 1, 1, 1, MeshTmp.Vecs, VecAdd);
-            //            SetPos(x + 1, CulData[add + i * 0x400 + x + 1 + (y + 1) * 32], y + 1, 2, 1, MeshTmp.Vecs, VecAdd);
-
-
-            //            int TexAdd = (x + y * 32) * 3 * 2 * 2;
-            //            SetTex(x, y, 0, 0, MeshTmp.Texs, TexAdd);
-            //            SetTex(x+1, y, 1, 0, MeshTmp.Texs, TexAdd);
-            //            SetTex(x, y+1, 2, 0, MeshTmp.Texs, TexAdd);
-
-            //            SetTex(x+1, y, 0, 1, MeshTmp.Texs, TexAdd);
-            //            SetTex(x, y+1, 1, 1, MeshTmp.Texs, TexAdd);
-            //            SetTex(x+1, y+1, 2, 1, MeshTmp.Texs, TexAdd);
-
-            //        }
-            //}
         }
         void GetSubMapList(TreeNode node)
         {
@@ -200,8 +163,6 @@ namespace AC4Analysis
         }
         void GetSubMaps()
         {
-            Height = 1024;
-            Width = 1024;
             //Height = SubMapList.Count * 1024;
             for (int i = 0; i < 1; i++)
             {
@@ -243,6 +204,8 @@ namespace AC4Analysis
 
         public void Set3Dwin(Control control)
         {
+            Height = control.Height+5;
+            Width = control.Width+5;
             Controls.Add(control);
         }
         public void Unset3Dwin()
