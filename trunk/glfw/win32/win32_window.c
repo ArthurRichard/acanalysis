@@ -811,14 +811,17 @@ static LRESULT CALLBACK windowProc( HWND hWnd, UINT uMsg,
         }
 
         case WM_LBUTTONDOWN:
+			SetFocus(hWnd);
             SetCapture(hWnd);
             _glfwInputMouseClick( GLFW_MOUSE_BUTTON_LEFT, GLFW_PRESS );
             return 0;
         case WM_RBUTTONDOWN:
+			SetFocus(hWnd);
             SetCapture(hWnd);
             _glfwInputMouseClick( GLFW_MOUSE_BUTTON_RIGHT, GLFW_PRESS );
             return 0;
         case WM_MBUTTONDOWN:
+			SetFocus(hWnd);
             SetCapture(hWnd);
             _glfwInputMouseClick( GLFW_MOUSE_BUTTON_MIDDLE, GLFW_PRESS );
             return 0;
@@ -838,7 +841,6 @@ static LRESULT CALLBACK windowProc( HWND hWnd, UINT uMsg,
         }
 
         case WM_LBUTTONUP:
-			SetFocus(hWnd);
             ReleaseCapture();
             _glfwInputMouseClick( GLFW_MOUSE_BUTTON_LEFT, GLFW_RELEASE );
             return 0;

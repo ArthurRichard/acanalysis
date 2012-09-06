@@ -43,6 +43,7 @@ int h;
 float msize=200.0f;
 float mpos[3]={0.0f,0.0f,0.0f};
 BOOL	done=FALSE;	
+int MouseWheel=0;
 inline void EastPerspective(float fovyInDegrees, float aspectRatio,
                       float znear, float zfar,float * Matrix)
 {
@@ -212,7 +213,6 @@ GLfloat LightPosition[]= { 0.0f, 0.0f, 0.0f, 1.0f };
 	glEnable(GL_LIGHT1);								// Enable Light One
 	//glEnable(GL_LIGHTING);
 }
-
 /* Callback function for window resize events */
 void GLFWCALL handle_resize( int width, int height )
 {
@@ -308,41 +308,49 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	ReleaseMutex(Mutex);
 	return TRUE;										// Keep Going
 }
+bool RMousePRESS=false;
+bool MMousePRESS=false;
+int LastMousePos[]={0,0};
+int MousePos[]={0,0};
+void GLFWCALL handle_MousePos( int x, int y )
+{
+	LastMousePos[0]=MousePos[0];
+	LastMousePos[1]=MousePos[1];
+	MousePos[0]=x;
+	MousePos[1]=y;
+	if(RMousePRESS)
+	{
+		ViewTurnX+=-float(MousePos[0]-LastMousePos[0])*0.25f;
+		ViewTurnY+=float(MousePos[1]-LastMousePos[1])*0.25f;
+	}
+}
 void GLFWCALL handle_key_down(int key, int action)
 {
-  if( action != GLFW_PRESS )
-  {
-    return;
-  }
-
-  //switch(key) {
-  //  case GLFW_KEY_ESC:
-  //    running = 0;
-  //    break;
-  //  case GLFW_KEY_SPACE:
-  //    initSurface();
-  //    break;
-  //  case GLFW_KEY_LEFT:
-  //    alpha+=5;
-  //    break;
-  //  case GLFW_KEY_RIGHT:
-  //    alpha-=5;
-  //    break;
-  //  case GLFW_KEY_UP:
-  //    beta-=5;
-  //    break;
-  //  case GLFW_KEY_DOWN:
-  //    beta+=5;
-  //    break;
-  //  case GLFW_KEY_PAGEUP:
-  //    if(zoom>1) zoom-=1;
-  //    break;
-  //  case GLFW_KEY_PAGEDOWN:
-  //    zoom+=1;
-  //    break;
-  //  default:
-  //    break;
-  //}
+	switch(key)
+	{
+	case GLFW_MOUSE_BUTTON_RIGHT:
+		{
+			if( action == GLFW_PRESS )
+				RMousePRESS=true;
+			else
+				RMousePRESS=false;
+			break;
+		}
+	case GLFW_MOUSE_BUTTON_MIDDLE:
+		{
+			if( action == GLFW_PRESS )
+				MMousePRESS=true;
+			else
+				MMousePRESS=false;
+			break;
+		}
+		default:
+			break;
+	}
+}
+void GLFWCALL handle_MouseWheel( int pos )
+{
+	WHEEL=(float)pos;
 }
 unsigned int __stdcall RenderThread(LPVOID lpvoid)
 {
@@ -355,6 +363,9 @@ unsigned int __stdcall RenderThread(LPVOID lpvoid)
 	}
 	glfwSwapInterval( 1 );
 	glfwSetKeyCallback( handle_key_down );
+	glfwSetMouseButtonCallback(handle_key_down);
+	glfwSetMousePosCallback(handle_MousePos);
+	glfwSetMouseWheelCallback(handle_MouseWheel);
 	glfwEnable( GLFW_KEY_REPEAT );
 
 	glfwSetWindowSizeCallback( handle_resize );
