@@ -399,23 +399,12 @@ extern "C" _declspec(dllexport) void Set3DData(float * VecsIn,float * NorsIn,int
 extern "C" _declspec(dllexport) void SetSub3DData(float * VecsIn,float * NorsIn,int VecHeadIn,int VecSizeIn,float * TexsIn,int TexHeadIn,int TexsSizeIn)
 {
 	WaitForSingleObject(Mutex,INFINITE);
-	if(Vecs) delete [] Vecs;
-	if(Nors) delete [] Nors;
-	if(Texs) delete [] Texs;
-	VecSize=VecSizeIn;
-	TexsSize=TexsSizeIn;
-	Vecs=new float [VecSize];
-	Nors=new float [VecSize];
-	Texs=new float [TexsSize];
-
-	memcpy_s(Vecs,sizeof(float)*VecSizeIn,VecsIn,sizeof(float)*VecSizeIn);
-	memcpy_s(Nors,sizeof(float)*VecSizeIn,NorsIn,sizeof(float)*VecSizeIn);
-	memcpy_s(Texs,sizeof(float)*TexsSizeIn,TexsIn,sizeof(float)*TexsSizeIn);
-
-	for(int i=0;i<VecSizeIn;i++)
-		msize=max(msize,abs(Vecs[i]));
-	msize=min(1000.0f,msize);
-	ClearViewTurn();
+	if(Vecs)
+		memcpy_s(Vecs+VecHeadIn,sizeof(float)*VecSizeIn,VecsIn,sizeof(float)*VecSizeIn);
+	if(Nors)
+		memcpy_s(Nors+VecHeadIn,sizeof(float)*VecSizeIn,NorsIn,sizeof(float)*VecSizeIn);
+	if(Texs)
+		memcpy_s(Texs+TexHeadIn,sizeof(float)*TexsSizeIn,TexsIn,sizeof(float)*TexsSizeIn);
 	ReleaseMutex(Mutex);
 }
 extern "C" _declspec(dllexport) void SetPartData(float * PartTRIn,int * PartInfoIn,int PartSizeIn)
