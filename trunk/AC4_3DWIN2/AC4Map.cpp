@@ -1,5 +1,6 @@
 #include "AC4Map.h"
-
+#include "GL\glew.h"
+#include <windows.h>		// Header File For Windows
 
 AC4Map::AC4Map(void)
 {
