@@ -5,6 +5,7 @@ NodeMath::NodeMath(void)
 {
 	Mat=new _NodeMatrix4f;
 	Quat=new _NodeQuat;
+	Pos =new _NodeQuat;
 	Clear();
 }
 

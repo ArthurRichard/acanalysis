@@ -8,6 +8,7 @@
 #include"GL\glfw.h"
 #include"AC4Map.h"
 #include "NodeMath.h"
+NodeMath * ViewMAth;
 AC4Map * Map=0;
 #ifdef _DEBUG
 #pragma comment( lib, "glew32sd.lib" )
@@ -101,6 +102,11 @@ extern "C" _declspec(dllexport) void ClearViewTurn()
 	ViewChanging[0]=0.0f;
 	ViewChanging[1]=0.0f;
 	ViewChanging[2]=0.0f;
+	mpos[2]=msize;
+	//ViewMAth.Clear();
+	//ViewMAth.Turn(45.0f,0.0f,1.0f,0.0f);
+	//ViewMAth.Turn(45.0f,1.0f,0.0f,0.0f);
+	//ViewMAth.Move(0.0f,0.0f,mpos[2]);
 }
 
 void SetMatrix(int PartID)
@@ -270,19 +276,26 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 		glEnable(GL_BLEND);
 	else
 		glDisable(GL_BLEND);
+
 	ChangeTex();
 	glEnable(GL_TEXTURE_2D);
 	WaitForSingleObject(Mutex,INFINITE);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glLoadIdentity();
-	//glLightfv(GL_LIGHT0, GL_POSITION,LightPosition);
-	//glTranslatef(0.0f,0.0f,-msize*((100.0f+WHEEL)/100.0f));	
-	glTranslatef(0.0f,0.0f,-mpos[2]);	
-	
-	//if(!DrawMap)
-	glRotatef(ViewTurnY,1.0f,0.0f,0.0f);
-	glRotatef(ViewTurnX,0.0f,1.0f,0.0f);
+
+	switch(ViewMode)
+	{
+		case _ViewMode_View:
+			glTranslatef(0.0f,0.0f,-mpos[2]);	
+			glRotatef(ViewTurnY,1.0f,0.0f,0.0f);
+			glRotatef(ViewTurnX,0.0f,1.0f,0.0f);
+			break;
+		case _ViewMode_Fly:
+			//ViewMAth.Inv();
+			//glMultMatrixf(ViewMAth.Mat->F);
+			break;
+	}
 	
 	glColor3f(1.0f,1.0f,1.0f);
 	if(FSAAsamples>1)
@@ -366,6 +379,7 @@ void GLFWCALL handle_MouseWheel( int pos )
 }
 unsigned int __stdcall RenderThread(LPVOID lpvoid)
 {
+	ViewMAth=new NodeMath;
 	if(glfwInit() == GL_FALSE)
 		return 0;
     glfwOpenWindowHint(GLFW_FSAA_SAMPLES, FSAAsamples);
@@ -391,6 +405,7 @@ unsigned int __stdcall RenderThread(LPVOID lpvoid)
 		glfwSwapBuffers();
 		glfwSleep(0.005);
 	}
+	delete ViewMAth;
 	return 0;
 }
 extern "C" _declspec(dllexport) void InitRenderThread(HWND EditerHWND)
@@ -497,4 +512,12 @@ extern "C" _declspec(dllexport) void InputMap(unsigned char * Data,int Size)
 extern "C" _declspec(dllexport) void SetMoveStep(float MoveStepIn)
 {
 	MoveStep=MoveStepIn;
+}
+extern "C" _declspec(dllexport) void ResetView()
+{
+	ClearViewTurn();
+}
+extern "C" _declspec(dllexport) void ChangeViewMode(int mode)
+{
+	ViewMode=(_ViewMode)mode;
 }
