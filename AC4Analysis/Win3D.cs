@@ -25,6 +25,8 @@ namespace AC4Analysis
         {
             InitializeComponent();
             rdbView模式选择1.Checked = true;
+            tp观察模式操作说明.SetToolTip(rdbView模式选择1, "Mouse wheel to Forward and back\nDrag mouse right key to change view");
+            tp飞行模式操作说明.SetToolTip(rdbView模式选择2, "Mouse wheel to Forward and back\nDrag mouse right key to change view\nDrag mouse middle key to move");
             SetMoveStep(float.Parse(textBox1.Text));
         }
         public IntPtr GetHwnd()
