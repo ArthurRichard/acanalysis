@@ -3,6 +3,9 @@
 #include <windows.h>		// Header File For Windows
 
 AC4Map::AC4Map(void)
+	: vecBuf(0)
+	, texBuf(0)
+	, DataChanged(false)
 {
 	VecPos.ChangeMaxCount(31*31*2);
 	TexCood.ChangeMaxCount(31*31*2);
@@ -74,17 +77,38 @@ void AC4Map::Set(unsigned char * Data)
 		TexCood.push_back(TexTmp);
 
 	}
+	DataChanged =true;
 }
 
 
 void AC4Map::Draw(void)
 {
+	if(DataChanged)
+	{
+		if(vecBuf) glDeleteBuffersARB(1,&vecBuf);
+		if(texBuf) glDeleteBuffersARB(1,&texBuf);
+
+		glGenBuffersARB( 1,&vecBuf);
+		glBindBufferARB( GL_ARRAY_BUFFER_ARB, vecBuf );
+		glBufferDataARB( GL_ARRAY_BUFFER_ARB, VecPos.Count*sizeof(_VecPos), VecPos.ListData1, GL_STATIC_DRAW_ARB );
+
+		glGenBuffersARB( 1,&texBuf);
+		glBindBufferARB( GL_ARRAY_BUFFER_ARB, texBuf );
+		glBufferDataARB( GL_ARRAY_BUFFER_ARB, VecPos.Count*sizeof(_TexCood), TexCood.ListData1, GL_STATIC_DRAW_ARB );
+
+		glBindBufferARB(GL_ARRAY_BUFFER_ARB,0);
+		DataChanged=false;
+	}
+
 	glEnableClientState( GL_VERTEX_ARRAY );
 	glEnableClientState( GL_TEXTURE_COORD_ARRAY );
 	
-	glVertexPointer( 3, GL_FLOAT, 0, VecPos.ListData1 );
-	glTexCoordPointer( 2, GL_FLOAT, 0, TexCood.ListData1 );
+	glBindBufferARB( GL_ARRAY_BUFFER_ARB, vecBuf );
+	glVertexPointer( 3, GL_FLOAT, 0, 0 );
+	glBindBufferARB( GL_ARRAY_BUFFER_ARB, texBuf );
+	glTexCoordPointer( 2, GL_FLOAT, 0, 0 );
 	glDrawArrays(GL_TRIANGLES,0,VecPos.Count*3);
 	glDisableClientState( GL_VERTEX_ARRAY );
 	glDisableClientState( GL_TEXTURE_COORD_ARRAY );
+	glBindBufferARB(GL_ARRAY_BUFFER_ARB,0);
 }

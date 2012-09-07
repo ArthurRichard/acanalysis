@@ -51,7 +51,7 @@ int MouseWheel=0;
 enum _ViewMode
 {
 	_ViewMode_View,
-	_ViewMode_Fly
+	_ViewMode_Free
 };
 _ViewMode ViewMode=_ViewMode_View;
 float MoveStep=10.0f;
@@ -263,7 +263,7 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 			glRotatef(ViewTurnY,1.0f,0.0f,0.0f);
 			glRotatef(ViewTurnX,0.0f,1.0f,0.0f);
 			break;
-		case _ViewMode_Fly:
+		case _ViewMode_Free:
 			ViewMAth->Inv();
 			glMultMatrixf(ViewMAth->Mat->m128_f32);
 			break;
@@ -318,7 +318,7 @@ void GLFWCALL handle_MousePos( int x, int y )
 				ViewTurnY+=float(MousePos[1]-LastMousePos[1])*0.25f;
 			}
 			break;
-		case _ViewMode_Fly:
+		case _ViewMode_Free:
 			if(RMousePRESS)
 			{
 				ViewMAth->Turn(float(MousePos[0]-LastMousePos[0])*0.25f,0.0f,1.0f,0.0f);
@@ -367,7 +367,7 @@ void GLFWCALL handle_MouseWheel( int pos )
 				WHEEL+=(float)(pos-lastMouseWheel);
 				mpos[2]+=(float)(pos-lastMouseWheel)*MoveStep;
 				break;
-			case _ViewMode_Fly:
+			case _ViewMode_Free:
 				ViewMAth->Move(0.0f,0.0f,-(float)(pos-lastMouseWheel)*MoveStep);
 				break;
 		}

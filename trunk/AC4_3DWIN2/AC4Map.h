@@ -35,5 +35,8 @@ public:
 	CTAList<_VecPos> VecPos;
 	CTAList<_TexCood> TexCood;
 
+	unsigned int vecBuf;
+	unsigned int texBuf;
+	bool DataChanged;
 };
 

@@ -116,9 +116,9 @@
             this.rdbView模式选择2.AutoSize = true;
             this.rdbView模式选择2.Location = new System.Drawing.Point(196, 517);
             this.rdbView模式选择2.Name = "rdbView模式选择2";
-            this.rdbView模式选择2.Size = new System.Drawing.Size(71, 16);
+            this.rdbView模式选择2.Size = new System.Drawing.Size(77, 16);
             this.rdbView模式选择2.TabIndex = 16;
-            this.rdbView模式选择2.Text = "Fly mode";
+            this.rdbView模式选择2.Text = "Free mode";
             this.rdbView模式选择2.UseVisualStyleBackColor = true;
             this.rdbView模式选择2.CheckedChanged += new System.EventHandler(this.rdbView模式选择2_CheckedChanged);
             // 
