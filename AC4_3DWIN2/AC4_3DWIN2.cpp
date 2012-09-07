@@ -24,7 +24,6 @@ HWND ParentHWND=0;
 HANDLE RenderThreadHANDLE=NULL;
 HANDLE Mutex=0;
 float ViewTurnX=45.0f,ViewTurnY=45.0f;
-float ViewChanging[]={0.0f,0.0f,0.0f};
 bool UseLight=false;
 bool UseAlpha=false;
 unsigned int TexID=0;
@@ -57,30 +56,7 @@ enum _ViewMode
 _ViewMode ViewMode=_ViewMode_View;
 float MoveStep=10.0f;
 int FSAAsamples=4;
-inline void EastPerspective(float fovyInDegrees, float aspectRatio,
-                      float znear, float zfar,float * Matrix)
-{
-    float ymax, xmax;
-    ymax = znear * tan(fovyInDegrees * 3.14159265358979323846f / 360.0f);
-    xmax = ymax * aspectRatio;
 
-	Matrix[0] = znear / xmax;
-    Matrix[1] = 0.0;
-    Matrix[2] = 0.0;
-    Matrix[3] = 0.0;
-    Matrix[4] = 0.0;
-    Matrix[5] = znear / ymax;
-    Matrix[6] = 0.0;
-    Matrix[7] = 0.0;
-    Matrix[8] = 0.0;
-    Matrix[9] = 0.0;
-    Matrix[10] = (-zfar - znear) / (zfar - znear);
-    Matrix[11] = -1.0;
-    Matrix[12] = 0.0;
-    Matrix[13] = 0.0;
-    Matrix[14] = (-2.0f*znear * zfar) /  (zfar - znear);
-    Matrix[15] = 0.0;
-}
 void ChangeTex()
 {
 	if(!TexChanged)
@@ -99,14 +75,11 @@ extern "C" _declspec(dllexport) void ClearViewTurn()
 	ViewTurnX=45.0f;
 	ViewTurnY=45.0f;
 	WHEEL=0.0f;
-	ViewChanging[0]=0.0f;
-	ViewChanging[1]=0.0f;
-	ViewChanging[2]=0.0f;
 	mpos[2]=msize;
-	//ViewMAth.Clear();
-	//ViewMAth.Turn(45.0f,0.0f,1.0f,0.0f);
-	//ViewMAth.Turn(45.0f,1.0f,0.0f,0.0f);
-	//ViewMAth.Move(0.0f,0.0f,mpos[2]);
+	ViewMAth->Clear();
+	ViewMAth->Turn(-45.0f,0.0f,1.0f,0.0f);
+	ViewMAth->Turn(-45.0f,1.0f,0.0f,0.0f);
+	ViewMAth->Move(0.0f,0.0f,mpos[2]);
 }
 
 void SetMatrix(int PartID)
@@ -264,10 +237,6 @@ void GLFWCALL handle_resize( int width, int height )
 
 int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 {
-	
-	ViewTurnX+=ViewChanging[0];
-	ViewTurnY+=ViewChanging[1];
-	WHEEL+=ViewChanging[2];
 	if(UseLight)
 		glEnable(GL_LIGHTING);
 	else
@@ -292,8 +261,8 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 			glRotatef(ViewTurnX,0.0f,1.0f,0.0f);
 			break;
 		case _ViewMode_Fly:
-			//ViewMAth.Inv();
-			//glMultMatrixf(ViewMAth.Mat->F);
+			ViewMAth->Inv();
+			glMultMatrixf(ViewMAth->Mat->m128_f32);
 			break;
 	}
 	
@@ -337,10 +306,27 @@ void GLFWCALL handle_MousePos( int x, int y )
 	LastMousePos[1]=MousePos[1];
 	MousePos[0]=x;
 	MousePos[1]=y;
-	if(RMousePRESS)
+	switch(ViewMode)
 	{
-		ViewTurnX+=float(MousePos[0]-LastMousePos[0])*0.25f;
-		ViewTurnY+=float(MousePos[1]-LastMousePos[1])*0.25f;
+		case _ViewMode_View:
+			if(RMousePRESS)
+			{
+				ViewTurnX+=float(MousePos[0]-LastMousePos[0])*0.25f;
+				ViewTurnY+=float(MousePos[1]-LastMousePos[1])*0.25f;
+			}
+			break;
+		case _ViewMode_Fly:
+			if(RMousePRESS)
+			{
+				ViewMAth->Turn(float(MousePos[0]-LastMousePos[0])*0.25f,0.0f,1.0f,0.0f);
+				ViewMAth->Turn(float(MousePos[1]-LastMousePos[1])*0.25f,1.0f,0.0f,0.0f);
+			}
+			if(MMousePRESS)
+			{
+				ViewMAth->Move(MoveStep*float(MousePos[0]-LastMousePos[0])*0.1f,0.0f,0.0f);
+				ViewMAth->Move(0.0f,-MoveStep*float(MousePos[1]-LastMousePos[1])*0.1f,0.0f);
+			}
+			break;
 	}
 }
 void GLFWCALL handle_key_down(int key, int action)
@@ -372,8 +358,16 @@ void GLFWCALL handle_MouseWheel( int pos )
 {
 	if(pos)
 	{
-		WHEEL+=(float)(pos-lastMouseWheel);
-		mpos[2]+=(float)(pos-lastMouseWheel)*MoveStep;
+		switch(ViewMode)
+		{
+			case _ViewMode_View:
+				WHEEL+=(float)(pos-lastMouseWheel);
+				mpos[2]+=(float)(pos-lastMouseWheel)*MoveStep;
+				break;
+			case _ViewMode_Fly:
+				ViewMAth->Move(0.0f,0.0f,-(float)(pos-lastMouseWheel)*MoveStep);
+				break;
+		}
 		lastMouseWheel=pos;
 	}
 }
@@ -489,14 +483,6 @@ extern "C" _declspec(dllexport) void AlphaSwitch(bool Use)
 {
 	UseAlpha=Use;
 }
-//extern "C" _declspec(dllexport) void ChangeView(float TurnX,float TurnY,float TurnZ)
-//{
-//	WaitForSingleObject(Mutex,INFINITE);
-//	ViewChanging[0]=TurnX;
-//	ViewChanging[1]=TurnY;
-//	ViewChanging[2]=TurnZ;
-//	ReleaseMutex(Mutex);
-//}
 extern "C" _declspec(dllexport) void InputMap(unsigned char * Data,int Size)
 {
 	DrawMap=true;

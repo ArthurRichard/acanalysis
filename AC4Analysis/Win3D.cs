@@ -17,9 +17,14 @@ namespace AC4Analysis
         public static extern void AlphaSwitch(bool Use);
         [DllImport("AC4_3DWIN.DLL", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetMoveStep(float MoveStepIn);
+        [DllImport("AC4_3DWIN.DLL", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void ResetView();
+        [DllImport("AC4_3DWIN.DLL", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void ChangeViewMode(int mode);
         public Win3D()
         {
             InitializeComponent();
+            rdbView模式选择1.Checked = true;
             SetMoveStep(float.Parse(textBox1.Text));
         }
         public IntPtr GetHwnd()
@@ -54,17 +59,19 @@ namespace AC4Analysis
 
         private void btn重置视角_Click(object sender, EventArgs e)
         {
-
+            ResetView();
         }
 
         private void rdbView模式选择1_CheckedChanged(object sender, EventArgs e)
         {
-
+            if (rdbView模式选择1.Checked)
+                ChangeViewMode(0);
         }
 
         private void rdbView模式选择2_CheckedChanged(object sender, EventArgs e)
         {
-
+            if (rdbView模式选择2.Checked)
+                ChangeViewMode(1);
         }
     }
 }

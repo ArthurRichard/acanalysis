@@ -28,9 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.timer旋转停止 = new System.Windows.Forms.Timer(this.components);
             this.label1 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -47,10 +45,6 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(639, 480);
             this.panel1.TabIndex = 8;
-            // 
-            // timer旋转停止
-            // 
-            this.timer旋转停止.Interval = 250;
             // 
             // label1
             // 
@@ -158,7 +152,6 @@
         #endregion
 
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Timer timer旋转停止;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label label2;
