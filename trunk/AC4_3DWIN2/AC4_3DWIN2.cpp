@@ -183,12 +183,14 @@ int RenderPart(int PartID)
 	}
 
 }
+GLfloat LightMaterialDiffuse[]= { 0.5f, 0.5f, 0.5f, 1.0f };
+GLfloat LightAmbient[]= { 0.75f, 0.75f, 0.75f, 1.0f };
+GLfloat LightDiffuse[]= { 1.0f, 1.0f, 1.0f, 1.0f };
+GLfloat LightPosition[]= { 0.0f, 0.0f, 0.0f, 1.0f };
 void InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 {
 	glewInit();
-GLfloat LightAmbient[]= { 0.5f, 0.5f, 0.5f, 1.0f };
-GLfloat LightDiffuse[]= { 1.0f, 1.0f, 1.0f, 1.0f };
-GLfloat LightPosition[]= { 0.0f, 0.0f, 0.0f, 1.0f };
+	glLightModeli(GL_LIGHT_MODEL_COLOR_CONTROL,GL_SEPARATE_SPECULAR_COLOR);
 	glShadeModel(GL_SMOOTH);							// Enable Smooth Shading
 	glClearColor(0.0f, 0.5f, 1.0f, 0.5f);				// Black Background
 	glClearDepth(1.0f);									// Depth Buffer Setup
@@ -197,13 +199,14 @@ GLfloat LightPosition[]= { 0.0f, 0.0f, 0.0f, 1.0f };
 	glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA   );
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);	// Really Nice Perspective Calculations
 
-    GLfloat mat_shininess[]={50.0};
-    glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT,LightAmbient);
-	glMaterialfv(GL_FRONT_AND_BACK,GL_DIFFUSE,LightDiffuse);
+    GLfloat mat_shininess[]={75.0};
+ //   glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT,LightMaterialDiffuse);
+	//glMaterialfv(GL_FRONT_AND_BACK,GL_DIFFUSE,LightAmbient);
     glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR,LightDiffuse);
     glMaterialfv(GL_FRONT_AND_BACK,GL_SHININESS,mat_shininess);
-	glLightfv(GL_LIGHT1, GL_AMBIENT, LightAmbient);		// Setup The Ambient Light
+	glLightfv(GL_LIGHT1, GL_AMBIENT, LightDiffuse);		// Setup The Ambient Light
 	glLightfv(GL_LIGHT1, GL_DIFFUSE, LightDiffuse);		// Setup The Diffuse Light
+	glLightfv(GL_LIGHT1, GL_SPECULAR,LightAmbient);	// Position The Light
 	glLightfv(GL_LIGHT1, GL_POSITION,LightPosition);	// Position The Light
 	glEnable(GL_LIGHT1);								// Enable Light One
 	//glEnable(GL_LIGHTING);
@@ -269,6 +272,7 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 			break;
 	}
 	
+	//glLightfv(GL_LIGHT1, GL_POSITION,LightPosition);	// Position The Light
 	glColor3f(1.0f,1.0f,1.0f);
 	if(FSAAsamples>1)
     glEnable(GL_MULTISAMPLE_ARB);

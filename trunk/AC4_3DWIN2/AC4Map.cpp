@@ -6,6 +6,8 @@ AC4Map::AC4Map(void)
 	: vecBuf(0)
 	, texBuf(0)
 	, DataChanged(false)
+	, posX(0)
+	, posY(0)
 {
 	VecPos.ChangeMaxCount(31*31*2);
 	TexCood.ChangeMaxCount(31*31*2);
@@ -100,9 +102,10 @@ void AC4Map::Draw(void)
 		DataChanged=false;
 	}
 
+	glTranslatef(posX,0.0f,posY);	
+
 	glEnableClientState( GL_VERTEX_ARRAY );
 	glEnableClientState( GL_TEXTURE_COORD_ARRAY );
-	
 	glBindBufferARB( GL_ARRAY_BUFFER_ARB, vecBuf );
 	glVertexPointer( 3, GL_FLOAT, 0, 0 );
 	glBindBufferARB( GL_ARRAY_BUFFER_ARB, texBuf );
