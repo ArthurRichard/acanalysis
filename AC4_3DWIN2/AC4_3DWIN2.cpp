@@ -89,6 +89,7 @@ void DrawTestLine()
 {	
 	glBindBufferARB( GL_ARRAY_BUFFER_ARB, 0 );
 	glDisable( GL_TEXTURE_2D );
+	glDisable( GL_LIGHTING );
 	glColor3f(1.0f,1.0f,1.0f);
 	glBegin(GL_LINES);
 		glColor3f(1.0f,1.0f,0.0f);
@@ -119,6 +120,7 @@ void DrawTestLine()
 	
 	glColor3f(1.0f,1.0f,1.0f);
 	glEnable( GL_TEXTURE_2D );
+	glEnable(GL_LIGHTING);
 }
 void SetMatrix(int PartID)
 {
