@@ -47,6 +47,13 @@ float msize=200.0f;
 float mpos[3]={0.0f,0.0f,0.0f};
 BOOL	done=FALSE;	
 int MouseWheel=0;
+enum _ViewMode
+{
+	_ViewMode_View,
+	_ViewMode_Fly
+};
+_ViewMode ViewMode=_ViewMode_View;
+int FSAAsamples=4;
 inline void EastPerspective(float fovyInDegrees, float aspectRatio,
                       float znear, float zfar,float * Matrix)
 {
@@ -264,19 +271,7 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	ChangeTex();
 	glEnable(GL_TEXTURE_2D);
 	WaitForSingleObject(Mutex,INFINITE);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear Screen And Depth Buffer
-											// Done Drawing The Triangle
-	glLoadIdentity();
-	        glTranslatef( 0.0f, 0.0f, -20.0f );
-       // glRotatef( 0.3f*(GLfloat)x + (GLfloat)t*100.0f, 0.0f, 0.0f, 1.0f );
-        glBegin( GL_TRIANGLES );
-          glColor3f( 1.0f, 0.0f, 0.0f );
-          glVertex3f( -5.0f, 0.0f, -4.0f );
-          glColor3f( 0.0f, 1.0f, 0.0f );
-          glVertex3f( 5.0f, 0.0f, -4.0f );
-          glColor3f( 0.0f, 0.0f, 1.0f );
-          glVertex3f( 0.0f, 0.0f, 6.0f );
-        glEnd();
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glLoadIdentity();
 	//glLightfv(GL_LIGHT0, GL_POSITION,LightPosition);
@@ -285,9 +280,11 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	glRotatef(ViewTurnY,1.0f,0.0f,0.0f);
 	if(!DrawMap)
 	glRotatef(180.0f,1.0f,0.0f,0.0f); // 模型方向反的
-	glRotatef(ViewTurnX,0.0f,1.0f,0.0f);// Done Drawing The Quad
+	glRotatef(ViewTurnX,0.0f,1.0f,0.0f);
 	
 	glColor3f(1.0f,1.0f,1.0f);
+	if(FSAAsamples>1)
+    glEnable(GL_MULTISAMPLE_ARB);
 	if(DrawMap)
 	{
 		if(Map)
@@ -309,6 +306,8 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 			glDepthMask(GL_TRUE);
 		}
 	}
+	if(FSAAsamples>1)
+    glDisable(GL_MULTISAMPLE_ARB);
 	ReleaseMutex(Mutex);
 	return TRUE;										// Keep Going
 }
@@ -365,11 +364,14 @@ unsigned int __stdcall RenderThread(LPVOID lpvoid)
 {
 	if(glfwInit() == GL_FALSE)
 		return 0;
+    glfwOpenWindowHint(GLFW_FSAA_SAMPLES, FSAAsamples);
 	if( glfwOpenSubWindow(winwidth,winheight,0,0,0,0,24,0,GLFW_WINDOW,(unsigned int)ParentHWND) == GL_FALSE )
 	{
 		glfwTerminate();
 		return 0;
 	}
+	
+    FSAAsamples = glfwGetWindowParam(GLFW_FSAA_SAMPLES);
 	glfwSwapInterval( 1 );
 	glfwSetKeyCallback( handle_key_down );
 	glfwSetMouseButtonCallback(handle_key_down);
