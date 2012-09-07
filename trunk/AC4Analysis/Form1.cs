@@ -48,7 +48,7 @@ namespace AC4Analysis
             {
                 OpenFileDialog ofd = new OpenFileDialog();
                 ofd.FileName = "Data.TBL";
-                ofd.Filter = "AC4 and AC0 TBL(*.tbl)|*.tbl|所有文件(*.*)|*.*";
+                ofd.Filter = "AC4 and AC0 TBL(*.tbl)|*.tbl|all file(*.*)|*.*";
                 if (!ofd.ShowDialog().Equals(DialogResult.OK))
                     return;
                 cdpfilename = System.IO.Path.GetDirectoryName(ofd.FileName) + "\\" + System.IO.Path.GetFileNameWithoutExtension(ofd.FileName) + ".cdp";
@@ -58,7 +58,7 @@ namespace AC4Analysis
                     cdpfilename = System.IO.Path.GetDirectoryName(ofd.FileName) + "\\" + System.IO.Path.GetFileNameWithoutExtension(ofd.FileName) + ".pac";
                     if (!File.Exists(cdpfilename))
                     {
-                        MessageBox.Show("未找到tbl对应的data文件");
+                        MessageBox.Show("Can not find data file");
                         return;
                     }
                 }
@@ -66,7 +66,7 @@ namespace AC4Analysis
                     mode = _Mode.AC4;
                 if (string.IsNullOrEmpty(cdpfilename))
                 {
-                    MessageBox.Show("未打开TBL");
+                    MessageBox.Show("Can not open TBL file");
                     return;
                 }
                 FileStream fs = new FileStream(ofd.FileName, FileMode.Open);
