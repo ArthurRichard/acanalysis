@@ -7,6 +7,7 @@
 #include "GL\glew.h"
 #include"GL\glfw.h"
 #include"AC4Map.h"
+#include "NodeMath.h"
 AC4Map * Map=0;
 #ifdef _DEBUG
 #pragma comment( lib, "glew32sd.lib" )

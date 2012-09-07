@@ -38,11 +38,6 @@ namespace AC4Analysis
             AlphaSwitch(cb透明开关.Checked);
         }
 
-        private void textBox1_MouseLeave(object sender, EventArgs e)
-        {
-
-        }
-
         private void textBox1_KeyUp(object sender, KeyEventArgs e)
         {
             float MoveStep = 10.0f;
