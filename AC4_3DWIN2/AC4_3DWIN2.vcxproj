@@ -80,11 +80,13 @@
   <ItemGroup>
     <ClCompile Include="AC4Map.cpp" />
     <ClCompile Include="AC4_3DWIN2.cpp" />
+    <ClCompile Include="NodeMath.cpp" />
     <ClCompile Include="TAList.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AC4Map.h" />
     <ClInclude Include="AC4_3DWIN2.h" />
+    <ClInclude Include="NodeMath.h" />
     <ClInclude Include="TAList.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

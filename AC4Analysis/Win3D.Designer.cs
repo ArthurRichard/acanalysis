@@ -66,7 +66,6 @@
             this.textBox1.TabIndex = 10;
             this.textBox1.Text = "10.0";
             this.textBox1.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBox1_KeyUp);
-            this.textBox1.MouseLeave += new System.EventHandler(this.textBox1_MouseLeave);
             // 
             // label2
             // 
