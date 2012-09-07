@@ -85,6 +85,41 @@ extern "C" _declspec(dllexport) void ClearViewTurn()
 	ViewMAth->Move(0.0f,0.0f,mpos[2]);
 }
 
+void DrawTestLine()
+{	
+	glBindBufferARB( GL_ARRAY_BUFFER_ARB, 0 );
+	glDisable( GL_TEXTURE_2D );
+	glColor3f(1.0f,1.0f,1.0f);
+	glBegin(GL_LINES);
+		glColor3f(1.0f,1.0f,0.0f);
+		glVertex3f( 0.0f, 0.0f, 1.0f);
+		glVertex3f( 0.0f, 0.0f,      0.0f);
+
+		glColor3f(1.0f,0.0f,1.0f);
+		glVertex3f( 0.0f, 0.0f,      0.0f);
+		glVertex3f( 0.0f, 0.0f,-1.0f);
+
+		glColor3f(1.0f,1.0f,1.0f);
+		glVertex3f( 0.0f, 1.0f, 0.0f);
+		glVertex3f( 0.0f,      0.0f, 0.0f);
+
+		glColor3f(0.0f,0.0f,0.0f);
+		glVertex3f( 0.0f,      0.0f, 0.0f);
+		glVertex3f( 0.0f,-1.0f, 0.0f);
+
+		glColor3f(1.0f,0.0f,0.0f);
+		glVertex3f( 1.0f, 0.0f, 0.0f);
+		glVertex3f(      0.0f, 0.0f, 0.0f);
+		glColor3f(0.0f,0.0f,1.0f);
+		glVertex3f(-1.0f, 0.0f, 0.0f);
+		glVertex3f(      0.0f, 0.0f, 0.0f);
+
+
+	glEnd();
+	
+	glColor3f(1.0f,1.0f,1.0f);
+	glEnable( GL_TEXTURE_2D );
+}
 void SetMatrix(int PartID)
 {
 	float Q[4];
@@ -148,6 +183,8 @@ int RenderPart(int PartID)
 		}
 		glEnd();
 	
+		if(PartInfo[PartID*3+2]==0)
+			DrawTestLine();
 		for(int i=0;i<PartInfo[PartID*3];i++)
 		{
 			nextPartID = RenderPart(nextPartID);
@@ -209,8 +246,11 @@ void InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	glLightfv(GL_LIGHT1, GL_SPECULAR,LightAmbient);	// Position The Light
 	glLightfv(GL_LIGHT1, GL_POSITION,LightPosition);	// Position The Light
 	glEnable(GL_LIGHT1);								// Enable Light One
+	
+	glLineWidth(1.0f);
 	//glEnable(GL_LIGHTING);
 }
+
 /* Callback function for window resize events */
 void GLFWCALL handle_resize( int width, int height )
 {
