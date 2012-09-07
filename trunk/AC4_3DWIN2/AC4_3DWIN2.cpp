@@ -64,14 +64,14 @@ void ChangeTex()
 	TexChanged=false;
 	if(TexID)
 		glDeleteTextures(1, &TexID);
-		glGenTextures( 1, &TexID );
-		glBindTexture( GL_TEXTURE_2D, TexID ); 
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, TexW, TexH, 0, GL_BGRA_EXT, GL_UNSIGNED_BYTE, TexData);
-		glGenerateMipmapEXT(GL_TEXTURE_2D);
-		if(glewIsSupported("GL_EXT_texture_filter_anisotropic"))
-			glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 4 ); 
-		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+	glGenTextures( 1, &TexID );
+	glBindTexture( GL_TEXTURE_2D, TexID ); 
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, TexW, TexH, 0, GL_BGRA_EXT, GL_UNSIGNED_BYTE, TexData);
+	glGenerateMipmapEXT(GL_TEXTURE_2D);
+	if(glewIsSupported("GL_EXT_texture_filter_anisotropic"))
+		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 4 ); 
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
 }
 extern "C" _declspec(dllexport) void ClearViewTurn()
 {
