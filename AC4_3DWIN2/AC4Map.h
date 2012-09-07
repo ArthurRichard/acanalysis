@@ -38,5 +38,7 @@ public:
 	unsigned int vecBuf;
 	unsigned int texBuf;
 	bool DataChanged;
+	float posX;
+	float posY;
 };
 
