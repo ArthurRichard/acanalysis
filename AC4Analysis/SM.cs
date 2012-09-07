@@ -273,27 +273,34 @@ namespace AC4Analysis
                 case 19: return "可变翼(折叠翼)";
                 case 20: return "可变翼关节";
                 case 22: return "发动机风扇";
+                case 27: return "前起落架灯?";
+                case 28: return "后左起落架灯?";
+                case 29: return "后右起落架灯?";
                 case 30: return "机身发光条";
                 case 31: return "机舱驾驶员";
                 case 33: return "常规武器舱门";
                 case 34: return "特殊兵装舱门";
                 case 40: return "起落架舱门";
+                case 41: return "起落架";
                 case 42: return "尾钩";
-                case 50: return "武器挂架_1_1";
-                case 51: return "武器挂架_1_2";
-                case 52: return "武器挂架_1_3";
-                case 53: return "武器挂架_1_4";
-                case 54: return "武器挂架_1_5";
-                case 55: return "武器挂架_1_6";
-                case 58: return "特殊兵装挂架_1";
-                case 59: return "特殊兵装挂架_2";
-                case 60: return "武器挂架_2_3";
-                case 61: return "武器挂架_2_4";
-                case 62: return "武器挂架_3_1";
-                case 63: return "武器挂架_3_2";
+                case 43: return "前轮";
+                case 44: return "后轮_左";
+                case 45: return "后轮_右";
+                case 50: return "武器挂架1";
+                case 51: return "武器挂架2";
+                case 52: return "武器挂架3";
+                case 53: return "武器挂架4";
+                case 54: return "武器挂架5";
+                case 55: return "武器挂架6";
+                case 58: return "特殊挂架1";
+                case 59: return "特殊挂架2";
+                case 60: return "特殊挂架3";
+                case 61: return "特殊挂架4";
+                case 62: return "特殊挂架5";
+                case 63: return "特殊挂架6";
                 case 97: return "空中加油舱门";
                 case 98: return "尾钩";
-                default: return "未知类型_" + _编号.ToString();
+                default: return "未知" + _编号.ToString();
             }
         }
         public SM()
