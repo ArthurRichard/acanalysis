@@ -1446,7 +1446,7 @@ int  _glfwPlatformOpenSubWindow( int width, int height, const _GLFWwndconfig *wn
     }
 
     setForegroundWindow( _glfwWin.window );
-    SetFocus( _glfwWin.window );
+    //SetFocus( _glfwWin.window );
 
     return GL_TRUE;
 }

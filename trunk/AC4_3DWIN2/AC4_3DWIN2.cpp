@@ -44,7 +44,7 @@ float Pmat[16];
 int w;
 int h;
 float msize=200.0f;
-float mpos[3]={0.0f,0.0f,0.0f};
+float mpos[3]={0.0f,0.0f,100.0f};
 BOOL	done=FALSE;	
 int MouseWheel=0;
 enum _ViewMode
@@ -53,6 +53,7 @@ enum _ViewMode
 	_ViewMode_Fly
 };
 _ViewMode ViewMode=_ViewMode_View;
+float MoveStep=10.0f;
 int FSAAsamples=4;
 inline void EastPerspective(float fovyInDegrees, float aspectRatio,
                       float znear, float zfar,float * Matrix)
@@ -275,11 +276,11 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 
 	glLoadIdentity();
 	//glLightfv(GL_LIGHT0, GL_POSITION,LightPosition);
-	glTranslatef(0.0f,0.0f,-msize*((100.0f+WHEEL)/100.0f));	
+	//glTranslatef(0.0f,0.0f,-msize*((100.0f+WHEEL)/100.0f));	
+	glTranslatef(0.0f,0.0f,-mpos[2]);	
 	
+	//if(!DrawMap)
 	glRotatef(ViewTurnY,1.0f,0.0f,0.0f);
-	if(!DrawMap)
-	glRotatef(180.0f,1.0f,0.0f,0.0f); // 模型方向反的
 	glRotatef(ViewTurnX,0.0f,1.0f,0.0f);
 	
 	glColor3f(1.0f,1.0f,1.0f);
@@ -292,6 +293,7 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	}
 	else
 	{
+	glRotatef(180.0f,1.0f,0.0f,0.0f); // 模型方向反的
 		if(!UseAlpha)
 			RenderPart(0);
 		else
@@ -323,7 +325,7 @@ void GLFWCALL handle_MousePos( int x, int y )
 	MousePos[1]=y;
 	if(RMousePRESS)
 	{
-		ViewTurnX+=-float(MousePos[0]-LastMousePos[0])*0.25f;
+		ViewTurnX+=float(MousePos[0]-LastMousePos[0])*0.25f;
 		ViewTurnY+=float(MousePos[1]-LastMousePos[1])*0.25f;
 	}
 }
@@ -357,6 +359,7 @@ void GLFWCALL handle_MouseWheel( int pos )
 	if(pos)
 	{
 		WHEEL+=(float)(pos-lastMouseWheel);
+		mpos[2]+=(float)(pos-lastMouseWheel)*MoveStep;
 		lastMouseWheel=pos;
 	}
 }
@@ -414,7 +417,7 @@ extern "C" _declspec(dllexport) void Set3DData(float * VecsIn,float * NorsIn,int
 
 	for(int i=0;i<VecSizeIn;i++)
 		msize=max(msize,abs(Vecs[i]));
-	msize=min(1000.0f,msize);
+	mpos[2]=msize=min(1000.0f,msize);
 	ClearViewTurn();
 	ReleaseMutex(Mutex);
 }
@@ -470,14 +473,14 @@ extern "C" _declspec(dllexport) void AlphaSwitch(bool Use)
 {
 	UseAlpha=Use;
 }
-extern "C" _declspec(dllexport) void ChangeView(float TurnX,float TurnY,float TurnZ)
-{
-	WaitForSingleObject(Mutex,INFINITE);
-	ViewChanging[0]=TurnX;
-	ViewChanging[1]=TurnY;
-	ViewChanging[2]=TurnZ;
-	ReleaseMutex(Mutex);
-}
+//extern "C" _declspec(dllexport) void ChangeView(float TurnX,float TurnY,float TurnZ)
+//{
+//	WaitForSingleObject(Mutex,INFINITE);
+//	ViewChanging[0]=TurnX;
+//	ViewChanging[1]=TurnY;
+//	ViewChanging[2]=TurnZ;
+//	ReleaseMutex(Mutex);
+//}
 extern "C" _declspec(dllexport) void InputMap(unsigned char * Data,int Size)
 {
 	DrawMap=true;
@@ -489,4 +492,8 @@ extern "C" _declspec(dllexport) void InputMap(unsigned char * Data,int Size)
 	Map=new AC4Map;
 	Map->Set(Data);
 	ReleaseMutex(Mutex);
+}
+extern "C" _declspec(dllexport) void SetMoveStep(float MoveStepIn)
+{
+	MoveStep=MoveStepIn;
 }
