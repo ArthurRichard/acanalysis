@@ -51,5 +51,20 @@ namespace AC4Analysis
             }
 
         }
+
+        private void btn重置视角_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void rdbView模式选择1_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void rdbView模式选择2_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }
