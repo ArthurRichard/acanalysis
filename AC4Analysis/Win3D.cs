@@ -16,82 +16,45 @@ namespace AC4Analysis
         [DllImport("AC4_3DWIN.DLL", CallingConvention = CallingConvention.Cdecl)]
         public static extern void AlphaSwitch(bool Use);
         [DllImport("AC4_3DWIN.DLL", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void ChangeView(float TurnX, float TurnY, float TurnZ);
+        public static extern void SetMoveStep(float MoveStepIn);
         public Win3D()
         {
             InitializeComponent();
-            btn开关灯.Text = "Turn On Light";
-            btn开关透明.Text = "Turn On Alpha";
+            SetMoveStep(float.Parse(textBox1.Text));
         }
-
-        bool OpenLight = false;
-        bool OpenAlpha = false;
         public IntPtr GetHwnd()
         {
             return panel1.Handle;
         }
 
-        private void btn开关灯_Click(object sender, EventArgs e)
+        private void cb光源开关_CheckedChanged(object sender, EventArgs e)
         {
-            OpenLight = !OpenLight;
-            if (OpenLight)
-                btn开关灯.Text = "Turn Off Light";
+            LightSwitch(cb光源开关.Checked);
+        }
+
+        private void cb透明开关_CheckedChanged(object sender, EventArgs e)
+        {
+
+            AlphaSwitch(cb透明开关.Checked);
+        }
+
+        private void textBox1_MouseLeave(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox1_KeyUp(object sender, KeyEventArgs e)
+        {
+            float MoveStep = 10.0f;
+            if (float.TryParse(textBox1.Text, out MoveStep) == false)
+            {
+                MessageBox.Show("Must number only");
+            }
             else
-                btn开关灯.Text = "Turn On Light";
-            LightSwitch(OpenLight);
+            {
+                SetMoveStep(MoveStep);
+            }
 
-        }
-
-        private void btn开关透明_Click(object sender, EventArgs e)
-        {
-            OpenAlpha = !OpenAlpha;
-            if (OpenAlpha)
-                btn开关透明.Text = "Turn Off Alpha";
-            else
-                btn开关透明.Text = "Turn On Alpha";
-            AlphaSwitch(OpenAlpha);
-        }
-
-        private void btn向左旋转_Click(object sender, EventArgs e)
-        {
-            timer旋转停止.Start();
-            ChangeView(1.0f, 0.0f, 0.0f);
-        }
-
-        private void btn向右旋转_Click(object sender, EventArgs e)
-        {
-            timer旋转停止.Start();
-            ChangeView(-1.0f, 0.0f, 0.0f);
-        }
-
-        private void btn向上旋转_Click(object sender, EventArgs e)
-        {
-            timer旋转停止.Start();
-            ChangeView(0.0f,-1.0f, 0.0f);
-        }
-
-        private void btn向下旋转_Click(object sender, EventArgs e)
-        {
-            timer旋转停止.Start();
-            ChangeView(0.0f, 1.0f, 0.0f);
-        }
-
-        private void btn拉近_Click(object sender, EventArgs e)
-        {
-            timer旋转停止.Start();
-            ChangeView(0.0f, 0.0f, -1.0f);
-        }
-
-        private void btn拉远_Click(object sender, EventArgs e)
-        {
-            timer旋转停止.Start();
-            ChangeView(0.0f, 0.0f, 1.0f);
-        }
-
-        private void timer旋转停止_Tick(object sender, EventArgs e)
-        {
-            timer旋转停止.Stop();
-            ChangeView(0.0f, 0.0f, 0.0f);
         }
     }
 }
