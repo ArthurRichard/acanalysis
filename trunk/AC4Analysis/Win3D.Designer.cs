@@ -38,7 +38,9 @@
             this.rdbView模式选择1 = new System.Windows.Forms.RadioButton();
             this.rdbView模式选择2 = new System.Windows.Forms.RadioButton();
             this.tp观察模式操作说明 = new System.Windows.Forms.ToolTip(this.components);
-            this.tp飞行模式操作说明 = new System.Windows.Forms.ToolTip(this.components);
+            this.tp自由模式操作说明 = new System.Windows.Forms.ToolTip(this.components);
+            this.btn设置光源 = new System.Windows.Forms.Button();
+            this.btn设置雾 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // panel1
@@ -128,16 +130,36 @@
             this.tp观察模式操作说明.InitialDelay = 200;
             this.tp观察模式操作说明.ReshowDelay = 100;
             // 
-            // tp飞行模式操作说明
+            // tp自由模式操作说明
             // 
-            this.tp飞行模式操作说明.AutoPopDelay = 5000;
-            this.tp飞行模式操作说明.InitialDelay = 200;
-            this.tp飞行模式操作说明.ReshowDelay = 100;
+            this.tp自由模式操作说明.AutoPopDelay = 5000;
+            this.tp自由模式操作说明.InitialDelay = 200;
+            this.tp自由模式操作说明.ReshowDelay = 100;
+            // 
+            // btn设置光源
+            // 
+            this.btn设置光源.Location = new System.Drawing.Point(279, 491);
+            this.btn设置光源.Name = "btn设置光源";
+            this.btn设置光源.Size = new System.Drawing.Size(67, 23);
+            this.btn设置光源.TabIndex = 17;
+            this.btn设置光源.Text = "Set light";
+            this.btn设置光源.UseVisualStyleBackColor = true;
+            // 
+            // btn设置雾
+            // 
+            this.btn设置雾.Location = new System.Drawing.Point(279, 520);
+            this.btn设置雾.Name = "btn设置雾";
+            this.btn设置雾.Size = new System.Drawing.Size(67, 23);
+            this.btn设置雾.TabIndex = 18;
+            this.btn设置雾.Text = "Set fog";
+            this.btn设置雾.UseVisualStyleBackColor = true;
             // 
             // Win3D
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.btn设置雾);
+            this.Controls.Add(this.btn设置光源);
             this.Controls.Add(this.rdbView模式选择2);
             this.Controls.Add(this.rdbView模式选择1);
             this.Controls.Add(this.btn重置视角);
@@ -164,6 +186,8 @@
         private System.Windows.Forms.RadioButton rdbView模式选择1;
         private System.Windows.Forms.RadioButton rdbView模式选择2;
         private System.Windows.Forms.ToolTip tp观察模式操作说明;
-        private System.Windows.Forms.ToolTip tp飞行模式操作说明;
+        private System.Windows.Forms.ToolTip tp自由模式操作说明;
+        private System.Windows.Forms.Button btn设置光源;
+        private System.Windows.Forms.Button btn设置雾;
     }
 }
