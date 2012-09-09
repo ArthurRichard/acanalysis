@@ -239,7 +239,7 @@ void InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA   );
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);	// Really Nice Perspective Calculations
 
-    GLfloat mat_shininess[]={75.0};
+    GLfloat mat_shininess[]={90.0};
  //   glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT,LightMaterialDiffuse);
 	//glMaterialfv(GL_FRONT_AND_BACK,GL_DIFFUSE,LightAmbient);
     glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR,LightDiffuse);
