@@ -90,6 +90,12 @@
       <DependentUpon>GIM.cs</DependentUpon>
     </Compile>
     <Compile Include="ini.cs" />
+    <Compile Include="LightWin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LightWin.Designer.cs">
+      <DependentUpon>LightWin.cs</DependentUpon>
+    </Compile>
     <Compile Include="map.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -128,6 +134,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GIM.resx">
       <DependentUpon>GIM.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LightWin.resx">
+      <DependentUpon>LightWin.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="map.resx">
       <DependentUpon>map.cs</DependentUpon>
