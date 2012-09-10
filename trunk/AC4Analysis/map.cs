@@ -11,12 +11,6 @@ namespace AC4Analysis
 {
     public partial class map : UserControl
     {
-        struct _Mesh
-        {
-            public float[] Vecs;
-            public float[] Nors;
-            public float[] Texs;
-        }
         public map()
         {
             InitializeComponent();
@@ -27,7 +21,6 @@ namespace AC4Analysis
         int TexDataAdd;
         int TexCount;
         Bitmap[] Images;
-        _Mesh[] Meshs;
         System.Drawing.Imaging.ColorPalette tempPalette;
         public bool Check(TreeNode node)
         {
@@ -72,7 +65,6 @@ namespace AC4Analysis
             _L1 tmp = (_L1)node.Tag;
             int add = (int)tmp.add;
             int SubMeshCount = (int)tmp.size / 0x400;
-            Meshs = new _Mesh[SubMeshCount];
             byte [] datatmp=new byte[0x400];
 
             for (int i = 0; i < 0x400; i++)

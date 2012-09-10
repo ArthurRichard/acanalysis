@@ -29,6 +29,8 @@ namespace AC4Analysis
             h = data[0x1e] + data[0x1f] * 256;
             pictureBox1.Width = w;
             pictureBox1.Height = h;
+            pictureBox2.Width = w;
+            pictureBox2.Height = h;
             label1.Text = "Width：" + w.ToString();
             label2.Text = "Height：" + h.ToString();
             culfmt = System.Drawing.Imaging.PixelFormat.Format8bppIndexed;
@@ -37,6 +39,7 @@ namespace AC4Analysis
             if ((paladd % 16) > 0)
                 paladd += (16 - paladd % 16);
             Color[] tmpcols = new Color[256];
+            Color[] tmpcolsA = new Color[256];
             for (int i = 0; i < tmpcols.Length; i++)
             {
                 byte alpha = data[paladd + i * 4 + 3];
@@ -53,6 +56,7 @@ namespace AC4Analysis
                 //    data[paladd + i * 4 + 0],
                 //    data[paladd + i * 4 + 1],
                 //    data[paladd + i * 4 + 2]);
+                tmpcolsA[i] = Color.FromArgb(255, alpha, alpha, alpha);
             }
             System.Drawing.Imaging.ColorPalette tempPalette;
             using (Bitmap tempBmp = new Bitmap(1, 1, System.Drawing.Imaging.PixelFormat.Format8bppIndexed))
@@ -73,9 +77,7 @@ namespace AC4Analysis
 
             gb.Palette = tempPalette;
 
-
             System.Drawing.Imaging.BitmapData bdata = gb.LockBits(Rectangle.FromLTRB(0, 0, w, h), System.Drawing.Imaging.ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format8bppIndexed);
-
             System.Runtime.InteropServices.Marshal.Copy(data, 0x20, bdata.Scan0, w * h);
             gb.UnlockBits(bdata);
 
@@ -85,6 +87,36 @@ namespace AC4Analysis
             btn导入图像.Enabled = true;
             btn保存非调色板图像.Enabled = true;
             btn在3D窗口里使用.Enabled = true;
+
+            System.Drawing.Imaging.ColorPalette tempPaletteA;
+            using (Bitmap tempBmp = new Bitmap(1, 1, culfmt))
+            {
+                tempPaletteA = tempBmp.Palette;
+            }
+            for (int i = 0; i < 8; i++)
+            {
+                for (int j = 0; j < 8; j++)
+                    tempPaletteA.Entries[i * 32 + j + 8 * 0] = tmpcolsA[i * 32 + j + 8 * 0];
+                for (int j = 0; j < 8; j++)
+                    tempPaletteA.Entries[i * 32 + j + 8 * 2] = tmpcolsA[i * 32 + j + 8 * 1];
+                for (int j = 0; j < 8; j++)
+                    tempPaletteA.Entries[i * 32 + j + 8 * 1] = tmpcolsA[i * 32 + j + 8 * 2];
+                for (int j = 0; j < 8; j++)
+                    tempPaletteA.Entries[i * 32 + j + 8 * 3] = tmpcolsA[i * 32 + j + 8 * 3];
+            }
+            System.Drawing.Bitmap gbA = new Bitmap(w, h, culfmt);
+            gbA.Palette = tempPaletteA;
+            System.Drawing.Imaging.BitmapData bdataA = gbA.LockBits(Rectangle.FromLTRB(0, 0, w, h), System.Drawing.Imaging.ImageLockMode.WriteOnly, culfmt);
+            System.Runtime.InteropServices.Marshal.Copy(data, 0x20, bdataA.Scan0, w * h);
+            gbA.UnlockBits(bdataA);
+            pictureBox2.Image = gbA;
+            pictureBox2.BackColor = Color.FromArgb(255, 0, 0, 0);
+            Point point = new Point();
+            point.X = pictureBox1.Location.X + w + 5;
+            point.Y = pictureBox1.Location.Y;
+            pictureBox2.Location = point;
+            Width = Math.Max(605, pictureBox1.Location.X + w * 2 + 10);
+            pictureBox2.Visible = true;
         }
         void Analysis_GIM4bit()
         {
@@ -101,6 +133,7 @@ namespace AC4Analysis
             if ((paladd % 16) > 0)
                 paladd += (16 - paladd % 16);
             Color[] tmpcols = new Color[16];
+            Color[] tmpcolsA = new Color[16];
             for (int i = 0; i < tmpcols.Length; i++)
             {
                 byte alpha = data[paladd + i * 4 + 3];
@@ -113,6 +146,7 @@ namespace AC4Analysis
                     data[paladd + i * 4 + 0],
                     data[paladd + i * 4 + 1],
                     data[paladd + i * 4 + 2]);
+                tmpcolsA[i] = Color.FromArgb(255, alpha, alpha, alpha);
             }
             System.Drawing.Imaging.ColorPalette tempPalette;
             using (Bitmap tempBmp = new Bitmap(1, 1, culfmt))
@@ -127,7 +161,6 @@ namespace AC4Analysis
             for (int i = 0; i < newdata.Length; i++)
             {
                 byte A = data[i + 0x20];
-                //newdata[i] = (byte)(255 - data[i + 0x20]);
                 newdata[i] = (byte)(((A & 0xf0) >> 4) | ((A & 0x0f) << 4));
             }
             gb.Palette = tempPalette;
@@ -137,6 +170,31 @@ namespace AC4Analysis
             pictureBox1.Image = gb;
             pictureBox1.BackColor = Color.FromArgb(255, 0, 0, 0);
             this.Visible = true;
+
+            System.Drawing.Imaging.ColorPalette tempPaletteA;
+            using (Bitmap tempBmp = new Bitmap(1, 1, culfmt))
+            {
+                tempPaletteA = tempBmp.Palette;
+            }
+            for (int i = 0; i < tmpcols.Length; i++)
+            {
+                tempPaletteA.Entries[i] = tmpcolsA[i];
+            }
+            System.Drawing.Bitmap gbA = new Bitmap(w, h, culfmt);
+            gbA.Palette = tempPalette;
+            System.Drawing.Imaging.BitmapData bdataA = gbA.LockBits(Rectangle.FromLTRB(0, 0, w, h), System.Drawing.Imaging.ImageLockMode.WriteOnly, culfmt);
+            System.Runtime.InteropServices.Marshal.Copy(newdata, 0, bdataA.Scan0, w * h / 2);
+            gbA.UnlockBits(bdataA);
+            PictureBox pbA = new PictureBox();
+            pbA.Image = gbA;
+            pbA.Width = w;
+            pbA.Height = h;
+            Point point = new Point();
+            point.X = pictureBox1.Location.X + w + 5;
+            point.Y = pictureBox1.Location.Y;
+            pbA.Location = point;
+            Controls.Add(pbA);
+            Width = Math.Max(605, pictureBox1.Location.X + w * 2 + 10);
         }
         void Analysis_GIM24bit()
         {
