@@ -89,9 +89,9 @@ namespace AC4Analysis
             btn在3D窗口里使用.Enabled = true;
 
             System.Drawing.Imaging.ColorPalette tempPaletteA;
-            using (Bitmap tempBmp = new Bitmap(1, 1, culfmt))
+            using (Bitmap tempBmpA = new Bitmap(1, 1, culfmt))
             {
-                tempPaletteA = tempBmp.Palette;
+                tempPaletteA = tempBmpA.Palette;
             }
             for (int i = 0; i < 8; i++)
             {
