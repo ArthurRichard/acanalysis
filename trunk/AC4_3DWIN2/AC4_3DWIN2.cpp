@@ -246,7 +246,7 @@ void InitGL(GLvoid)										// All Setup For OpenGL Goes Here
     glMaterialfv(GL_FRONT_AND_BACK,GL_SHININESS,mat_shininess);
 	glLightfv(GL_LIGHT1, GL_AMBIENT, LightDiffuse);		// Setup The Ambient Light
 	glLightfv(GL_LIGHT1, GL_DIFFUSE, LightDiffuse);		// Setup The Diffuse Light
-	glLightfv(GL_LIGHT1, GL_SPECULAR,LightAmbient);	// Position The Light
+	glLightfv(GL_LIGHT1, GL_SPECULAR,LightDiffuse);	// Position The Light
 	glLightfv(GL_LIGHT1, GL_POSITION,LightPosition);	// Position The Light
 	glEnable(GL_LIGHT1);								// Enable Light One
 	
@@ -328,7 +328,25 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	{
 	glRotatef(180.0f,1.0f,0.0f,0.0f); // 模型方向反的
 		if(!UseAlpha)
+		{
+			
+			glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR,LightPosition);
 			RenderPart(0);
+			glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR,LightDiffuse);
+			if(UseLight)
+			{
+				glLightfv(GL_LIGHT1, GL_AMBIENT, LightPosition);		// Setup The Ambient Light
+				glLightfv(GL_LIGHT1, GL_DIFFUSE, LightPosition);		// Setup The Diffuse Light
+				glEnable(GL_BLEND);
+				glBlendFunc(GL_SRC_ALPHA,GL_ONE   );
+				RenderPart(0);
+				RenderPart(0);
+				glDisable(GL_BLEND);
+				glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA   );
+				glLightfv(GL_LIGHT1, GL_AMBIENT, LightDiffuse);		// Setup The Ambient Light
+				glLightfv(GL_LIGHT1, GL_DIFFUSE, LightDiffuse);		// Setup The Diffuse Light
+			}
+		}
 		else
 		{
 			glEnable(GL_ALPHA_TEST);
