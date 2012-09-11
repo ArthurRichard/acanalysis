@@ -1,13 +1,16 @@
 #include "AC4Map.h"
 #include "GL\glew.h"
 #include <windows.h>		// Header File For Windows
-
+#include <process.h>
+#include"TAList.h"
+extern HANDLE Mutex=0;
 AC4Map::AC4Map(void)
 	: vecBuf(0)
 	, texBuf(0)
 	, DataChanged(false)
-	, posX(0)
-	, posY(0)
+	, TID(0)
+	, TextureBuf(0)
+	, TextureChanged(false)
 {
 	VecPos.ChangeMaxCount(31*31*2);
 	TexCood.ChangeMaxCount(31*31*2);
@@ -16,6 +19,7 @@ AC4Map::AC4Map(void)
 
 AC4Map::~AC4Map(void)
 {
+	Clear();
 }
 
 
@@ -101,8 +105,23 @@ void AC4Map::Draw(void)
 		glBindBufferARB(GL_ARRAY_BUFFER_ARB,0);
 		DataChanged=false;
 	}
-
-	glTranslatef(posX,0.0f,posY);	
+	if(TextureChanged)
+	{
+		TextureChanged=false;
+		if(TID)
+			glDeleteTextures(1, &TID);
+		glGenTextures( 1, &TID );
+		glBindTexture( GL_TEXTURE_2D, TID ); 
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1024, 1024, 0, GL_BGRA_EXT, GL_UNSIGNED_BYTE, TextureBuf);
+		glGenerateMipmapEXT(GL_TEXTURE_2D);
+		if(glewIsSupported("GL_EXT_texture_filter_anisotropic"))
+			glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 4 ); 
+		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+	}
+	if(!vecBuf)
+		return;
+	//glTranslatef(posX,0.0f,posY);	
 
 	glEnableClientState( GL_VERTEX_ARRAY );
 	glEnableClientState( GL_TEXTURE_COORD_ARRAY );
@@ -115,3 +134,59 @@ void AC4Map::Draw(void)
 	glDisableClientState( GL_TEXTURE_COORD_ARRAY );
 	glBindBufferARB(GL_ARRAY_BUFFER_ARB,0);
 }
+unsigned char MapIndex[0x100]={0};
+void AC4Map::Clear(void)
+{
+	if(TID)
+		glDeleteTextures(1, &TID);
+	if(vecBuf) glDeleteBuffersARB(1,&vecBuf);
+	if(texBuf) glDeleteBuffersARB(1,&texBuf);
+	if(TextureBuf) delete [] TextureBuf;
+}
+
+void AC4Map::SetTexture(unsigned char * TexDataIn)
+{
+	if(TextureBuf) delete [] TextureBuf;
+	TextureBuf=new unsigned char[1024*1024];
+	memcpy_s(TextureBuf,1024*1024,TexDataIn,1024*1024);
+	TextureChanged=true;
+}
+CTAList<AC4Map> MapList;
+int ListSize=0;
+extern "C" _declspec(dllexport) void ChangeMapSize(int Size)
+{
+	ListSize=Size;
+}
+extern "C" _declspec(dllexport) void SetMapData(int ID,unsigned char * Data)
+{
+	WaitForSingleObject(Mutex,INFINITE);
+	MapList[ID].Set(Data);
+	ReleaseMutex(Mutex);
+}
+extern "C" _declspec(dllexport) void SetMapTex(int ID,unsigned char * Data)
+{
+	WaitForSingleObject(Mutex,INFINITE);
+	MapList[ID].SetTexture(Data);
+	ReleaseMutex(Mutex);
+}
+extern "C" _declspec(dllexport) void SetMapIndex(unsigned char * Data)
+{
+	memcpy_s(MapIndex,0x100,Data,0x100);
+}
+
+void DrawMaps(float posx,float posz)
+{
+	if(ListSize!=MapList.Count)
+	{
+		MapList.Clear();
+		MapList.ChangeMaxCount(ListSize);
+	}
+	for(int y=int(posz/310.0f)-2;y<(int(posz/310.0f)+2);y++)
+	for(int x=int(posx/310.0f)-2;x<(int(posx/310.0f)+2);x++)
+	{
+		int MapID=x+y*10;
+		glTranslatef(x*310.0f,0.0f,y*310.0f);
+		MapList[MapID].Draw();
+	}
+}
+
