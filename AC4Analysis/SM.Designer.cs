@@ -60,7 +60,7 @@
             this.panel1.AutoScroll = true;
             this.panel1.Location = new System.Drawing.Point(0, 23);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(647, 561);
+            this.panel1.Size = new System.Drawing.Size(649, 561);
             this.panel1.TabIndex = 0;
             // 
             // cboxPart
@@ -221,7 +221,7 @@
             this.tb关键帧.Location = new System.Drawing.Point(649, 54);
             this.tb关键帧.Maximum = 100;
             this.tb关键帧.Name = "tb关键帧";
-            this.tb关键帧.Size = new System.Drawing.Size(91, 45);
+            this.tb关键帧.Size = new System.Drawing.Size(91, 42);
             this.tb关键帧.TabIndex = 22;
             this.tb关键帧.Scroll += new System.EventHandler(this.tb关键帧_Scroll);
             // 

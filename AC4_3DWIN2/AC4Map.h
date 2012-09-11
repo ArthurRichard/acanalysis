@@ -38,7 +38,11 @@ public:
 	unsigned int vecBuf;
 	unsigned int texBuf;
 	bool DataChanged;
-	float posX;
-	float posY;
+	unsigned int TID;
+	unsigned char * TextureBuf;
+	bool TextureChanged;
+	void SetTexture(unsigned char * TexDataIn);
+	void Clear(void);
 };
 
+void DrawMaps(float posx,float posz);
