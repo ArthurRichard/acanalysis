@@ -22,7 +22,7 @@ AC4Map * Map=0;
 int winwidth=640, winheight=480;
 HWND ParentHWND=0;
 HANDLE RenderThreadHANDLE=NULL;
-HANDLE Mutex=0;
+extern HANDLE Mutex=0;
 float ViewTurnX=45.0f,ViewTurnY=45.0f;
 bool UseLight=false;
 bool UseAlpha=false;

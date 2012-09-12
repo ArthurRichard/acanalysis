@@ -3,7 +3,7 @@
 #include <windows.h>		// Header File For Windows
 #include <process.h>
 #include"TAList.h"
-extern HANDLE Mutex=0;
+extern HANDLE Mutex;
 AC4Map::AC4Map(void)
 	: vecBuf(0)
 	, texBuf(0)
