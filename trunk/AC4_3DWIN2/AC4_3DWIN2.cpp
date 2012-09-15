@@ -31,7 +31,7 @@ int TexW=0;
 int TexH=0;
 unsigned char * TexData=0;
 bool TexChanged=false;
-bool DrawMap=false;
+extern bool DrawMap=false;
 float * Vecs=0;
 float * Nors=0;
 float * Texs=0;
@@ -301,15 +301,17 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glLoadIdentity();
-
+	float ViewPos[2];
 	switch(ViewMode)
 	{
 		case _ViewMode_View:
 			glTranslatef(0.0f,0.0f,-mpos[2]);	
 			glRotatef(ViewTurnY,1.0f,0.0f,0.0f);
 			glRotatef(ViewTurnX,0.0f,1.0f,0.0f);
+			ViewPos[0]=0.0f;ViewPos[1]=0.0f;
 			break;
 		case _ViewMode_Free:
+			ViewPos[0]=ViewMAth->Pos->m128_f32[0];ViewPos[1]=ViewMAth->Pos->m128_f32[2];
 			ViewMAth->Inv();
 			glMultMatrixf(ViewMAth->Mat->m128_f32);
 			break;
@@ -321,8 +323,9 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
     glEnable(GL_MULTISAMPLE_ARB);
 	if(DrawMap)
 	{
-		if(Map)
-			Map->Draw();
+		DrawMaps(ViewPos[0],ViewPos[1]);
+		//if(Map)
+		//	Map->Draw();
 	}
 	else
 	{
@@ -550,6 +553,11 @@ extern "C" _declspec(dllexport) void LightSwitch(bool Use)
 extern "C" _declspec(dllexport) void AlphaSwitch(bool Use)
 {
 	UseAlpha=Use;
+}
+
+extern "C" _declspec(dllexport) void ShowMap()
+{
+	DrawMap=true;
 }
 extern "C" _declspec(dllexport) void InputMap(unsigned char * Data,int Size)
 {

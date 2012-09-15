@@ -15,6 +15,17 @@ namespace AC4Analysis
         {
             InitializeComponent();
         }
+        [DllImport("AC4_3DWIN.DLL", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void ChangeMapSize(int Size);
+        [DllImport("AC4_3DWIN.DLL", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void SetMapData(int ID,byte [] Data);
+        [DllImport("AC4_3DWIN.DLL", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void SetMapTex(int ID, byte[] Data);
+        [DllImport("AC4_3DWIN.DLL", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void SetMapIndex(byte[] Data);
+        [DllImport("AC4_3DWIN.DLL", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void ShowMap();
+
         public byte[] TexDataTmp = new byte[1024 * 1024];
         public byte[] CulData;
         List<ushort[]> SubMapList = new List<ushort[]>();
@@ -32,10 +43,11 @@ namespace AC4Analysis
             TexCount = 0;
             TexDataTmp = new byte[1024 * 1024];
             SubMapList = new List<ushort[]>();
-            Controls.Clear();
+            panel1.Controls.Clear();
             TreeNode SubMapNode = node.Nodes[5];
             GetSubMapList(SubMapNode);
             TreeNode SubMapIDNode = node.Nodes[6];
+            GetMapIDs(SubMapIDNode);
             TreeNode TexsNode = node.Nodes[7];
             GetTexs(TexsNode);
             TreeNode MapPalNode = node.Nodes[8];
@@ -45,21 +57,11 @@ namespace AC4Analysis
 
             GetSubMaps();
             SetDataTo3DWin();
+            ShowMap();
             return true;
         }
-        void SetPos(int x, int y, int z, int VecID, int FaceID, float[] Data, int add)
-        {
-            Data[add + VecID * 3 + FaceID * 9 + 0] = (float)x * 100.0f;
-            Data[add + VecID * 3 + FaceID * 9 + 1] = (float)y * 100.0f;
-            Data[add + VecID * 3 + FaceID * 9 + 2] = (float)z * 100.0f;
-        }
-        void SetTex(int x, int y, int VecID, int FaceID, float[] Data, int add)
-        {
-            Data[add + VecID * 2 + FaceID * 6 + 0] = (float)x / 32.0f;
-            Data[add + VecID * 2 + FaceID * 6 + 1] = (float)y / 32.0f;
-        }
-        [DllImport("AC4_3DWIN.DLL", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void InputMap(byte[] Data,int Size);
+        //[DllImport("AC4_3DWIN.DLL", CallingConvention = CallingConvention.Cdecl)]
+        //public static extern void InputMap(byte[] Data,int Size);
         void GetMesh(TreeNode node)
         {
             _L1 tmp = (_L1)node.Tag;
@@ -67,11 +69,15 @@ namespace AC4Analysis
             int SubMeshCount = (int)tmp.size / 0x400;
             byte [] datatmp=new byte[0x400];
 
-            for (int i = 0; i < 0x400; i++)
+            for (int j = 0; j < Images.Length; j++)
             {
-                datatmp[i]=CulData[add + i];
+                for (int i = 0; i < 0x400; i++)
+                {
+                    datatmp[i] = CulData[add + i+j*0x400];
+                }
+                SetMapData(j, datatmp);
             }
-            InputMap(datatmp, 0x400);
+            //InputMap(datatmp, 0x400);
         }
         void GetSubMapList(TreeNode node)
         {
@@ -88,6 +94,7 @@ namespace AC4Analysis
                 SubMapList.Add(SubMap);
             }
             Images = new Bitmap[SubMapCount];
+            ChangeMapSize(SubMapCount);
         }
         void GetTexs(TreeNode node)
         { 
@@ -156,7 +163,7 @@ namespace AC4Analysis
         void GetSubMaps()
         {
             //Height = SubMapList.Count * 1024;
-            for (int i = 0; i < 1; i++)
+            for (int i = 0; i < SubMapList.Count; i++)
             {
                 ushort[] SubMap = SubMapList[i];
                 for (int y = 0; y < 16; y++)
@@ -191,36 +198,55 @@ namespace AC4Analysis
                 pb.BackColor = Color.FromArgb(255, 0, 0, 0);
                 //Controls.Add(pb);
                 Images[i] = tmp;
+                progressBar1.Value = 50 * i / SubMapList.Count;
             }
         }
-
+        void GetMapIDs(TreeNode node)
+        {
+            _L1 tmp = (_L1)node.Tag;
+            int add = (int)tmp.add;
+            byte[] datatmp = new byte[0x100];
+            for (int i = 0; i < 0x100; i++)
+            {
+                datatmp[i] = CulData[add + i];
+            }
+            SetMapIndex(datatmp);
+        }
         public void Set3Dwin(Control control)
         {
-            Height = control.Height+5;
-            Width = control.Width+5;
-            Controls.Add(control);
+            Height = control.Height+35;
+            Width = control.Width + 5;
+            panel1.Height = control.Height + 2;
+            panel1.Width = control.Width + 2;
+            panel1.Controls.Add(control);
         }
         public void Unset3Dwin()
         {
-            Controls.Clear();
+            panel1.Controls.Clear();
         }
-        [DllImport("AC4_3DWIN.DLL", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void InputTex(byte[] TexDataIn, int SizeX, int SizeY, int DataSize);
+        //[DllImport("AC4_3DWIN.DLL", CallingConvention = CallingConvention.Cdecl)]
+        //public static extern void InputTex(byte[] TexDataIn, int SizeX, int SizeY, int DataSize);
         void SetDataTo3DWin()
         {
-            System.Drawing.Bitmap gb = Images[0];
-            System.Drawing.Bitmap newb = new Bitmap(gb.Width, gb.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-            for (int y = 0; y < gb.Height; y++)
-                for (int x = 0; x < gb.Width; x++)
-                {
-                    newb.SetPixel(x, y, gb.GetPixel(x, y));
-                }
-            byte[] TexDataIn = new byte[gb.Width * gb.Height * 4];
-            System.Drawing.Imaging.BitmapData bdata = newb.LockBits(Rectangle.FromLTRB(0, 0, gb.Width, gb.Height), System.Drawing.Imaging.ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            for (int i = 0; i < SubMapList.Count; i++)
+            {
+                System.Drawing.Bitmap gb = Images[i];
+                System.Drawing.Bitmap newb = new Bitmap(gb.Width, gb.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                for (int y = 0; y < gb.Height; y++)
+                    for (int x = 0; x < gb.Width; x++)
+                    {
+                        newb.SetPixel(x, y, gb.GetPixel(x, y));
+                    }
+                byte[] TexDataIn = new byte[gb.Width * gb.Height * 4];
+                System.Drawing.Imaging.BitmapData bdata = newb.LockBits(Rectangle.FromLTRB(0, 0, gb.Width, gb.Height), System.Drawing.Imaging.ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 
-            System.Runtime.InteropServices.Marshal.Copy(bdata.Scan0, TexDataIn, 0, gb.Width * gb.Height * 4);
-            newb.UnlockBits(bdata);
-            InputTex(TexDataIn, gb.Width, gb.Height, gb.Width * gb.Height * 4);
+                System.Runtime.InteropServices.Marshal.Copy(bdata.Scan0, TexDataIn, 0, gb.Width * gb.Height * 4);
+                newb.UnlockBits(bdata);
+                //InputTex(TexDataIn, gb.Width, gb.Height, gb.Width * gb.Height * 4);
+                SetMapTex(i, TexDataIn);
+                progressBar1.Value = 50+50 * (i+1) / SubMapList.Count;
+                Update();
+            }
         }
     }
 }

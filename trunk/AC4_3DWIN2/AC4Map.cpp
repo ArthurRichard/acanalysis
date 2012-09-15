@@ -4,12 +4,12 @@
 #include <process.h>
 #include"TAList.h"
 extern HANDLE Mutex;
+extern bool DrawMap;
 AC4Map::AC4Map(void)
 	: vecBuf(0)
 	, texBuf(0)
 	, DataChanged(false)
 	, TID(0)
-	, TextureBuf(0)
 	, TextureChanged(false)
 {
 	VecPos.ChangeMaxCount(31*31*2);
@@ -122,7 +122,8 @@ void AC4Map::Draw(void)
 	if(!vecBuf)
 		return;
 	//glTranslatef(posX,0.0f,posY);	
-
+	
+	glBindTexture( GL_TEXTURE_2D, TID ); 
 	glEnableClientState( GL_VERTEX_ARRAY );
 	glEnableClientState( GL_TEXTURE_COORD_ARRAY );
 	glBindBufferARB( GL_ARRAY_BUFFER_ARB, vecBuf );
@@ -141,21 +142,28 @@ void AC4Map::Clear(void)
 		glDeleteTextures(1, &TID);
 	if(vecBuf) glDeleteBuffersARB(1,&vecBuf);
 	if(texBuf) glDeleteBuffersARB(1,&texBuf);
-	if(TextureBuf) delete [] TextureBuf;
+	//if(TextureBuf) delete [] TextureBuf;
 }
 
 void AC4Map::SetTexture(unsigned char * TexDataIn)
 {
-	if(TextureBuf) delete [] TextureBuf;
-	TextureBuf=new unsigned char[1024*1024];
-	memcpy_s(TextureBuf,1024*1024,TexDataIn,1024*1024);
+	//if(TextureBuf) delete [] TextureBuf;
+	//TextureBuf=new unsigned char[1024*1024];
+	memcpy_s(TextureBuf,1024*1024*4,TexDataIn,1024*1024*4);
 	TextureChanged=true;
 }
 CTAList<AC4Map> MapList;
 int ListSize=0;
 extern "C" _declspec(dllexport) void ChangeMapSize(int Size)
 {
+	WaitForSingleObject(Mutex,INFINITE);
 	ListSize=Size;
+	if(MapList.Count==0)
+	{
+		MapList.ChangeMaxCount(ListSize);
+		MapList.Count=ListSize;
+	}
+	ReleaseMutex(Mutex);
 }
 extern "C" _declspec(dllexport) void SetMapData(int ID,unsigned char * Data)
 {
@@ -181,12 +189,19 @@ void DrawMaps(float posx,float posz)
 		MapList.Clear();
 		MapList.ChangeMaxCount(ListSize);
 	}
-	for(int y=int(posz/310.0f)-2;y<(int(posz/310.0f)+2);y++)
-	for(int x=int(posx/310.0f)-2;x<(int(posx/310.0f)+2);x++)
+	for(int y=int(posz/310.0f)-4+8;y<(int(posz/310.0f)+4+8);y++)
+	for(int x=int(posx/310.0f)-4+8;x<(int(posx/310.0f)+4+8);x++)
 	{
-		int MapID=x+y*10;
-		glTranslatef(x*310.0f,0.0f,y*310.0f);
-		MapList[MapID].Draw();
+		if(x<0) return;
+		if(y<0) return;
+		int MapID=x+y*0x10;
+		if(MapID>=0x100)
+			return;
+		glPushMatrix();
+		glTranslatef((x-8)*310.0f,0.0f,(y-8)*310.0f);
+		int ID=MapIndex[MapID];
+		MapList[ID].Draw();
+		glPopMatrix();
 	}
 }
 

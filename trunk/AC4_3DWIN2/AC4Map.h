@@ -39,7 +39,7 @@ public:
 	unsigned int texBuf;
 	bool DataChanged;
 	unsigned int TID;
-	unsigned char * TextureBuf;
+	unsigned char TextureBuf[1024*1024*4];
 	bool TextureChanged;
 	void SetTexture(unsigned char * TexDataIn);
 	void Clear(void);
