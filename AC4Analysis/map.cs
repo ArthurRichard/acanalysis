@@ -60,8 +60,6 @@ namespace AC4Analysis
             ShowMap();
             return true;
         }
-        //[DllImport("AC4_3DWIN.DLL", CallingConvention = CallingConvention.Cdecl)]
-        //public static extern void InputMap(byte[] Data,int Size);
         void GetMesh(TreeNode node)
         {
             _L1 tmp = (_L1)node.Tag;
