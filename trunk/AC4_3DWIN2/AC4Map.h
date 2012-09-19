@@ -77,10 +77,25 @@ public:
 	~AC4MapMesh(void);
 	CTAList<_VecPos> VecPos;
 	CTAList<_TexCood> TexCood;
+	unsigned int vecBuf;
+	unsigned int texBuf;
 	void Set(unsigned char * Data);
 	static unsigned char MeshIDs[0x100];
 	void Draw(void);
 	unsigned char MeshData[0x400];
+};
+class AC4MapMeshBoder
+{
+public:
+	AC4MapMeshBoder(void);
+	~AC4MapMeshBoder(void);
+	CTAList<_VecPos> VecPos;
+	CTAList<_TexCood> TexCood;
+	unsigned int vecBuf;
+	unsigned int texBuf;
+	void Set(unsigned char * Data00,unsigned char * Data10,unsigned char * Data01,unsigned char * Data11);
+	void Draw(void);
+	int LastTime;
 };
 class AC4MapPack
 {
@@ -96,4 +111,5 @@ public:
 	CTAList<AC4MapMesh *> Meshs;
 	_MapAdd Adds[36];
 	int MapTexAdd;
+	AC4MapMeshBoder * Boders[0x100];
 };
