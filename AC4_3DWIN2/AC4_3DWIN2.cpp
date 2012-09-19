@@ -8,8 +8,8 @@
 #include"GL\glfw.h"
 #include"AC4Map.h"
 #include "NodeMath.h"
-NodeMath * ViewMAth;
-//AC4Map * Map=0;
+NodeMath * ViewMath,*TurnUpMath;
+
 #ifdef _DEBUG
 #pragma comment( lib, "glew32sd.lib" )
 #pragma comment( lib, "GLFWd.lib" )
@@ -79,10 +79,10 @@ extern "C" _declspec(dllexport) void ClearViewTurn()
 	ViewTurnY=45.0f;
 	WHEEL=0.0f;
 	mpos[2]=msize;
-	ViewMAth->Clear();
-	ViewMAth->Turn(-45.0f,0.0f,1.0f,0.0f);
-	ViewMAth->Turn(-45.0f,1.0f,0.0f,0.0f);
-	ViewMAth->Move(0.0f,0.0f,mpos[2]);
+	ViewMath->Clear();
+	ViewMath->Turn(-45.0f,0.0f,1.0f,0.0f);
+	ViewMath->Turn(-45.0f,1.0f,0.0f,0.0f);
+	ViewMath->Move(0.0f,0.0f,mpos[2]);
 }
 
 void DrawTestLine()
@@ -311,9 +311,9 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 			ViewPos[0]=0.0f;ViewPos[1]=0.0f;
 			break;
 		case _ViewMode_Free:
-			ViewPos[0]=ViewMAth->Pos->m128_f32[0];ViewPos[1]=ViewMAth->Pos->m128_f32[2];
-			ViewMAth->Inv();
-			glMultMatrixf(ViewMAth->Mat->m128_f32);
+			ViewPos[0]=ViewMath->Pos->m128_f32[0];ViewPos[1]=ViewMath->Pos->m128_f32[2];
+			ViewMath->Inv();
+			glMultMatrixf(ViewMath->Mat->m128_f32);
 			break;
 	}
 	
@@ -389,13 +389,13 @@ void GLFWCALL handle_MousePos( int x, int y )
 		case _ViewMode_Free:
 			if(RMousePRESS)
 			{
-				ViewMAth->Turn(float(MousePos[0]-LastMousePos[0])*0.25f,0.0f,1.0f,0.0f);
-				ViewMAth->Turn(float(MousePos[1]-LastMousePos[1])*0.25f,1.0f,0.0f,0.0f);
+				ViewMath->Turn(float(MousePos[0]-LastMousePos[0])*0.25f,0.0f,1.0f,0.0f);
+				ViewMath->Turn(float(MousePos[1]-LastMousePos[1])*0.25f,1.0f,0.0f,0.0f);
 			}
 			if(MMousePRESS)
 			{
-				ViewMAth->Move(MoveStep*float(MousePos[0]-LastMousePos[0])*0.1f,0.0f,0.0f);
-				ViewMAth->Move(0.0f,-MoveStep*float(MousePos[1]-LastMousePos[1])*0.1f,0.0f);
+				ViewMath->Move(MoveStep*float(MousePos[0]-LastMousePos[0])*0.1f,0.0f,0.0f);
+				ViewMath->Move(0.0f,-MoveStep*float(MousePos[1]-LastMousePos[1])*0.1f,0.0f);
 			}
 			break;
 	}
@@ -436,7 +436,7 @@ void GLFWCALL handle_MouseWheel( int pos )
 				mpos[2]+=(float)(pos-lastMouseWheel)*MoveStep;
 				break;
 			case _ViewMode_Free:
-				ViewMAth->Move(0.0f,0.0f,-(float)(pos-lastMouseWheel)*MoveStep);
+				ViewMath->Move(0.0f,0.0f,-(float)(pos-lastMouseWheel)*MoveStep);
 				break;
 		}
 		lastMouseWheel=pos;
@@ -444,7 +444,8 @@ void GLFWCALL handle_MouseWheel( int pos )
 }
 unsigned int __stdcall RenderThread(LPVOID lpvoid)
 {
-	ViewMAth=new NodeMath;
+	ViewMath=new NodeMath;
+	TurnUpMath=new NodeMath;
 	if(glfwInit() == GL_FALSE)
 		return 0;
     glfwOpenWindowHint(GLFW_FSAA_SAMPLES, FSAAsamples);
@@ -470,7 +471,8 @@ unsigned int __stdcall RenderThread(LPVOID lpvoid)
 		glfwSwapBuffers();
 		glfwSleep(0.005);
 	}
-	delete ViewMAth;
+	delete ViewMath;
+	delete TurnUpMath;
 	return 0;
 }
 extern "C" _declspec(dllexport) void InitRenderThread(HWND EditerHWND)
@@ -559,18 +561,7 @@ extern "C" _declspec(dllexport) void ShowMap()
 {
 	DrawMap=true;
 }
-//extern "C" _declspec(dllexport) void InputMap(unsigned char * Data,int Size)
-//{
-//	DrawMap=true;
-//	WaitForSingleObject(Mutex,INFINITE);
-//	if(Map)
-//	{
-//		delete Map;
-//	}
-//	Map=new AC4Map;
-//	Map->Set(Data);
-//	ReleaseMutex(Mutex);
-//}
+
 extern "C" _declspec(dllexport) void SetMoveStep(float MoveStepIn)
 {
 	MoveStep=MoveStepIn;
