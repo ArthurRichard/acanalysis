@@ -15,7 +15,7 @@ namespace AC4Analysis
         {
             InitializeComponent();
         }
-        
+
         [DllImport("AC4_3DWIN.DLL", CallingConvention = CallingConvention.Cdecl)]
         public static extern void ShowMap();
         [DllImport("AC4_3DWIN.DLL", CallingConvention = CallingConvention.Cdecl)]
@@ -25,7 +25,7 @@ namespace AC4Analysis
 
         public byte[] CulData;
         int TexDataAdd;
-        
+
         public bool Check(TreeNode node)
         {
             if (node.Parent != null)
@@ -40,9 +40,9 @@ namespace AC4Analysis
             ShowMap();
             return true;
         }
-        
+
         void GetTexs(TreeNode node)
-        { 
+        {
             _L1 tmp = (_L1)node.Tag;
             int texadd = (int)tmp.add;
             TreeNode texlist = node.Nodes[0];
@@ -52,7 +52,7 @@ namespace AC4Analysis
             texadd += (int)tmp.add;
             TexDataAdd = texadd;
         }
-        
+
         public void Set3Dwin(Control control)
         {
             Height = control.Height + 35;
@@ -72,6 +72,5 @@ namespace AC4Analysis
             if (progressBar1.Value >= 100)
                 timer1.Stop();
         }
-        
     }
 }
