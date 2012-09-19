@@ -9,7 +9,7 @@
 #include"AC4Map.h"
 #include "NodeMath.h"
 NodeMath * ViewMAth;
-AC4Map * Map=0;
+//AC4Map * Map=0;
 #ifdef _DEBUG
 #pragma comment( lib, "glew32sd.lib" )
 #pragma comment( lib, "GLFWd.lib" )
@@ -559,18 +559,18 @@ extern "C" _declspec(dllexport) void ShowMap()
 {
 	DrawMap=true;
 }
-extern "C" _declspec(dllexport) void InputMap(unsigned char * Data,int Size)
-{
-	DrawMap=true;
-	WaitForSingleObject(Mutex,INFINITE);
-	if(Map)
-	{
-		delete Map;
-	}
-	Map=new AC4Map;
-	Map->Set(Data);
-	ReleaseMutex(Mutex);
-}
+//extern "C" _declspec(dllexport) void InputMap(unsigned char * Data,int Size)
+//{
+//	DrawMap=true;
+//	WaitForSingleObject(Mutex,INFINITE);
+//	if(Map)
+//	{
+//		delete Map;
+//	}
+//	Map=new AC4Map;
+//	Map->Set(Data);
+//	ReleaseMutex(Mutex);
+//}
 extern "C" _declspec(dllexport) void SetMoveStep(float MoveStepIn)
 {
 	MoveStep=MoveStepIn;
