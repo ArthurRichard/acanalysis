@@ -222,6 +222,7 @@ AC4MapPack::AC4MapPack(void)
 	, Changed(false)
 	, MapTexAdd(0)
 {
+	memset(Boders,0,sizeof(Boders));
 }
 
 AC4MapPack::~AC4MapPack(void)
@@ -261,6 +262,14 @@ void AC4MapPack::Init(void)
 	eachlist(Meshs,i)
 	{
 		delete Meshs[i];
+	}
+	for(int i=0;i<0x100;i++)
+	{
+		if(Boders[i])
+		{
+			delete Boders[i];
+			Boders[i]=0;
+		}
 	}
 	Texs.Clear();
 	Meshs.Clear();
@@ -452,8 +461,21 @@ void AC4MapPack::Draw(float posx,float posz)
 {
 	if(Changed)
 		Init();
-	for(int y=int(posz/320.0f)-2+8;y<(int(posz/320.0f)+2+8);y++)
-	for(int x=int(posx/320.0f)-2+8;x<(int(posx/320.0f)+2+8);x++)
+	for(int i=0;i<0x100;i++)
+	{
+		AC4MapMeshBoder * boder=Boders[i];
+		if(boder)
+		{
+			boder->LastTime++;
+			if(boder->LastTime>60)
+			{
+				delete Boders[i];
+				Boders[i]=0;
+			}
+		}
+	}
+	for(int y=int(posz/320.0f)-4+8;y<(int(posz/320.0f)+4+8);y++)
+	for(int x=int(posx/320.0f)-4+8;x<(int(posx/320.0f)+4+8);x++)
 	{
 		if(x<0) return;
 		if(y<0) return;
@@ -470,11 +492,26 @@ void AC4MapPack::Draw(float posx,float posz)
 		Meshs[meshID]->Draw();
 		if(x<15&&y<15)
 		{
-			DrawBorder(
-				Meshs[meshID]->MeshData,
-				Meshs[AC4MapMesh::MeshIDs[x+1+y*0x10]]->MeshData,
-				Meshs[AC4MapMesh::MeshIDs[x+(y+1)*0x10]]->MeshData,
-				Meshs[AC4MapMesh::MeshIDs[x+1+(y+1)*0x10]]->MeshData);
+			//DrawBorder(
+			//	Meshs[meshID]->MeshData,
+			//	Meshs[AC4MapMesh::MeshIDs[x+1+y*0x10]]->MeshData,
+			//	Meshs[AC4MapMesh::MeshIDs[x+(y+1)*0x10]]->MeshData,
+			//	Meshs[AC4MapMesh::MeshIDs[x+1+(y+1)*0x10]]->MeshData);
+
+			AC4MapMeshBoder * boder=Boders[MapID];
+			if(boder)
+				boder->Draw();
+			else
+			{
+				boder=new AC4MapMeshBoder;
+				boder->Set(
+					Meshs[meshID]->MeshData,
+					Meshs[AC4MapMesh::MeshIDs[x+1+y*0x10]]->MeshData,
+					Meshs[AC4MapMesh::MeshIDs[x+(y+1)*0x10]]->MeshData,
+					Meshs[AC4MapMesh::MeshIDs[x+1+(y+1)*0x10]]->MeshData);
+				boder->Draw();
+				Boders[MapID]=boder;
+			}
 		}
 		glPopMatrix();
 	}
@@ -483,23 +520,38 @@ void AC4MapPack::Draw(float posx,float posz)
 
 unsigned char AC4MapMesh::MeshIDs[0x100];
 AC4MapMesh::AC4MapMesh(void)
+	: vecBuf(0)
+	, texBuf(0)
 {
 }
 
 AC4MapMesh::~AC4MapMesh(void)
 {
+	if(vecBuf) glDeleteBuffersARB(1,&vecBuf);
+	if(texBuf) glDeleteBuffersARB(1,&texBuf);
 }
 
 void AC4MapMesh::Draw(void)
 {
-	glBindBufferARB(GL_ARRAY_BUFFER_ARB,0);
+	//glBindBufferARB(GL_ARRAY_BUFFER_ARB,0);
+	//glEnableClientState( GL_VERTEX_ARRAY );
+	//glEnableClientState( GL_TEXTURE_COORD_ARRAY );
+	//glVertexPointer( 3, GL_FLOAT, 0, VecPos.ListData1 );
+	//glTexCoordPointer( 2, GL_FLOAT, 0, TexCood.ListData1 );
+	//glDrawArrays(GL_TRIANGLES,0,VecPos.Count*3);
+	//glDisableClientState( GL_VERTEX_ARRAY );
+	//glDisableClientState( GL_TEXTURE_COORD_ARRAY );
+
 	glEnableClientState( GL_VERTEX_ARRAY );
 	glEnableClientState( GL_TEXTURE_COORD_ARRAY );
-	glVertexPointer( 3, GL_FLOAT, 0, VecPos.ListData1 );
-	glTexCoordPointer( 2, GL_FLOAT, 0, TexCood.ListData1 );
+	glBindBufferARB( GL_ARRAY_BUFFER_ARB, vecBuf );
+	glVertexPointer( 3, GL_FLOAT, 0, 0 );
+	glBindBufferARB( GL_ARRAY_BUFFER_ARB, texBuf );
+	glTexCoordPointer( 2, GL_FLOAT, 0, 0 );
 	glDrawArrays(GL_TRIANGLES,0,VecPos.Count*3);
 	glDisableClientState( GL_VERTEX_ARRAY );
 	glDisableClientState( GL_TEXTURE_COORD_ARRAY );
+	glBindBufferARB(GL_ARRAY_BUFFER_ARB,0);
 }
 
 void AC4MapMesh::Set(unsigned char * Data)
@@ -563,6 +615,15 @@ void AC4MapMesh::Set(unsigned char * Data)
 		TexCood.push_back(TexTmp);
 
 	}
+	glGenBuffersARB( 1,&vecBuf);
+	glBindBufferARB( GL_ARRAY_BUFFER_ARB, vecBuf );
+	glBufferDataARB( GL_ARRAY_BUFFER_ARB, VecPos.Count*sizeof(_VecPos), VecPos.ListData1, GL_STATIC_DRAW_ARB );
+
+	glGenBuffersARB( 1,&texBuf);
+	glBindBufferARB( GL_ARRAY_BUFFER_ARB, texBuf );
+	glBufferDataARB( GL_ARRAY_BUFFER_ARB, VecPos.Count*sizeof(_TexCood), TexCood.ListData1, GL_STATIC_DRAW_ARB );
+
+	glBindBufferARB(GL_ARRAY_BUFFER_ARB,0);
 }
 
 
@@ -653,4 +714,197 @@ void AC4MapTex::Build(unsigned char * SubTexIDs,unsigned char * TexData)
     glGenerateMipmapEXT(GL_TEXTURE_2D);
 }
 
+AC4MapMeshBoder::AC4MapMeshBoder()
+	: LastTime(0)
+	, vecBuf(0)
+	, texBuf(0)
+{
+}
+AC4MapMeshBoder::~AC4MapMeshBoder()
+{
+	if(vecBuf) glDeleteBuffersARB(1,&vecBuf);
+	if(texBuf) glDeleteBuffersARB(1,&texBuf);
+}
+void AC4MapMeshBoder::Draw()
+{
+	LastTime=0;
+	//glBindBufferARB(GL_ARRAY_BUFFER_ARB,0);
+	//glEnableClientState( GL_VERTEX_ARRAY );
+	//glEnableClientState( GL_TEXTURE_COORD_ARRAY );
+	//glVertexPointer( 3, GL_FLOAT, 0, VecPos.ListData1 );
+	//glTexCoordPointer( 2, GL_FLOAT, 0, TexCood.ListData1 );
+	//glDrawArrays(GL_TRIANGLES,0,VecPos.Count*3);
+	//glDisableClientState( GL_VERTEX_ARRAY );
+	//glDisableClientState( GL_TEXTURE_COORD_ARRAY );
 
+	
+	glEnableClientState( GL_VERTEX_ARRAY );
+	glEnableClientState( GL_TEXTURE_COORD_ARRAY );
+	glBindBufferARB( GL_ARRAY_BUFFER_ARB, vecBuf );
+	glVertexPointer( 3, GL_FLOAT, 0, 0 );
+	glBindBufferARB( GL_ARRAY_BUFFER_ARB, texBuf );
+	glTexCoordPointer( 2, GL_FLOAT, 0, 0 );
+	glDrawArrays(GL_TRIANGLES,0,VecPos.Count*3);
+	glDisableClientState( GL_VERTEX_ARRAY );
+	glDisableClientState( GL_TEXTURE_COORD_ARRAY );
+	glBindBufferARB(GL_ARRAY_BUFFER_ARB,0);
+}
+void AC4MapMeshBoder::Set(unsigned char * Data00,unsigned char * Data10,unsigned char * Data01,unsigned char * Data11)
+{	
+	VecPos.Count=0;
+	TexCood.Count=0;
+	_VecPos PosTmp;
+	_TexCood TexTmp;
+	float size=10.0f,hsize=1.0f,texsize=float(1.0/32.0);
+	for(int y=0;y<31;y++)
+	{
+		int x=31;
+		float Height00=Data00[31+y*32];
+		float Height10=Data10[y*32];
+		float Height01=Data00[31+(y+1)*32];
+		float Height11=Data10[(y+1)*32];
+		PosTmp.y0=Height00*hsize;
+		PosTmp.x0=x*size;
+		PosTmp.z0=y*size;
+		TexTmp.x0=x*texsize;
+		TexTmp.y0=y*texsize;
+		
+		PosTmp.y1=Height01*hsize;
+		PosTmp.x1=x*size;
+		PosTmp.z1=(y+1)*size;
+		TexTmp.x1=x*texsize;
+		TexTmp.y1=(y+1)*texsize;
+		
+		PosTmp.y2=Height10*hsize;
+		PosTmp.x2=(x+1)*size;
+		PosTmp.z2=y*size;
+		TexTmp.x2=(x+1)*texsize;
+		TexTmp.y2=y*texsize;
+		VecPos.push_back(PosTmp);
+		TexCood.push_back(TexTmp);
+		
+		PosTmp.y0=Height11*hsize;
+		PosTmp.x0=(x+1)*size;
+		PosTmp.z0=(y+1)*size;
+		TexTmp.x0=(x+1)*texsize;
+		TexTmp.y0=(y+1)*texsize;
+		
+		PosTmp.y1=Height01*hsize;
+		PosTmp.x1=x*size;
+		PosTmp.z1=(y+1)*size;
+		TexTmp.x1=x*texsize;
+		TexTmp.y1=(y+1)*texsize;
+		
+		PosTmp.y2=Height10*hsize;
+		PosTmp.x2=(x+1)*size;
+		PosTmp.z2=y*size;
+		TexTmp.x2=(x+1)*texsize;
+		TexTmp.y2=y*texsize;
+
+		VecPos.push_back(PosTmp);
+		TexCood.push_back(TexTmp);
+	}
+	for(int x=0;x<31;x++)
+	{
+		int y=31;
+		float Height00=Data00[x+y*32];
+		float Height10=Data00[x+1+y*32];
+		float Height01=Data01[x];
+		float Height11=Data01[x+1];
+		PosTmp.y0=Height00*hsize;
+		PosTmp.x0=x*size;
+		PosTmp.z0=y*size;
+		TexTmp.x0=x*texsize;
+		TexTmp.y0=y*texsize;
+		
+		PosTmp.y1=Height01*hsize;
+		PosTmp.x1=x*size;
+		PosTmp.z1=(y+1)*size;
+		TexTmp.x1=x*texsize;
+		TexTmp.y1=(y+1)*texsize;
+		
+		PosTmp.y2=Height10*hsize;
+		PosTmp.x2=(x+1)*size;
+		PosTmp.z2=y*size;
+		TexTmp.x2=(x+1)*texsize;
+		TexTmp.y2=y*texsize;
+		VecPos.push_back(PosTmp);
+		TexCood.push_back(TexTmp);
+		
+		PosTmp.y0=Height11*hsize;
+		PosTmp.x0=(x+1)*size;
+		PosTmp.z0=(y+1)*size;
+		TexTmp.x0=(x+1)*texsize;
+		TexTmp.y0=(y+1)*texsize;
+		
+		PosTmp.y1=Height01*hsize;
+		PosTmp.x1=x*size;
+		PosTmp.z1=(y+1)*size;
+		TexTmp.x1=x*texsize;
+		TexTmp.y1=(y+1)*texsize;
+		
+		PosTmp.y2=Height10*hsize;
+		PosTmp.x2=(x+1)*size;
+		PosTmp.z2=y*size;
+		TexTmp.x2=(x+1)*texsize;
+		TexTmp.y2=y*texsize;
+
+		VecPos.push_back(PosTmp);
+		TexCood.push_back(TexTmp);
+	}
+	int x=31,y=31;
+		float Height00=Data00[32*32-1];
+		float Height10=Data10[31*32];
+		float Height01=Data01[31];
+		float Height11=Data11[0];
+		PosTmp.y0=Height00*hsize;
+		PosTmp.x0=x*size;
+		PosTmp.z0=y*size;
+		TexTmp.x0=x*texsize;
+		TexTmp.y0=y*texsize;
+		
+		PosTmp.y1=Height01*hsize;
+		PosTmp.x1=x*size;
+		PosTmp.z1=(y+1)*size;
+		TexTmp.x1=x*texsize;
+		TexTmp.y1=(y+1)*texsize;
+		
+		PosTmp.y2=Height10*hsize;
+		PosTmp.x2=(x+1)*size;
+		PosTmp.z2=y*size;
+		TexTmp.x2=(x+1)*texsize;
+		TexTmp.y2=y*texsize;
+		VecPos.push_back(PosTmp);
+		TexCood.push_back(TexTmp);
+		
+		PosTmp.y0=Height11*hsize;
+		PosTmp.x0=(x+1)*size;
+		PosTmp.z0=(y+1)*size;
+		TexTmp.x0=(x+1)*texsize;
+		TexTmp.y0=(y+1)*texsize;
+		
+		PosTmp.y1=Height01*hsize;
+		PosTmp.x1=x*size;
+		PosTmp.z1=(y+1)*size;
+		TexTmp.x1=x*texsize;
+		TexTmp.y1=(y+1)*texsize;
+		
+		PosTmp.y2=Height10*hsize;
+		PosTmp.x2=(x+1)*size;
+		PosTmp.z2=y*size;
+		TexTmp.x2=(x+1)*texsize;
+		TexTmp.y2=y*texsize;
+
+		VecPos.push_back(PosTmp);
+		TexCood.push_back(TexTmp);
+		
+	glGenBuffersARB( 1,&vecBuf);
+	glBindBufferARB( GL_ARRAY_BUFFER_ARB, vecBuf );
+	glBufferDataARB( GL_ARRAY_BUFFER_ARB, VecPos.Count*sizeof(_VecPos), VecPos.ListData1, GL_STATIC_DRAW_ARB );
+
+	glGenBuffersARB( 1,&texBuf);
+	glBindBufferARB( GL_ARRAY_BUFFER_ARB, texBuf );
+	glBufferDataARB( GL_ARRAY_BUFFER_ARB, VecPos.Count*sizeof(_TexCood), TexCood.ListData1, GL_STATIC_DRAW_ARB );
+
+	glBindBufferARB(GL_ARRAY_BUFFER_ARB,0);
+}

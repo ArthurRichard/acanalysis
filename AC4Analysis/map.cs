@@ -233,7 +233,7 @@ namespace AC4Analysis
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            progressBar1.Value = GetMapReadProgress();
+            progressBar1.Value = Math.Min(100, GetMapReadProgress());
             if (progressBar1.Value >= 100)
                 timer1.Stop();
         }
