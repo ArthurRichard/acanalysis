@@ -79,6 +79,7 @@ public:
 	CTAList<_TexCood> TexCood;
 	void Set(unsigned char * Data);
 	static unsigned char MeshIDs[0x100];
+	void Draw(void);
 };
 class AC4MapPack
 {

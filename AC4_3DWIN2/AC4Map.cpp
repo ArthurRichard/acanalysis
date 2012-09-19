@@ -185,25 +185,27 @@ extern "C" _declspec(dllexport) void SetMapIndex(unsigned char * Data)
 
 void DrawMaps(float posx,float posz)
 {
-	if(ListSize!=MapList.Count)
-	{
-		MapList.Clear();
-		MapList.ChangeMaxCount(ListSize);
-	}
-	for(int y=int(posz/310.0f)-4+8;y<(int(posz/310.0f)+4+8);y++)
-	for(int x=int(posx/310.0f)-4+8;x<(int(posx/310.0f)+4+8);x++)
-	{
-		if(x<0) return;
-		if(y<0) return;
-		int MapID=x+y*0x10;
-		if(MapID>=0x100)
-			return;
-		glPushMatrix();
-		glTranslatef((x-8)*310.0f,0.0f,(y-8)*310.0f);
-		int ID=MapIndex[MapID];
-		MapList[ID].Draw();
-		glPopMatrix();
-	}
+	if(MapPack)
+		MapPack->Draw(posx,posz);
+	//if(ListSize!=MapList.Count)
+	//{
+	//	MapList.Clear();
+	//	MapList.ChangeMaxCount(ListSize);
+	//}
+	//for(int y=int(posz/310.0f)-4+8;y<(int(posz/310.0f)+4+8);y++)
+	//for(int x=int(posx/310.0f)-4+8;x<(int(posx/310.0f)+4+8);x++)
+	//{
+	//	if(x<0) return;
+	//	if(y<0) return;
+	//	int MapID=x+y*0x10;
+	//	if(MapID>=0x100)
+	//		return;
+	//	glPushMatrix();
+	//	glTranslatef((x-8)*310.0f,0.0f,(y-8)*310.0f);
+	//	int ID=MapIndex[MapID];
+	//	MapList[ID].Draw();
+	//	glPopMatrix();
+	//}
 }
 
 extern "C" _declspec(dllexport) void SetMapPackData(unsigned char * Data,int size,int MapTexAdd)
@@ -282,6 +284,22 @@ void AC4MapPack::Draw(float posx,float posz)
 {
 	if(Changed)
 		Init();
+	for(int y=int(posz/320.0f)-4+8;y<(int(posz/320.0f)+4+8);y++)
+	for(int x=int(posx/320.0f)-4+8;x<(int(posx/320.0f)+4+8);x++)
+	{
+		if(x<0) return;
+		if(y<0) return;
+		int MapID=x+y*0x10;
+		if(MapID>=0x100)
+			return;
+		int meshID=AC4MapMesh::MeshIDs[MapID];
+		int texID=AC4MapTex::TexIDs[MapID];
+		glPushMatrix();
+		glTranslatef((x-8)*320.0f,0.0f,(y-8)*320.0f);
+		glBindTexture( GL_TEXTURE_2D, Texs[texID]->TID ); 
+		Meshs[meshID]->Draw();
+		glPopMatrix();
+	}
 }
 
 
@@ -292,6 +310,18 @@ AC4MapMesh::AC4MapMesh(void)
 
 AC4MapMesh::~AC4MapMesh(void)
 {
+}
+
+void AC4MapMesh::Draw(void)
+{
+	glBindBufferARB(GL_ARRAY_BUFFER_ARB,0);
+	glEnableClientState( GL_VERTEX_ARRAY );
+	glEnableClientState( GL_TEXTURE_COORD_ARRAY );
+	glVertexPointer( 3, GL_FLOAT, 0, VecPos.ListData1 );
+	glTexCoordPointer( 2, GL_FLOAT, 0, TexCood.ListData1 );
+	glDrawArrays(GL_TRIANGLES,0,VecPos.Count*3);
+	glDisableClientState( GL_VERTEX_ARRAY );
+	glDisableClientState( GL_TEXTURE_COORD_ARRAY );
 }
 
 void AC4MapMesh::Set(unsigned char * Data)
@@ -365,7 +395,7 @@ AC4MapTex::AC4MapTex(void)
 {
 	glGenTextures( 1, &TID );
 	glBindTexture( GL_TEXTURE_2D, TID ); 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1024, 1024, 0, GL_BGRA_EXT, GL_UNSIGNED_BYTE, 0);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1024, 1024, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
 	if(glewIsSupported("GL_EXT_texture_filter_anisotropic"))
 		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 4 ); 
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_LINEAR);
@@ -387,18 +417,18 @@ void AC4MapTex::Set(int posx,int posy,unsigned char * TexDataIn)
 	for (int x = 0; x < 64; x++)
 	{
 		if(posx<0)
-			TurnedX = 63 + x;
+			TurnedX = 63 - x;
 		else
 			TurnedX = x;
 
 		if(posy<0)
-			TurnedY = 63 + y;
+			TurnedY = 63 - y;
 		else
 			TurnedY = y;
 		AC4MapTexTmp[TurnedX+TurnedY*64]=AC4MapTex::Pal[TexDataIn[TurnedX+TurnedY*64]];
 	}
 
-	glTexSubImage2D(GL_TEXTURE_2D,0,abs(posx),abs(posy),64,64,GL_BGRA_EXT,GL_UNSIGNED_BYTE,AC4MapTexTmp);
+	glTexSubImage2D(GL_TEXTURE_2D,0,abs(posx)*64,abs(posy)*64,64,64,GL_RGBA,GL_UNSIGNED_BYTE,AC4MapTexTmp);
 }
 
 void AC4MapTex::SetPal(_PalColor * PalIn)
@@ -441,4 +471,5 @@ void AC4MapTex::Build(unsigned char * SubTexIDs,unsigned char * TexData)
 	}
     glGenerateMipmapEXT(GL_TEXTURE_2D);
 }
+
 

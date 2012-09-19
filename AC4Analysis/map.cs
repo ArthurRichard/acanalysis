@@ -25,6 +25,8 @@ namespace AC4Analysis
         public static extern void SetMapIndex(byte[] Data);
         [DllImport("AC4_3DWIN.DLL", CallingConvention = CallingConvention.Cdecl)]
         public static extern void ShowMap();
+        [DllImport("AC4_3DWIN.DLL", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void SetMapPackData(byte[] Data, int size, int MapTexAdd);
 
         public byte[] TexDataTmp = new byte[1024 * 1024];
         public byte[] CulData;
@@ -39,24 +41,27 @@ namespace AC4Analysis
                 return false;
             if (node.Nodes.Count != 36)
                 return false;
-            TexDataAdd = 0;
-            TexCount = 0;
-            TexDataTmp = new byte[1024 * 1024];
-            SubMapList = new List<ushort[]>();
-            panel1.Controls.Clear();
-            TreeNode SubMapNode = node.Nodes[5];
-            GetSubMapList(SubMapNode);
-            TreeNode SubMapIDNode = node.Nodes[6];
-            GetMapIDs(SubMapIDNode);
             TreeNode TexsNode = node.Nodes[7];
             GetTexs(TexsNode);
-            TreeNode MapPalNode = node.Nodes[8];
-            GetPal(MapPalNode);
-            TreeNode MeshNode = node.Nodes[9];
-            GetMesh(MeshNode);
+            SetMapPackData(CulData, CulData.Length, TexDataAdd);
+            //TexDataAdd = 0;
+            //TexCount = 0;
+            //TexDataTmp = new byte[1024 * 1024];
+            //SubMapList = new List<ushort[]>();
+            //panel1.Controls.Clear();
+            //TreeNode SubMapNode = node.Nodes[5];
+            //GetSubMapList(SubMapNode);
+            //TreeNode SubMapIDNode = node.Nodes[6];
+            //GetMapIDs(SubMapIDNode);
+            //TreeNode TexsNode = node.Nodes[7];
+            //GetTexs(TexsNode);
+            //TreeNode MapPalNode = node.Nodes[8];
+            //GetPal(MapPalNode);
+            //TreeNode MeshNode = node.Nodes[9];
+            //GetMesh(MeshNode);
 
-            GetSubMaps();
-            SetDataTo3DWin();
+            //GetSubMaps();
+            //SetDataTo3DWin();
             ShowMap();
             return true;
         }
