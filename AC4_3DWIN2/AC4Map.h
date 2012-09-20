@@ -97,6 +97,22 @@ public:
 	void Draw(void);
 	int LastTime;
 };
+struct _ModelSet
+{
+	int x;
+	int y;
+	int id;
+};
+class AC4MapModel
+{
+public:
+	AC4MapModel(void);
+	~AC4MapModel(void);
+	void Set(unsigned char *DataIn);
+	void Draw();
+	static unsigned char IDs[0x100];
+	CTAList<_ModelSet> Models;
+};
 class AC4MapPack
 {
 public:
@@ -109,6 +125,7 @@ public:
 	void Draw(float posx,float posz);
 	CTAList<AC4MapTex *> Texs;
 	CTAList<AC4MapMesh *> Meshs;
+	CTAList<AC4MapModel *> Models;
 	_MapAdd Adds[36];
 	int MapTexAdd;
 	AC4MapMeshBoder * Boders[0x100];

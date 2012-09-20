@@ -68,6 +68,10 @@ void AC4MapPack::Init(void)
 	{
 		delete Meshs[i];
 	}
+	eachlist(Models,i)
+	{
+		delete Models[i];
+	}
 	for(int i=0;i<0x100;i++)
 	{
 		if(Boders[i])
@@ -78,6 +82,7 @@ void AC4MapPack::Init(void)
 	}
 	Texs.Clear();
 	Meshs.Clear();
+	Models.Clear();
 	AC4MapTex::SetPal((_PalColor *)(PackBuf+Adds[8].Add));
 	memcpy_s(AC4MapTex::TexIDs,0x100,PackBuf+Adds[6].Add,0x100);
 	unsigned char * SubMapAdd=PackBuf+Adds[5].Add;
@@ -85,7 +90,7 @@ void AC4MapPack::Init(void)
 	Texs.Count=Adds[5].Size/0x200;
 	eachlist(Texs,i)
 	{
-		MapReadProgress=(50*(i+1))/Texs.Count;
+		MapReadProgress=(25*(i+1))/Texs.Count;
 		Texs[i]=new AC4MapTex;
 		Texs[i]->Build(SubMapAdd+i*0x200,PackBuf+MapTexAdd);
 	}
@@ -96,10 +101,21 @@ void AC4MapPack::Init(void)
 	Meshs.Count=Adds[9].Size/0x400;
 	eachlist(Meshs,i)
 	{
-		MapReadProgress=50+(50*(i+1))/Texs.Count;
+		MapReadProgress=25+(50*(i+1))/Texs.Count;
 		Meshs[i]=new AC4MapMesh;
 		Meshs[i]->Set(MeshAdd+i*0x400);
 	}
+
+	memcpy_s(AC4MapModel::IDs,0x100,PackBuf+Adds[15].Add,0x100);
+	unsigned char * ModelAdd=PackBuf+Adds[14].Add;
+	Models.ChangeMaxCount(Adds[14].Size/0x100);
+	Models.Count=Adds[14].Size/0x100;
+	eachlist(Models,i)
+	{
+		Models[i]=new AC4MapModel;
+		Models[i]->Set(ModelAdd+i*0x100);
+	}
+
 	MapReadProgress=100;
 }
 
@@ -132,6 +148,7 @@ void AC4MapPack::Draw(float posx,float posz)
 				continue;
 			int meshID=AC4MapMesh::MeshIDs[MapID];
 			int texID=AC4MapTex::TexIDs[MapID];
+			int modelID=AC4MapModel::IDs[MapID];
 			glPushMatrix();
 			glTranslatef((x-8)*320.0f,0.0f,(y-8)*320.0f);
 			glBindTexture( GL_TEXTURE_2D, Texs[texID]->TID ); 
@@ -528,4 +545,30 @@ void AC4MapMeshBoder::Set(unsigned char * Data00,unsigned char * Data10,unsigned
 	glBufferDataARB( GL_ARRAY_BUFFER_ARB, VecPos.Count*sizeof(_TexCood), TexCood.ListData1, GL_STATIC_DRAW_ARB );
 
 	glBindBufferARB(GL_ARRAY_BUFFER_ARB,0);
+}
+unsigned char AC4MapModel::IDs[0x100];
+AC4MapModel::AC4MapModel()
+{
+}
+AC4MapModel::~AC4MapModel()
+{
+}
+void AC4MapModel::Draw()
+{
+}
+void AC4MapModel::Set(unsigned char *DataIn)
+{
+	_ModelSet tmp;
+	for (int y = 0; y < 16; y++)
+		for (int x = 0; x < 16; x++)
+		{
+			tmp.id=DataIn[x+y*0x10];
+			if(tmp.id!=0xFF)
+			{
+				tmp.x=x;
+				tmp.y=y;
+				Models.push_back(tmp);
+			}
+
+		}
 }
