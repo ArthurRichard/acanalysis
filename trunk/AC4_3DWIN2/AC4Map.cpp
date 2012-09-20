@@ -123,13 +123,13 @@ void AC4MapPack::Draw(float posx,float posz)
 	for(int y=int(posz/320.0f)-4+8;y<(int(posz/320.0f)+4+8);y++)
 		for(int x=int(posx/320.0f)-4+8;x<(int(posx/320.0f)+4+8);x++)
 		{
-			if(x<0) return;
-			if(y<0) return;
-			if(x>=16) return;
-			if(y>=16) return;
+			if(x<0) continue;
+			if(y<0) continue;
+			if(x>=16) continue;
+			if(y>=16) continue;
 			int MapID=x+y*0x10;
 			if(MapID>=0x100)
-				return;
+				continue;
 			int meshID=AC4MapMesh::MeshIDs[MapID];
 			int texID=AC4MapTex::TexIDs[MapID];
 			glPushMatrix();

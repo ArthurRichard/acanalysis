@@ -181,20 +181,20 @@ namespace AC4Analysis
                 tempPaletteA.Entries[i] = tmpcolsA[i];
             }
             System.Drawing.Bitmap gbA = new Bitmap(w, h, culfmt);
-            gbA.Palette = tempPalette;
+            gbA.Palette = tempPaletteA;
             System.Drawing.Imaging.BitmapData bdataA = gbA.LockBits(Rectangle.FromLTRB(0, 0, w, h), System.Drawing.Imaging.ImageLockMode.WriteOnly, culfmt);
             System.Runtime.InteropServices.Marshal.Copy(newdata, 0, bdataA.Scan0, w * h / 2);
             gbA.UnlockBits(bdataA);
-            PictureBox pbA = new PictureBox();
-            pbA.Image = gbA;
-            pbA.Width = w;
-            pbA.Height = h;
+            pictureBox2.Image = gbA;
+            pictureBox2.Width = w;
+            pictureBox2.Height = h;
+            pictureBox2.BackColor = Color.FromArgb(255, 0, 0, 0);
             Point point = new Point();
             point.X = pictureBox1.Location.X + w + 5;
             point.Y = pictureBox1.Location.Y;
-            pbA.Location = point;
-            Controls.Add(pbA);
+            pictureBox2.Location = point;
             Width = Math.Max(605, pictureBox1.Location.X + w * 2 + 10);
+            pictureBox2.Visible = true;
         }
         void Analysis_GIM24bit()
         {
