@@ -92,44 +92,44 @@ void DrawTestLine()
 	glDisable( GL_LIGHTING );
 	glColor3f(1.0f,1.0f,1.0f);
 	glBegin(GL_LINES);
-		glColor3f(1.0f,1.0f,0.0f);
-		glVertex3f( 0.0f, 0.0f, 1.0f);
-		glVertex3f( 0.0f, 0.0f,      0.0f);
+	glColor3f(1.0f,1.0f,0.0f);
+	glVertex3f( 0.0f, 0.0f, 1.0f);
+	glVertex3f( 0.0f, 0.0f,      0.0f);
 
-		glColor3f(1.0f,0.0f,1.0f);
-		glVertex3f( 0.0f, 0.0f,      0.0f);
-		glVertex3f( 0.0f, 0.0f,-1.0f);
+	glColor3f(1.0f,0.0f,1.0f);
+	glVertex3f( 0.0f, 0.0f,      0.0f);
+	glVertex3f( 0.0f, 0.0f,-1.0f);
 
-		glColor3f(1.0f,1.0f,1.0f);
-		glVertex3f( 0.0f, 1.0f, 0.0f);
-		glVertex3f( 0.0f,      0.0f, 0.0f);
+	glColor3f(1.0f,1.0f,1.0f);
+	glVertex3f( 0.0f, 1.0f, 0.0f);
+	glVertex3f( 0.0f,      0.0f, 0.0f);
 
-		glColor3f(0.0f,0.0f,0.0f);
-		glVertex3f( 0.0f,      0.0f, 0.0f);
-		glVertex3f( 0.0f,-1.0f, 0.0f);
+	glColor3f(0.0f,0.0f,0.0f);
+	glVertex3f( 0.0f,      0.0f, 0.0f);
+	glVertex3f( 0.0f,-1.0f, 0.0f);
 
-		glColor3f(1.0f,0.0f,0.0f);
-		glVertex3f( 1.0f, 0.0f, 0.0f);
-		glVertex3f(      0.0f, 0.0f, 0.0f);
-		glColor3f(0.0f,0.0f,1.0f);
-		glVertex3f(-1.0f, 0.0f, 0.0f);
-		glVertex3f(      0.0f, 0.0f, 0.0f);
+	glColor3f(1.0f,0.0f,0.0f);
+	glVertex3f( 1.0f, 0.0f, 0.0f);
+	glVertex3f(      0.0f, 0.0f, 0.0f);
+	glColor3f(0.0f,0.0f,1.0f);
+	glVertex3f(-1.0f, 0.0f, 0.0f);
+	glVertex3f(      0.0f, 0.0f, 0.0f);
 
 
 	glEnd();
-	
+
 	glColor3f(1.0f,1.0f,1.0f);
 	glEnable( GL_TEXTURE_2D );
 	if(UseLight)
-	glEnable(GL_LIGHTING);
+		glEnable(GL_LIGHTING);
 }
 void SetMatrix(int PartID)
 {
 	float Q[4];
 	float T[4][4]={1.0f,0.0f,0.0f,0.0f,
-										 0.0f,1.0f,0.0f,0.0f,
-										 0.0f,0.0f,1.0f,0.0f,
-										 0.0f,0.0f,0.0f,1.0f};
+		0.0f,1.0f,0.0f,0.0f,
+		0.0f,0.0f,1.0f,0.0f,
+		0.0f,0.0f,0.0f,1.0f};
 	float theta_z = PartTR[PartID*6+5];
 	float theta_y = PartTR[PartID*6+4];
 	float theta_x = PartTR[PartID*6+3];
@@ -142,24 +142,24 @@ void SetMatrix(int PartID)
 	float sin_y_2 = sin(0.5f*theta_y);
 	float sin_x_2 = sin(0.5f*theta_x);
 
-Q[0] = cos_z_2*cos_y_2*cos_x_2 + sin_z_2*sin_y_2*sin_x_2;
-Q[1] = cos_z_2*cos_y_2*sin_x_2 - sin_z_2*sin_y_2*cos_x_2;
-Q[2] = cos_z_2*sin_y_2*cos_x_2 + sin_z_2*cos_y_2*sin_x_2;
-Q[3] = sin_z_2*cos_y_2*cos_x_2 - cos_z_2*sin_y_2*sin_x_2;
-    T[0][0] =   Q[0]*Q[0]+Q[1]*Q[1]-Q[2]*Q[2]-Q[3]*Q[3] ;
-    T[0][1] =                    2*(Q[1]*Q[2]-Q[0]*Q[3]);
-    T[0][2] =                    2*(Q[1]*Q[3]+Q[0]*Q[2]);
+	Q[0] = cos_z_2*cos_y_2*cos_x_2 + sin_z_2*sin_y_2*sin_x_2;
+	Q[1] = cos_z_2*cos_y_2*sin_x_2 - sin_z_2*sin_y_2*cos_x_2;
+	Q[2] = cos_z_2*sin_y_2*cos_x_2 + sin_z_2*cos_y_2*sin_x_2;
+	Q[3] = sin_z_2*cos_y_2*cos_x_2 - cos_z_2*sin_y_2*sin_x_2;
+	T[0][0] =   Q[0]*Q[0]+Q[1]*Q[1]-Q[2]*Q[2]-Q[3]*Q[3] ;
+	T[0][1] =                    2*(Q[1]*Q[2]-Q[0]*Q[3]);
+	T[0][2] =                    2*(Q[1]*Q[3]+Q[0]*Q[2]);
 
-    T[1][0] =                    2*(Q[1]*Q[2]+Q[0]*Q[3]);
-    T[1][1] =   Q[0]*Q[0]-Q[1]*Q[1]+Q[2]*Q[2]-Q[3]*Q[3] ;
-    T[1][2] =                    2*(Q[2]*Q[3]-Q[0]*Q[1]);
+	T[1][0] =                    2*(Q[1]*Q[2]+Q[0]*Q[3]);
+	T[1][1] =   Q[0]*Q[0]-Q[1]*Q[1]+Q[2]*Q[2]-Q[3]*Q[3] ;
+	T[1][2] =                    2*(Q[2]*Q[3]-Q[0]*Q[1]);
 
-    T[2][0] =                    2*(Q[1]*Q[3]-Q[0]*Q[2]);
-    T[2][1] =                    2*(Q[2]*Q[3]+Q[0]*Q[1]);
-    T[2][2] =   Q[0]*Q[0]-Q[1]*Q[1]-Q[2]*Q[2]+Q[3]*Q[3] ;
-    T[3][0] =   PartTR[PartID*6];
-    T[3][1] =   PartTR[PartID*6+1];
-    T[3][2] =   PartTR[PartID*6+2];
+	T[2][0] =                    2*(Q[1]*Q[3]-Q[0]*Q[2]);
+	T[2][1] =                    2*(Q[2]*Q[3]+Q[0]*Q[1]);
+	T[2][2] =   Q[0]*Q[0]-Q[1]*Q[1]-Q[2]*Q[2]+Q[3]*Q[3] ;
+	T[3][0] =   PartTR[PartID*6];
+	T[3][1] =   PartTR[PartID*6+1];
+	T[3][2] =   PartTR[PartID*6+2];
 	glMultMatrixf(&(T[0][0]));
 }
 int RenderPart(int PartID)
@@ -173,10 +173,10 @@ int RenderPart(int PartID)
 		glRotatef((PartTR[PartID*6+5]/3.1415926f)*180.0f,0.0f,0.0f,1.0f);
 		glRotatef((PartTR[PartID*6+4]/3.1415926f)*180.0f,0.0f,1.0f,0.0f);
 		glRotatef((PartTR[PartID*6+3]/3.1415926f)*180.0f,1.0f,0.0f,0.0f);
-		
-		
 
-		
+
+
+
 		glBegin(GL_TRIANGLES);
 		for(int i=PartInfo[PartID*3+1];i<PartInfo[PartID*3+1]+PartInfo[PartID*3+2];i++)
 		{
@@ -185,25 +185,25 @@ int RenderPart(int PartID)
 			glVertex3f(Vecs[i*3+0],Vecs[i*3+1], Vecs[i*3+2]);
 		}
 		glEnd();
-	
+
 		if(PartInfo[PartID*3+2]==0)
 			DrawTestLine();
 		for(int i=0;i<PartInfo[PartID*3];i++)
 		{
 			nextPartID = RenderPart(nextPartID);
 		}
-		
+
 		/*
 		for(int j=0;j<PartSize;j++)
 		{
-			glBegin(GL_TRIANGLES);
-			for(int i=PartInfo[j*3+1];i<PartInfo[j*3+1]+PartInfo[j*3+2];i++)
-			{
-				glNormal3f(Nors[i*3+0],Nors[i*3+1], Nors[i*3+2]);
-				glTexCoord2f(Texs[i*2+0],Texs[i*2+1]);
-				glVertex3f(Vecs[i*3+0],Vecs[i*3+1], Vecs[i*3+2]);
-			}
-			glEnd();
+		glBegin(GL_TRIANGLES);
+		for(int i=PartInfo[j*3+1];i<PartInfo[j*3+1]+PartInfo[j*3+2];i++)
+		{
+		glNormal3f(Nors[i*3+0],Nors[i*3+1], Nors[i*3+2]);
+		glTexCoord2f(Texs[i*2+0],Texs[i*2+1]);
+		glVertex3f(Vecs[i*3+0],Vecs[i*3+1], Vecs[i*3+2]);
+		}
+		glEnd();
 		}
 		*/
 		glPopMatrix();
@@ -239,17 +239,17 @@ void InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA   );
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);	// Really Nice Perspective Calculations
 
-    GLfloat mat_shininess[]={90.0};
- //   glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT,LightMaterialDiffuse);
+	GLfloat mat_shininess[]={90.0};
+	//   glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT,LightMaterialDiffuse);
 	//glMaterialfv(GL_FRONT_AND_BACK,GL_DIFFUSE,LightAmbient);
-    glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR,LightDiffuse);
-    glMaterialfv(GL_FRONT_AND_BACK,GL_SHININESS,mat_shininess);
+	glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR,LightDiffuse);
+	glMaterialfv(GL_FRONT_AND_BACK,GL_SHININESS,mat_shininess);
 	glLightfv(GL_LIGHT1, GL_AMBIENT, LightDiffuse);		// Setup The Ambient Light
 	glLightfv(GL_LIGHT1, GL_DIFFUSE, LightDiffuse);		// Setup The Diffuse Light
 	glLightfv(GL_LIGHT1, GL_SPECULAR,LightDiffuse);	// Position The Light
 	glLightfv(GL_LIGHT1, GL_POSITION,LightPosition);	// Position The Light
 	glEnable(GL_LIGHT1);								// Enable Light One
-	
+
 	glLineWidth(1.0f);
 	//glEnable(GL_LIGHTING);
 }
@@ -259,25 +259,17 @@ void GLFWCALL handle_resize( int width, int height )
 {
 	winwidth=width;
 	winheight=height;
-  float ratio = 1.0f;
+	float ratio = 1.0f;
 
-  if( height > 0 )
-  {
-      ratio = (float) width / (float) height;
-  }
+	if( height > 0 )
+	{
+		ratio = (float) width / (float) height;
+	}
 
-  /* Setup viewport (Place where the stuff will appear in the main window). */
-  glViewport(0, 0, width, height);
+	glViewport(0, 0, width, height);
 
-  /*
-   * Change to the projection matrix and set
-   * our viewing volume.
-   */
-  //glMatrixMode(GL_PROJECTION);
-  //glLoadIdentity();
-  //gluPerspective(45.0, ratio, 10.0, 100000.0);
-  glMatrixMode(GL_PROJECTION);
-  glLoadIdentity();
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
 	EastPerspective(45.0f,(GLfloat)width/(GLfloat)height,10.0f,1000000.0f,Pmat);
 	glLoadMatrixf(Pmat);
 	glMatrixMode(GL_MODELVIEW);							// Select The Modelview Matrix
@@ -304,35 +296,33 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	float ViewPos[2];
 	switch(ViewMode)
 	{
-		case _ViewMode_View:
-			glTranslatef(0.0f,0.0f,-mpos[2]);	
-			glRotatef(ViewTurnY,1.0f,0.0f,0.0f);
-			glRotatef(ViewTurnX,0.0f,1.0f,0.0f);
-			ViewPos[0]=0.0f;ViewPos[1]=0.0f;
-			break;
-		case _ViewMode_Free:
-			ViewPos[0]=ViewMath->Pos->m128_f32[0];ViewPos[1]=ViewMath->Pos->m128_f32[2];
-			ViewMath->Inv();
-			glMultMatrixf(ViewMath->Mat->m128_f32);
-			break;
+	case _ViewMode_View:
+		glTranslatef(0.0f,0.0f,-mpos[2]);	
+		glRotatef(ViewTurnY,1.0f,0.0f,0.0f);
+		glRotatef(ViewTurnX,0.0f,1.0f,0.0f);
+		ViewPos[0]=0.0f;ViewPos[1]=0.0f;
+		break;
+	case _ViewMode_Free:
+		ViewPos[0]=ViewMath->Pos->m128_f32[0];ViewPos[1]=ViewMath->Pos->m128_f32[2];
+		ViewMath->Inv();
+		glMultMatrixf(ViewMath->Mat->m128_f32);
+		break;
 	}
-	
+
 	//glLightfv(GL_LIGHT1, GL_POSITION,LightPosition);	// Position The Light
 	glColor3f(1.0f,1.0f,1.0f);
 	if(FSAAsamples>1)
-    glEnable(GL_MULTISAMPLE_ARB);
+		glEnable(GL_MULTISAMPLE_ARB);
 	if(DrawMap)
 	{
 		DrawMaps(ViewPos[0],ViewPos[1]);
-		//if(Map)
-		//	Map->Draw();
 	}
 	else
 	{
-	glRotatef(180.0f,1.0f,0.0f,0.0f); // 模型方向反的
+		glRotatef(180.0f,1.0f,0.0f,0.0f); // 模型方向反的
 		if(!UseAlpha)
 		{
-			
+
 			glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR,LightPosition);
 			RenderPart(0);
 			glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR,LightDiffuse);
@@ -363,7 +353,7 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 		}
 	}
 	if(FSAAsamples>1)
-    glDisable(GL_MULTISAMPLE_ARB);
+		glDisable(GL_MULTISAMPLE_ARB);
 	ReleaseMutex(Mutex);
 	return TRUE;										// Keep Going
 }
@@ -379,25 +369,25 @@ void GLFWCALL handle_MousePos( int x, int y )
 	MousePos[1]=y;
 	switch(ViewMode)
 	{
-		case _ViewMode_View:
-			if(RMousePRESS)
-			{
-				ViewTurnX+=float(MousePos[0]-LastMousePos[0])*0.25f;
-				ViewTurnY+=float(MousePos[1]-LastMousePos[1])*0.25f;
-			}
-			break;
-		case _ViewMode_Free:
-			if(RMousePRESS)
-			{
-				ViewMath->Turn(float(MousePos[0]-LastMousePos[0])*0.25f,0.0f,1.0f,0.0f);
-				ViewMath->Turn(float(MousePos[1]-LastMousePos[1])*0.25f,1.0f,0.0f,0.0f);
-			}
-			if(MMousePRESS)
-			{
-				ViewMath->Move(MoveStep*float(MousePos[0]-LastMousePos[0])*0.1f,0.0f,0.0f);
-				ViewMath->Move(0.0f,-MoveStep*float(MousePos[1]-LastMousePos[1])*0.1f,0.0f);
-			}
-			break;
+	case _ViewMode_View:
+		if(RMousePRESS)
+		{
+			ViewTurnX+=float(MousePos[0]-LastMousePos[0])*0.25f;
+			ViewTurnY+=float(MousePos[1]-LastMousePos[1])*0.25f;
+		}
+		break;
+	case _ViewMode_Free:
+		if(RMousePRESS)
+		{
+			ViewMath->Turn(float(MousePos[0]-LastMousePos[0])*0.25f,0.0f,1.0f,0.0f);
+			ViewMath->Turn(float(MousePos[1]-LastMousePos[1])*0.25f,1.0f,0.0f,0.0f);
+		}
+		if(MMousePRESS)
+		{
+			ViewMath->Move(MoveStep*float(MousePos[0]-LastMousePos[0])*0.1f,0.0f,0.0f);
+			ViewMath->Move(0.0f,-MoveStep*float(MousePos[1]-LastMousePos[1])*0.1f,0.0f);
+		}
+		break;
 	}
 }
 void GLFWCALL handle_key_down(int key, int action)
@@ -420,8 +410,8 @@ void GLFWCALL handle_key_down(int key, int action)
 				MMousePRESS=false;
 			break;
 		}
-		default:
-			break;
+	default:
+		break;
 	}
 }
 int lastMouseWheel=0;
@@ -431,13 +421,13 @@ void GLFWCALL handle_MouseWheel( int pos )
 	{
 		switch(ViewMode)
 		{
-			case _ViewMode_View:
-				WHEEL+=(float)(pos-lastMouseWheel);
-				mpos[2]+=(float)(pos-lastMouseWheel)*MoveStep;
-				break;
-			case _ViewMode_Free:
-				ViewMath->Move(0.0f,0.0f,-(float)(pos-lastMouseWheel)*MoveStep);
-				break;
+		case _ViewMode_View:
+			WHEEL+=(float)(pos-lastMouseWheel);
+			mpos[2]+=(float)(pos-lastMouseWheel)*MoveStep;
+			break;
+		case _ViewMode_Free:
+			ViewMath->Move(0.0f,0.0f,-(float)(pos-lastMouseWheel)*MoveStep);
+			break;
 		}
 		lastMouseWheel=pos;
 	}
@@ -448,14 +438,14 @@ unsigned int __stdcall RenderThread(LPVOID lpvoid)
 	TurnUpMath=new NodeMath;
 	if(glfwInit() == GL_FALSE)
 		return 0;
-    glfwOpenWindowHint(GLFW_FSAA_SAMPLES, FSAAsamples);
+	glfwOpenWindowHint(GLFW_FSAA_SAMPLES, FSAAsamples);
 	if( glfwOpenSubWindow(winwidth,winheight,0,0,0,0,24,0,GLFW_WINDOW,(unsigned int)ParentHWND) == GL_FALSE )
 	{
 		glfwTerminate();
 		return 0;
 	}
-	
-    FSAAsamples = glfwGetWindowParam(GLFW_FSAA_SAMPLES);
+
+	FSAAsamples = glfwGetWindowParam(GLFW_FSAA_SAMPLES);
 	glfwSwapInterval( 1 );
 	glfwSetKeyCallback( handle_key_down );
 	glfwSetMouseButtonCallback(handle_key_down);
@@ -541,7 +531,7 @@ extern "C" _declspec(dllexport) void InputTex(unsigned char * TexDataIn,int Size
 	WaitForSingleObject(Mutex,INFINITE);
 	TexW=SizeX;
 	TexH=SizeY;
-	
+
 	if(TexData) delete [] TexData;
 	TexData=new unsigned char[DataSize];
 	memcpy_s(TexData,DataSize,TexDataIn,DataSize);
