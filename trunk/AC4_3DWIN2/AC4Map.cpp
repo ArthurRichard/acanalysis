@@ -89,7 +89,7 @@ void AC4MapPack::Init(void)
 		Texs[i]=new AC4MapTex;
 		Texs[i]->Build(SubMapAdd+i*0x200,PackBuf+MapTexAdd);
 	}
-	
+
 	memcpy_s(AC4MapMesh::MeshIDs,0x100,PackBuf+Adds[10].Add,0x100);
 	unsigned char * MeshAdd=PackBuf+Adds[9].Add;
 	Meshs.ChangeMaxCount(Adds[9].Size/0x400);
@@ -121,40 +121,40 @@ void AC4MapPack::Draw(float posx,float posz)
 		}
 	}
 	for(int y=int(posz/320.0f)-4+8;y<(int(posz/320.0f)+4+8);y++)
-	for(int x=int(posx/320.0f)-4+8;x<(int(posx/320.0f)+4+8);x++)
-	{
-		if(x<0) return;
-		if(y<0) return;
-		if(x>=16) return;
-		if(y>=16) return;
-		int MapID=x+y*0x10;
-		if(MapID>=0x100)
-			return;
-		int meshID=AC4MapMesh::MeshIDs[MapID];
-		int texID=AC4MapTex::TexIDs[MapID];
-		glPushMatrix();
-		glTranslatef((x-8)*320.0f,0.0f,(y-8)*320.0f);
-		glBindTexture( GL_TEXTURE_2D, Texs[texID]->TID ); 
-		Meshs[meshID]->Draw();
-		if(x<15&&y<15)
+		for(int x=int(posx/320.0f)-4+8;x<(int(posx/320.0f)+4+8);x++)
 		{
-			AC4MapMeshBoder * boder=Boders[MapID];
-			if(boder)
-				boder->Draw();
-			else
+			if(x<0) return;
+			if(y<0) return;
+			if(x>=16) return;
+			if(y>=16) return;
+			int MapID=x+y*0x10;
+			if(MapID>=0x100)
+				return;
+			int meshID=AC4MapMesh::MeshIDs[MapID];
+			int texID=AC4MapTex::TexIDs[MapID];
+			glPushMatrix();
+			glTranslatef((x-8)*320.0f,0.0f,(y-8)*320.0f);
+			glBindTexture( GL_TEXTURE_2D, Texs[texID]->TID ); 
+			Meshs[meshID]->Draw();
+			if(x<15&&y<15)
 			{
-				boder=new AC4MapMeshBoder;
-				boder->Set(
-					Meshs[meshID]->MeshData,
-					Meshs[AC4MapMesh::MeshIDs[x+1+y*0x10]]->MeshData,
-					Meshs[AC4MapMesh::MeshIDs[x+(y+1)*0x10]]->MeshData,
-					Meshs[AC4MapMesh::MeshIDs[x+1+(y+1)*0x10]]->MeshData);
-				boder->Draw();
-				Boders[MapID]=boder;
+				AC4MapMeshBoder * boder=Boders[MapID];
+				if(boder)
+					boder->Draw();
+				else
+				{
+					boder=new AC4MapMeshBoder;
+					boder->Set(
+						Meshs[meshID]->MeshData,
+						Meshs[AC4MapMesh::MeshIDs[x+1+y*0x10]]->MeshData,
+						Meshs[AC4MapMesh::MeshIDs[x+(y+1)*0x10]]->MeshData,
+						Meshs[AC4MapMesh::MeshIDs[x+1+(y+1)*0x10]]->MeshData);
+					boder->Draw();
+					Boders[MapID]=boder;
+				}
 			}
+			glPopMatrix();
 		}
-		glPopMatrix();
-	}
 }
 
 
@@ -193,68 +193,68 @@ void AC4MapMesh::Set(unsigned char * Data)
 	float size=10.0f,hsize=1.0f,texsize=float(1.0/32.0);
 
 	for(int y=0;y<31;y++)
-	for(int x=0;x<31;x++)
-	{
-		float Height00=Data[x+y*32];
-		float Height10=Data[x+1+y*32];
-		float Height01=Data[x+(y+1)*32];
-		float Height11=Data[x+1+(y+1)*32];
+		for(int x=0;x<31;x++)
+		{
+			float Height00=Data[x+y*32];
+			float Height10=Data[x+1+y*32];
+			float Height01=Data[x+(y+1)*32];
+			float Height11=Data[x+1+(y+1)*32];
 
-		_VecPos PosTmp;
-		_TexCood TexTmp;
-		
-		PosTmp.y0=Height00*hsize;
-		PosTmp.x0=x*size;
-		PosTmp.z0=y*size;
-		TexTmp.x0=x*texsize;
-		TexTmp.y0=y*texsize;
-		
-		PosTmp.y1=Height01*hsize;
-		PosTmp.x1=x*size;
-		PosTmp.z1=(y+1)*size;
-		TexTmp.x1=x*texsize;
-		TexTmp.y1=(y+1)*texsize;
-		
-		PosTmp.y2=Height10*hsize;
-		PosTmp.x2=(x+1)*size;
-		PosTmp.z2=y*size;
-		TexTmp.x2=(x+1)*texsize;
-		TexTmp.y2=y*texsize;
+			_VecPos PosTmp;
+			_TexCood TexTmp;
 
-		VecPos.push_back(PosTmp);
-		TexCood.push_back(TexTmp);
-		
-		PosTmp.y0=Height11*hsize;
-		PosTmp.x0=(x+1)*size;
-		PosTmp.z0=(y+1)*size;
-		TexTmp.x0=(x+1)*texsize;
-		TexTmp.y0=(y+1)*texsize;
-		
-		PosTmp.y1=Height01*hsize;
-		PosTmp.x1=x*size;
-		PosTmp.z1=(y+1)*size;
-		TexTmp.x1=x*texsize;
-		TexTmp.y1=(y+1)*texsize;
-		
-		PosTmp.y2=Height10*hsize;
-		PosTmp.x2=(x+1)*size;
-		PosTmp.z2=y*size;
-		TexTmp.x2=(x+1)*texsize;
-		TexTmp.y2=y*texsize;
+			PosTmp.y0=Height00*hsize;
+			PosTmp.x0=x*size;
+			PosTmp.z0=y*size;
+			TexTmp.x0=x*texsize;
+			TexTmp.y0=y*texsize;
 
-		VecPos.push_back(PosTmp);
-		TexCood.push_back(TexTmp);
+			PosTmp.y1=Height01*hsize;
+			PosTmp.x1=x*size;
+			PosTmp.z1=(y+1)*size;
+			TexTmp.x1=x*texsize;
+			TexTmp.y1=(y+1)*texsize;
 
-	}
-	glGenBuffersARB( 1,&vecBuf);
-	glBindBufferARB( GL_ARRAY_BUFFER_ARB, vecBuf );
-	glBufferDataARB( GL_ARRAY_BUFFER_ARB, VecPos.Count*sizeof(_VecPos), VecPos.ListData1, GL_STATIC_DRAW_ARB );
+			PosTmp.y2=Height10*hsize;
+			PosTmp.x2=(x+1)*size;
+			PosTmp.z2=y*size;
+			TexTmp.x2=(x+1)*texsize;
+			TexTmp.y2=y*texsize;
 
-	glGenBuffersARB( 1,&texBuf);
-	glBindBufferARB( GL_ARRAY_BUFFER_ARB, texBuf );
-	glBufferDataARB( GL_ARRAY_BUFFER_ARB, VecPos.Count*sizeof(_TexCood), TexCood.ListData1, GL_STATIC_DRAW_ARB );
+			VecPos.push_back(PosTmp);
+			TexCood.push_back(TexTmp);
 
-	glBindBufferARB(GL_ARRAY_BUFFER_ARB,0);
+			PosTmp.y0=Height11*hsize;
+			PosTmp.x0=(x+1)*size;
+			PosTmp.z0=(y+1)*size;
+			TexTmp.x0=(x+1)*texsize;
+			TexTmp.y0=(y+1)*texsize;
+
+			PosTmp.y1=Height01*hsize;
+			PosTmp.x1=x*size;
+			PosTmp.z1=(y+1)*size;
+			TexTmp.x1=x*texsize;
+			TexTmp.y1=(y+1)*texsize;
+
+			PosTmp.y2=Height10*hsize;
+			PosTmp.x2=(x+1)*size;
+			PosTmp.z2=y*size;
+			TexTmp.x2=(x+1)*texsize;
+			TexTmp.y2=y*texsize;
+
+			VecPos.push_back(PosTmp);
+			TexCood.push_back(TexTmp);
+
+		}
+		glGenBuffersARB( 1,&vecBuf);
+		glBindBufferARB( GL_ARRAY_BUFFER_ARB, vecBuf );
+		glBufferDataARB( GL_ARRAY_BUFFER_ARB, VecPos.Count*sizeof(_VecPos), VecPos.ListData1, GL_STATIC_DRAW_ARB );
+
+		glGenBuffersARB( 1,&texBuf);
+		glBindBufferARB( GL_ARRAY_BUFFER_ARB, texBuf );
+		glBufferDataARB( GL_ARRAY_BUFFER_ARB, VecPos.Count*sizeof(_TexCood), TexCood.ListData1, GL_STATIC_DRAW_ARB );
+
+		glBindBufferARB(GL_ARRAY_BUFFER_ARB,0);
 }
 
 
@@ -287,21 +287,21 @@ void AC4MapTex::Set(int posx,int posy,bool turnX,bool turnY,unsigned char * TexD
 {
 	int TurnedX = 0,TurnedY = 0;
 	for (int y = 0; y < 64; y++)
-	for (int x = 0; x < 64; x++)
-	{
-		if(turnX)
-			TurnedX = 63 - x;
-		else
-			TurnedX = x;
+		for (int x = 0; x < 64; x++)
+		{
+			if(turnX)
+				TurnedX = 63 - x;
+			else
+				TurnedX = x;
 
-		if(turnY)
-			TurnedY = 63 - y;
-		else
-			TurnedY = y;
-		AC4MapTexTmp[x+y*64]=AC4MapTex::Pal[TexDataIn[TurnedX+TurnedY*64]];
-	}
+			if(turnY)
+				TurnedY = 63 - y;
+			else
+				TurnedY = y;
+			AC4MapTexTmp[x+y*64]=AC4MapTex::Pal[TexDataIn[TurnedX+TurnedY*64]];
+		}
 
-	glTexSubImage2D(GL_TEXTURE_2D,0,posx*64,posy*64,64,64,GL_RGBA,GL_UNSIGNED_BYTE,AC4MapTexTmp);
+		glTexSubImage2D(GL_TEXTURE_2D,0,posx*64,posy*64,64,64,GL_RGBA,GL_UNSIGNED_BYTE,AC4MapTexTmp);
 }
 
 void AC4MapTex::SetPal(_PalColor * PalIn)
@@ -330,19 +330,19 @@ void AC4MapTex::Build(unsigned char * SubTexIDs,unsigned char * TexData)
 {
 	glBindTexture( GL_TEXTURE_2D, TID ); 
 	for (int y = 0; y < 16; y++)
-	for (int x = 0; x < 16; x++)
-	{
-		int j=x+y*16;
-		int MapID=SubTexIDs[j*2]+SubTexIDs[j*2+1]*0x100;
-		bool turnX=false;bool turnY=false;
-		if ((MapID / 0x800) % 2 == 1)
-			turnY = true;
-		if ((MapID / 0x400) % 2 == 1)
-			turnX = true;
-		MapID=MapID%0x400;
-		Set(x,y,turnX,turnY,TexData+MapID*0x1000);
-	}
-    glGenerateMipmapEXT(GL_TEXTURE_2D);
+		for (int x = 0; x < 16; x++)
+		{
+			int j=x+y*16;
+			int MapID=SubTexIDs[j*2]+SubTexIDs[j*2+1]*0x100;
+			bool turnX=false;bool turnY=false;
+			if ((MapID / 0x800) % 2 == 1)
+				turnY = true;
+			if ((MapID / 0x400) % 2 == 1)
+				turnX = true;
+			MapID=MapID%0x400;
+			Set(x,y,turnX,turnY,TexData+MapID*0x1000);
+		}
+		glGenerateMipmapEXT(GL_TEXTURE_2D);
 }
 
 AC4MapMeshBoder::AC4MapMeshBoder()
@@ -389,13 +389,13 @@ void AC4MapMeshBoder::Set(unsigned char * Data00,unsigned char * Data10,unsigned
 		PosTmp.z0=y*size;
 		TexTmp.x0=x*texsize;
 		TexTmp.y0=y*texsize;
-		
+
 		PosTmp.y1=Height01*hsize;
 		PosTmp.x1=x*size;
 		PosTmp.z1=(y+1)*size;
 		TexTmp.x1=x*texsize;
 		TexTmp.y1=(y+1)*texsize;
-		
+
 		PosTmp.y2=Height10*hsize;
 		PosTmp.x2=(x+1)*size;
 		PosTmp.z2=y*size;
@@ -403,19 +403,19 @@ void AC4MapMeshBoder::Set(unsigned char * Data00,unsigned char * Data10,unsigned
 		TexTmp.y2=y*texsize;
 		VecPos.push_back(PosTmp);
 		TexCood.push_back(TexTmp);
-		
+
 		PosTmp.y0=Height11*hsize;
 		PosTmp.x0=(x+1)*size;
 		PosTmp.z0=(y+1)*size;
 		TexTmp.x0=(x+1)*texsize;
 		TexTmp.y0=(y+1)*texsize;
-		
+
 		PosTmp.y1=Height01*hsize;
 		PosTmp.x1=x*size;
 		PosTmp.z1=(y+1)*size;
 		TexTmp.x1=x*texsize;
 		TexTmp.y1=(y+1)*texsize;
-		
+
 		PosTmp.y2=Height10*hsize;
 		PosTmp.x2=(x+1)*size;
 		PosTmp.z2=y*size;
@@ -437,13 +437,13 @@ void AC4MapMeshBoder::Set(unsigned char * Data00,unsigned char * Data10,unsigned
 		PosTmp.z0=y*size;
 		TexTmp.x0=x*texsize;
 		TexTmp.y0=y*texsize;
-		
+
 		PosTmp.y1=Height01*hsize;
 		PosTmp.x1=x*size;
 		PosTmp.z1=(y+1)*size;
 		TexTmp.x1=x*texsize;
 		TexTmp.y1=(y+1)*texsize;
-		
+
 		PosTmp.y2=Height10*hsize;
 		PosTmp.x2=(x+1)*size;
 		PosTmp.z2=y*size;
@@ -451,19 +451,19 @@ void AC4MapMeshBoder::Set(unsigned char * Data00,unsigned char * Data10,unsigned
 		TexTmp.y2=y*texsize;
 		VecPos.push_back(PosTmp);
 		TexCood.push_back(TexTmp);
-		
+
 		PosTmp.y0=Height11*hsize;
 		PosTmp.x0=(x+1)*size;
 		PosTmp.z0=(y+1)*size;
 		TexTmp.x0=(x+1)*texsize;
 		TexTmp.y0=(y+1)*texsize;
-		
+
 		PosTmp.y1=Height01*hsize;
 		PosTmp.x1=x*size;
 		PosTmp.z1=(y+1)*size;
 		TexTmp.x1=x*texsize;
 		TexTmp.y1=(y+1)*texsize;
-		
+
 		PosTmp.y2=Height10*hsize;
 		PosTmp.x2=(x+1)*size;
 		PosTmp.z2=y*size;
@@ -474,51 +474,51 @@ void AC4MapMeshBoder::Set(unsigned char * Data00,unsigned char * Data10,unsigned
 		TexCood.push_back(TexTmp);
 	}
 	int x=31,y=31;
-		float Height00=Data00[32*32-1];
-		float Height10=Data10[31*32];
-		float Height01=Data01[31];
-		float Height11=Data11[0];
-		PosTmp.y0=Height00*hsize;
-		PosTmp.x0=x*size;
-		PosTmp.z0=y*size;
-		TexTmp.x0=x*texsize;
-		TexTmp.y0=y*texsize;
-		
-		PosTmp.y1=Height01*hsize;
-		PosTmp.x1=x*size;
-		PosTmp.z1=(y+1)*size;
-		TexTmp.x1=x*texsize;
-		TexTmp.y1=(y+1)*texsize;
-		
-		PosTmp.y2=Height10*hsize;
-		PosTmp.x2=(x+1)*size;
-		PosTmp.z2=y*size;
-		TexTmp.x2=(x+1)*texsize;
-		TexTmp.y2=y*texsize;
-		VecPos.push_back(PosTmp);
-		TexCood.push_back(TexTmp);
-		
-		PosTmp.y0=Height11*hsize;
-		PosTmp.x0=(x+1)*size;
-		PosTmp.z0=(y+1)*size;
-		TexTmp.x0=(x+1)*texsize;
-		TexTmp.y0=(y+1)*texsize;
-		
-		PosTmp.y1=Height01*hsize;
-		PosTmp.x1=x*size;
-		PosTmp.z1=(y+1)*size;
-		TexTmp.x1=x*texsize;
-		TexTmp.y1=(y+1)*texsize;
-		
-		PosTmp.y2=Height10*hsize;
-		PosTmp.x2=(x+1)*size;
-		PosTmp.z2=y*size;
-		TexTmp.x2=(x+1)*texsize;
-		TexTmp.y2=y*texsize;
+	float Height00=Data00[32*32-1];
+	float Height10=Data10[31*32];
+	float Height01=Data01[31];
+	float Height11=Data11[0];
+	PosTmp.y0=Height00*hsize;
+	PosTmp.x0=x*size;
+	PosTmp.z0=y*size;
+	TexTmp.x0=x*texsize;
+	TexTmp.y0=y*texsize;
 
-		VecPos.push_back(PosTmp);
-		TexCood.push_back(TexTmp);
-		
+	PosTmp.y1=Height01*hsize;
+	PosTmp.x1=x*size;
+	PosTmp.z1=(y+1)*size;
+	TexTmp.x1=x*texsize;
+	TexTmp.y1=(y+1)*texsize;
+
+	PosTmp.y2=Height10*hsize;
+	PosTmp.x2=(x+1)*size;
+	PosTmp.z2=y*size;
+	TexTmp.x2=(x+1)*texsize;
+	TexTmp.y2=y*texsize;
+	VecPos.push_back(PosTmp);
+	TexCood.push_back(TexTmp);
+
+	PosTmp.y0=Height11*hsize;
+	PosTmp.x0=(x+1)*size;
+	PosTmp.z0=(y+1)*size;
+	TexTmp.x0=(x+1)*texsize;
+	TexTmp.y0=(y+1)*texsize;
+
+	PosTmp.y1=Height01*hsize;
+	PosTmp.x1=x*size;
+	PosTmp.z1=(y+1)*size;
+	TexTmp.x1=x*texsize;
+	TexTmp.y1=(y+1)*texsize;
+
+	PosTmp.y2=Height10*hsize;
+	PosTmp.x2=(x+1)*size;
+	PosTmp.z2=y*size;
+	TexTmp.x2=(x+1)*texsize;
+	TexTmp.y2=y*texsize;
+
+	VecPos.push_back(PosTmp);
+	TexCood.push_back(TexTmp);
+
 	glGenBuffersARB( 1,&vecBuf);
 	glBindBufferARB( GL_ARRAY_BUFFER_ARB, vecBuf );
 	glBufferDataARB( GL_ARRAY_BUFFER_ARB, VecPos.Count*sizeof(_VecPos), VecPos.ListData1, GL_STATIC_DRAW_ARB );
