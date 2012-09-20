@@ -80,8 +80,10 @@ extern "C" _declspec(dllexport) void ClearViewTurn()
 	WHEEL=0.0f;
 	mpos[2]=msize;
 	ViewMath->Clear();
+	TurnUpMath->Clear();
 	ViewMath->Turn(-45.0f,0.0f,1.0f,0.0f);
-	ViewMath->Turn(-45.0f,1.0f,0.0f,0.0f);
+	//ViewMath->Turn(-45.0f,1.0f,0.0f,0.0f);
+	TurnUpMath->Turn(45.0f,1.0f,0.0f,0.0f);
 	ViewMath->Move(0.0f,0.0f,mpos[2]);
 }
 
@@ -253,7 +255,10 @@ void InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	glLineWidth(1.0f);
 	//glEnable(GL_LIGHTING);
 }
-
+int Deinit()
+{
+	return 1;
+}
 /* Callback function for window resize events */
 void GLFWCALL handle_resize( int width, int height )
 {
@@ -305,6 +310,8 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	case _ViewMode_Free:
 		ViewPos[0]=ViewMath->Pos->m128_f32[0];ViewPos[1]=ViewMath->Pos->m128_f32[2];
 		ViewMath->Inv();
+		TurnUpMath->Inv();
+		glMultMatrixf(TurnUpMath->Mat->m128_f32);
 		glMultMatrixf(ViewMath->Mat->m128_f32);
 		break;
 	}
@@ -380,7 +387,8 @@ void GLFWCALL handle_MousePos( int x, int y )
 		if(RMousePRESS)
 		{
 			ViewMath->Turn(float(MousePos[0]-LastMousePos[0])*0.25f,0.0f,1.0f,0.0f);
-			ViewMath->Turn(float(MousePos[1]-LastMousePos[1])*0.25f,1.0f,0.0f,0.0f);
+			TurnUpMath->Turn(-float(MousePos[1]-LastMousePos[1])*0.25f,1.0f,0.0f,0.0f);
+			//ViewMath->Turn(float(MousePos[1]-LastMousePos[1])*0.25f,1.0f,0.0f,0.0f);
 		}
 		if(MMousePRESS)
 		{
@@ -451,6 +459,7 @@ unsigned int __stdcall RenderThread(LPVOID lpvoid)
 	glfwSetMouseButtonCallback(handle_key_down);
 	glfwSetMousePosCallback(handle_MousePos);
 	glfwSetMouseWheelCallback(handle_MouseWheel);
+	glfwSetWindowCloseCallback(Deinit);
 	glfwEnable( GLFW_KEY_REPEAT );
 
 	glfwSetWindowSizeCallback( handle_resize );
