@@ -153,6 +153,7 @@ void AC4MapPack::Draw(float posx,float posz)
 			glTranslatef((x-8)*320.0f,0.0f,(y-8)*320.0f);
 			glBindTexture( GL_TEXTURE_2D, Texs[texID]->TID ); 
 			Meshs[meshID]->Draw();
+			Models[modelID]->Draw();
 			if(x<15&&y<15)
 			{
 				AC4MapMeshBoder * boder=Boders[MapID];
@@ -555,6 +556,42 @@ AC4MapModel::~AC4MapModel()
 }
 void AC4MapModel::Draw()
 {
+	glBindBufferARB( GL_ARRAY_BUFFER_ARB, 0 );
+	glDisable( GL_TEXTURE_2D );
+	eachlist(Models,i)
+	{
+		glPushMatrix();
+		glTranslatef(Models[i].x* 20.0f,0.0f,Models[i].y* 20.0f);
+		glBegin(GL_LINES);
+
+		glColor3f(1.0f,1.0f,0.0f);
+		glVertex3f( 0.0f, 0.0f, 10.0f);
+		glVertex3f( 0.0f, 0.0f,      0.0f);
+
+		glColor3f(1.0f,0.0f,1.0f);
+		glVertex3f( 0.0f, 0.0f,      0.0f);
+		glVertex3f( 0.0f, 0.0f,-10.0f);
+
+		glColor3f(1.0f,1.0f,1.0f);
+		glVertex3f( 0.0f, 10.0f, 0.0f);
+		glVertex3f( 0.0f,      0.0f, 0.0f);
+
+		glColor3f(0.0f,0.0f,0.0f);
+		glVertex3f( 0.0f,      0.0f, 0.0f);
+		glVertex3f( 0.0f,-10.0f, 0.0f);
+
+		glColor3f(1.0f,0.0f,0.0f);
+		glVertex3f( 10.0f, 0.0f, 0.0f);
+		glVertex3f(      0.0f, 0.0f, 0.0f);
+		glColor3f(0.0f,0.0f,1.0f);
+		glVertex3f(-10.0f, 0.0f, 0.0f);
+		glVertex3f(      0.0f, 0.0f, 0.0f);
+
+		glEnd();
+		glPopMatrix();
+	}
+	glColor3f(1.0f,1.0f,1.0f);
+	glEnable( GL_TEXTURE_2D );
 }
 void AC4MapModel::Set(unsigned char *DataIn)
 {
