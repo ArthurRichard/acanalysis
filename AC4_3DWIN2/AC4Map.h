@@ -25,25 +25,6 @@ struct _TexCood
 	float x2;
 	float y2;
 };
-//class AC4Map
-//{
-//public:
-//	AC4Map(void);
-//	~AC4Map(void);
-//	void Set(unsigned char * Data);
-//	void Draw(void);
-//	CTAList<_VecPos> VecPos;
-//	CTAList<_TexCood> TexCood;
-//
-//	unsigned int vecBuf;
-//	unsigned int texBuf;
-//	bool DataChanged;
-//	unsigned int TID;
-//	unsigned char TextureBuf[1024*1024*4];
-//	bool TextureChanged;
-//	void SetTexture(unsigned char * TexDataIn);
-//	void Clear(void);
-//};
 
 void DrawMaps(float posx,float posz);
 struct _MapAdd
