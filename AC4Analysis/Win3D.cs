@@ -21,6 +21,7 @@ namespace AC4Analysis
         public static extern void ResetView();
         [DllImport("AC4_3DWIN.DLL", CallingConvention = CallingConvention.Cdecl)]
         public static extern void ChangeViewMode(int mode);
+        LightWin lightwin;
         public Win3D()
         {
             InitializeComponent();
@@ -28,6 +29,7 @@ namespace AC4Analysis
             tp观察模式操作说明.SetToolTip(rdbView模式选择1, "Mouse wheel to Forward and back\nDrag mouse right key to change view");
             tp自由模式操作说明.SetToolTip(rdbView模式选择2, "Mouse wheel to Forward and back\nDrag mouse right key to change view\nDrag mouse middle key to move");
             SetMoveStep(float.Parse(textBox1.Text));
+            lightwin = new LightWin();
         }
         public IntPtr GetHwnd()
         {
@@ -74,6 +76,11 @@ namespace AC4Analysis
         {
             if (rdbView模式选择2.Checked)
                 ChangeViewMode(1);
+        }
+
+        private void btn设置光源_Click(object sender, EventArgs e)
+        {
+            lightwin.Show();
         }
     }
 }
