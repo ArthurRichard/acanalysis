@@ -57,7 +57,8 @@ enum _ViewMode
 _ViewMode ViewMode=_ViewMode_View;
 float MoveStep=10.0f;
 int FSAAsamples=4;
-
+bool isPerspective=true;
+float fov=45.0f;
 void ChangeTex()
 {
 	if(!TexChanged)
@@ -281,7 +282,12 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	WaitForSingleObject(Mutex,INFINITE);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
+	glLoadMatrixf(Pmat);
+	glMatrixMode(GL_MODELVIEW);							// Select The Modelview Matrix
+	glLoadIdentity();	
+
 	float ViewPos[2];
 	switch(ViewMode)
 	{
@@ -331,41 +337,7 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 			else
 				RenderPart(0);
 		}
-		//if(!UseAlpha)
-		//{
-
-		//	glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR,LightPosition);
-		//	RenderPart(0);
-		//	glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR,LightDiffuse);
-		//	if(UseLight)
-		//	{
-		//		//glLightfv(GL_LIGHT1, GL_AMBIENT, LightPosition);		// Setup The Ambient Light
-		//		//glLightfv(GL_LIGHT1, GL_DIFFUSE, LightPosition);		// Setup The Diffuse Light
-		//	glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT,LightPosition);
-		//	glMaterialfv(GL_FRONT_AND_BACK,GL_DIFFUSE,LightPosition);
-		//		glEnable(GL_BLEND);
-		//		glBlendFunc(GL_SRC_ALPHA,GL_ONE   );
-		//		RenderPart(0);
-		//		RenderPart(0);
-		//		glDisable(GL_BLEND);
-		//		glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA   );
-		//		//glLightfv(GL_LIGHT1, GL_AMBIENT, LightDiffuse);		// Setup The Ambient Light
-		//		//glLightfv(GL_LIGHT1, GL_DIFFUSE, LightDiffuse);		// Setup The Diffuse Light
-		//	glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT,LightDiffuse);
-		//	glMaterialfv(GL_FRONT_AND_BACK,GL_DIFFUSE,LightDiffuse);
-		//	}
-		//}
-		//else
-		//{
-		//	glEnable(GL_ALPHA_TEST);
-		//	glAlphaFunc(GL_GREATER, 0.99f);
-		//	RenderPart(0);
-		//	glAlphaFunc(GL_LEQUAL, 0.99f);
-		//	glDepthMask(GL_FALSE);
-		//	RenderPart(0);
-		//	glDisable(GL_ALPHA_TEST); 
-		//	glDepthMask(GL_TRUE);
-		//}
+		
 	}
 	if(FSAAsamples>1)
 		glDisable(GL_MULTISAMPLE_ARB);
@@ -580,4 +552,12 @@ extern "C" _declspec(dllexport) void ResetView()
 extern "C" _declspec(dllexport) void ChangeViewMode(int mode)
 {
 	ViewMode=(_ViewMode)mode;
+}
+extern "C" _declspec(dllexport) void Perspective(float Fov)
+{
+	EastPerspective(Fov,(GLfloat)winwidth/(GLfloat)winheight,10.0f,1000000.0f,Pmat);
+}
+extern "C" _declspec(dllexport) void Orthogonal(float w,float h)
+{
+	EasyOrtho(-w*0.5f,w*0.5f,-h*0.5f,h*0.5f,10.0f,1000000.0f,Pmat);
 }

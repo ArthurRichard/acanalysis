@@ -117,6 +117,12 @@
     <Compile Include="Text.Designer.cs">
       <DependentUpon>Text.cs</DependentUpon>
     </Compile>
+    <Compile Include="ViewWin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ViewWin.Designer.cs">
+      <DependentUpon>ViewWin.cs</DependentUpon>
+    </Compile>
     <Compile Include="Win3D.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -156,6 +162,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Text.resx">
       <DependentUpon>Text.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ViewWin.resx">
+      <DependentUpon>ViewWin.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Win3D.resx">
       <DependentUpon>Win3D.cs</DependentUpon>
