@@ -18,12 +18,20 @@ extern "C" _declspec(dllexport) void SetMaterial(float *Data)
 }
 extern "C" _declspec(dllexport) void SetLightSwitch(int LightID,bool Switch)
 {
+	if(LightID<0)
+		return;
+	if(LightID>7)
+		return;
 	WaitForSingleObject(Mutex,INFINITE);
 	LightSwitch[LightID]=Switch;
 	ReleaseMutex(Mutex);
 }
 extern "C" _declspec(dllexport) void SetLight(int LightID,float * Data)
 {
+	if(LightID<0)
+		return;
+	if(LightID>7)
+		return;
 	WaitForSingleObject(Mutex,INFINITE);
 	memcpy_s(LightData[LightID],sizeof(float)*16,Data,sizeof(float)*16);
 	ReleaseMutex(Mutex);
@@ -34,21 +42,21 @@ void DrawLightMark()
 	glDisable( GL_TEXTURE_2D );
 	glDisable( GL_LIGHTING );
 	glBegin(GL_LINES);
-	glVertex3f( 0.0f, 0.0f, 1.0f);
+	glVertex3f( 0.0f, 0.0f, 2.0f);
 	glVertex3f( 0.0f, 0.0f,      0.0f);
 
 	glVertex3f( 0.0f, 0.0f,      0.0f);
-	glVertex3f( 0.0f, 0.0f,-1.0f);
+	glVertex3f( 0.0f, 0.0f,-2.0f);
 
-	glVertex3f( 0.0f, 1.0f, 0.0f);
+	glVertex3f( 0.0f, 2.0f, 0.0f);
 	glVertex3f( 0.0f,      0.0f, 0.0f);
 
 	glVertex3f( 0.0f,      0.0f, 0.0f);
-	glVertex3f( 0.0f,-1.0f, 0.0f);
+	glVertex3f( 0.0f,-2.0f, 0.0f);
 
-	glVertex3f( 1.0f, 0.0f, 0.0f);
+	glVertex3f( 2.0f, 0.0f, 0.0f);
 	glVertex3f(      0.0f, 0.0f, 0.0f);
-	glVertex3f(-1.0f, 0.0f, 0.0f);
+	glVertex3f(-2.0f, 0.0f, 0.0f);
 	glVertex3f(      0.0f, 0.0f, 0.0f);
 
 

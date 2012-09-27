@@ -253,7 +253,7 @@ void InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	//glLightfv(GL_LIGHT1, GL_POSITION,LightPosition);	// Position The Light
 	//glEnable(GL_LIGHT1);								// Enable Light One
 
-	glLineWidth(1.0f);
+	glLineWidth(2.0f);
 	//glEnable(GL_LIGHTING);
 }
 int Deinit()
