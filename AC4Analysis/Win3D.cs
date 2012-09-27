@@ -80,7 +80,12 @@ namespace AC4Analysis
 
         private void btn设置光源_Click(object sender, EventArgs e)
         {
-            lightwin.Show();
+            lightwin.ShowDialog();
+        }
+
+        private void btnSetView_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
