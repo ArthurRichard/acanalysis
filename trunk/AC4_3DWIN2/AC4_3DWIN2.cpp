@@ -226,10 +226,6 @@ int RenderPart(int PartID)
 	}
 
 }
-//GLfloat LightMaterialDiffuse[]= { 0.5f, 0.5f, 0.5f, 1.0f };
-//GLfloat LightAmbient[]= { 0.75f, 0.75f, 0.75f, 1.0f };
-//GLfloat LightDiffuse[]= { 1.0f, 1.0f, 1.0f, 1.0f };
-//GLfloat LightPosition[]= { 0.0f, 0.0f, 0.0f, 1.0f };
 void InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 {
 	glewInit();
@@ -242,25 +238,12 @@ void InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA   );
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);	// Really Nice Perspective Calculations
 
-	//GLfloat mat_shininess[]={90.0};
-	////   glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT,LightMaterialDiffuse);
-	////glMaterialfv(GL_FRONT_AND_BACK,GL_DIFFUSE,LightAmbient);
-	//glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR,LightDiffuse);
-	//glMaterialfv(GL_FRONT_AND_BACK,GL_SHININESS,mat_shininess);
-	//glLightfv(GL_LIGHT1, GL_AMBIENT, LightDiffuse);		// Setup The Ambient Light
-	//glLightfv(GL_LIGHT1, GL_DIFFUSE, LightDiffuse);		// Setup The Diffuse Light
-	//glLightfv(GL_LIGHT1, GL_SPECULAR,LightDiffuse);	// Position The Light
-	//glLightfv(GL_LIGHT1, GL_POSITION,LightPosition);	// Position The Light
-	//glEnable(GL_LIGHT1);								// Enable Light One
-
 	glLineWidth(2.0f);
-	//glEnable(GL_LIGHTING);
 }
 int Deinit()
 {
 	return 1;
 }
-/* Callback function for window resize events */
 void GLFWCALL handle_resize( int width, int height )
 {
 	winwidth=width;
@@ -317,7 +300,6 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 		break;
 	}
 
-	//glLightfv(GL_LIGHT1, GL_POSITION,LightPosition);	// Position The Light
 	glColor3f(1.0f,1.0f,1.0f);
 	if(FSAAsamples>1)
 		glEnable(GL_MULTISAMPLE_ARB);
