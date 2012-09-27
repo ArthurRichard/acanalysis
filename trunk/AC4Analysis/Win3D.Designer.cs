@@ -40,6 +40,7 @@
             this.tp观察模式操作说明 = new System.Windows.Forms.ToolTip(this.components);
             this.tp自由模式操作说明 = new System.Windows.Forms.ToolTip(this.components);
             this.btn设置光源 = new System.Windows.Forms.Button();
+            this.btnSetView = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // panel1
@@ -145,10 +146,21 @@
             this.btn设置光源.UseVisualStyleBackColor = true;
             this.btn设置光源.Click += new System.EventHandler(this.btn设置光源_Click);
             // 
+            // btnSetView
+            // 
+            this.btnSetView.Location = new System.Drawing.Point(279, 518);
+            this.btnSetView.Name = "btnSetView";
+            this.btnSetView.Size = new System.Drawing.Size(75, 23);
+            this.btnSetView.TabIndex = 18;
+            this.btnSetView.Text = "Set View";
+            this.btnSetView.UseVisualStyleBackColor = true;
+            this.btnSetView.Click += new System.EventHandler(this.btnSetView_Click);
+            // 
             // Win3D
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.btnSetView);
             this.Controls.Add(this.btn设置光源);
             this.Controls.Add(this.rdbView模式选择2);
             this.Controls.Add(this.rdbView模式选择1);
@@ -178,5 +190,6 @@
         private System.Windows.Forms.ToolTip tp观察模式操作说明;
         private System.Windows.Forms.ToolTip tp自由模式操作说明;
         private System.Windows.Forms.Button btn设置光源;
+        private System.Windows.Forms.Button btnSetView;
     }
 }
