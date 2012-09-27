@@ -8,6 +8,7 @@
 #include"GL\glfw.h"
 #include"AC4Map.h"
 #include "NodeMath.h"
+#include"set.h"
 NodeMath * ViewMath,*TurnUpMath;
 
 #ifdef _DEBUG
@@ -225,10 +226,10 @@ int RenderPart(int PartID)
 	}
 
 }
-GLfloat LightMaterialDiffuse[]= { 0.5f, 0.5f, 0.5f, 1.0f };
-GLfloat LightAmbient[]= { 0.75f, 0.75f, 0.75f, 1.0f };
-GLfloat LightDiffuse[]= { 1.0f, 1.0f, 1.0f, 1.0f };
-GLfloat LightPosition[]= { 0.0f, 0.0f, 0.0f, 1.0f };
+//GLfloat LightMaterialDiffuse[]= { 0.5f, 0.5f, 0.5f, 1.0f };
+//GLfloat LightAmbient[]= { 0.75f, 0.75f, 0.75f, 1.0f };
+//GLfloat LightDiffuse[]= { 1.0f, 1.0f, 1.0f, 1.0f };
+//GLfloat LightPosition[]= { 0.0f, 0.0f, 0.0f, 1.0f };
 void InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 {
 	glewInit();
@@ -241,16 +242,16 @@ void InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA   );
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);	// Really Nice Perspective Calculations
 
-	GLfloat mat_shininess[]={90.0};
-	//   glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT,LightMaterialDiffuse);
-	//glMaterialfv(GL_FRONT_AND_BACK,GL_DIFFUSE,LightAmbient);
-	glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR,LightDiffuse);
-	glMaterialfv(GL_FRONT_AND_BACK,GL_SHININESS,mat_shininess);
-	glLightfv(GL_LIGHT1, GL_AMBIENT, LightDiffuse);		// Setup The Ambient Light
-	glLightfv(GL_LIGHT1, GL_DIFFUSE, LightDiffuse);		// Setup The Diffuse Light
-	glLightfv(GL_LIGHT1, GL_SPECULAR,LightDiffuse);	// Position The Light
-	glLightfv(GL_LIGHT1, GL_POSITION,LightPosition);	// Position The Light
-	glEnable(GL_LIGHT1);								// Enable Light One
+	//GLfloat mat_shininess[]={90.0};
+	////   glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT,LightMaterialDiffuse);
+	////glMaterialfv(GL_FRONT_AND_BACK,GL_DIFFUSE,LightAmbient);
+	//glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR,LightDiffuse);
+	//glMaterialfv(GL_FRONT_AND_BACK,GL_SHININESS,mat_shininess);
+	//glLightfv(GL_LIGHT1, GL_AMBIENT, LightDiffuse);		// Setup The Ambient Light
+	//glLightfv(GL_LIGHT1, GL_DIFFUSE, LightDiffuse);		// Setup The Diffuse Light
+	//glLightfv(GL_LIGHT1, GL_SPECULAR,LightDiffuse);	// Position The Light
+	//glLightfv(GL_LIGHT1, GL_POSITION,LightPosition);	// Position The Light
+	//glEnable(GL_LIGHT1);								// Enable Light One
 
 	glLineWidth(1.0f);
 	//glEnable(GL_LIGHTING);
@@ -327,37 +328,62 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	else
 	{
 		glRotatef(180.0f,1.0f,0.0f,0.0f); // 模型方向反的
-		if(!UseAlpha)
+		if(UseLight)
 		{
-
-			glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR,LightPosition);
-			RenderPart(0);
-			glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR,LightDiffuse);
-			if(UseLight)
-			{
-				glLightfv(GL_LIGHT1, GL_AMBIENT, LightPosition);		// Setup The Ambient Light
-				glLightfv(GL_LIGHT1, GL_DIFFUSE, LightPosition);		// Setup The Diffuse Light
-				glEnable(GL_BLEND);
-				glBlendFunc(GL_SRC_ALPHA,GL_ONE   );
-				RenderPart(0);
-				RenderPart(0);
-				glDisable(GL_BLEND);
-				glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA   );
-				glLightfv(GL_LIGHT1, GL_AMBIENT, LightDiffuse);		// Setup The Ambient Light
-				glLightfv(GL_LIGHT1, GL_DIFFUSE, LightDiffuse);		// Setup The Diffuse Light
-			}
+			DrawModel(UseAlpha);
 		}
 		else
 		{
-			glEnable(GL_ALPHA_TEST);
-			glAlphaFunc(GL_GREATER, 0.99f);
-			RenderPart(0);
-			glAlphaFunc(GL_LEQUAL, 0.99f);
-			glDepthMask(GL_FALSE);
-			RenderPart(0);
-			glDisable(GL_ALPHA_TEST); 
-			glDepthMask(GL_TRUE);
+			if(UseAlpha)
+			{
+				
+				glEnable(GL_ALPHA_TEST);
+				glAlphaFunc(GL_GREATER, 0.99f);
+				RenderPart(0);
+				glAlphaFunc(GL_LEQUAL, 0.99f);
+				glDepthMask(GL_FALSE);
+				RenderPart(0);
+				glDisable(GL_ALPHA_TEST); 
+				glDepthMask(GL_TRUE);
+			}
+			else
+				RenderPart(0);
 		}
+		//if(!UseAlpha)
+		//{
+
+		//	glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR,LightPosition);
+		//	RenderPart(0);
+		//	glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR,LightDiffuse);
+		//	if(UseLight)
+		//	{
+		//		//glLightfv(GL_LIGHT1, GL_AMBIENT, LightPosition);		// Setup The Ambient Light
+		//		//glLightfv(GL_LIGHT1, GL_DIFFUSE, LightPosition);		// Setup The Diffuse Light
+		//	glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT,LightPosition);
+		//	glMaterialfv(GL_FRONT_AND_BACK,GL_DIFFUSE,LightPosition);
+		//		glEnable(GL_BLEND);
+		//		glBlendFunc(GL_SRC_ALPHA,GL_ONE   );
+		//		RenderPart(0);
+		//		RenderPart(0);
+		//		glDisable(GL_BLEND);
+		//		glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA   );
+		//		//glLightfv(GL_LIGHT1, GL_AMBIENT, LightDiffuse);		// Setup The Ambient Light
+		//		//glLightfv(GL_LIGHT1, GL_DIFFUSE, LightDiffuse);		// Setup The Diffuse Light
+		//	glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT,LightDiffuse);
+		//	glMaterialfv(GL_FRONT_AND_BACK,GL_DIFFUSE,LightDiffuse);
+		//	}
+		//}
+		//else
+		//{
+		//	glEnable(GL_ALPHA_TEST);
+		//	glAlphaFunc(GL_GREATER, 0.99f);
+		//	RenderPart(0);
+		//	glAlphaFunc(GL_LEQUAL, 0.99f);
+		//	glDepthMask(GL_FALSE);
+		//	RenderPart(0);
+		//	glDisable(GL_ALPHA_TEST); 
+		//	glDepthMask(GL_TRUE);
+		//}
 	}
 	if(FSAAsamples>1)
 		glDisable(GL_MULTISAMPLE_ARB);

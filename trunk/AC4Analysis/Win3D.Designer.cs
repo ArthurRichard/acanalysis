@@ -39,6 +39,7 @@
             this.rdbView模式选择2 = new System.Windows.Forms.RadioButton();
             this.tp观察模式操作说明 = new System.Windows.Forms.ToolTip(this.components);
             this.tp自由模式操作说明 = new System.Windows.Forms.ToolTip(this.components);
+            this.btn设置光源 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // panel1
@@ -134,10 +135,21 @@
             this.tp自由模式操作说明.InitialDelay = 200;
             this.tp自由模式操作说明.ReshowDelay = 100;
             // 
+            // btn设置光源
+            // 
+            this.btn设置光源.Location = new System.Drawing.Point(279, 491);
+            this.btn设置光源.Name = "btn设置光源";
+            this.btn设置光源.Size = new System.Drawing.Size(75, 23);
+            this.btn设置光源.TabIndex = 17;
+            this.btn设置光源.Text = "Set Light";
+            this.btn设置光源.UseVisualStyleBackColor = true;
+            this.btn设置光源.Click += new System.EventHandler(this.btn设置光源_Click);
+            // 
             // Win3D
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.btn设置光源);
             this.Controls.Add(this.rdbView模式选择2);
             this.Controls.Add(this.rdbView模式选择1);
             this.Controls.Add(this.btn重置视角);
@@ -165,5 +177,6 @@
         private System.Windows.Forms.RadioButton rdbView模式选择2;
         private System.Windows.Forms.ToolTip tp观察模式操作说明;
         private System.Windows.Forms.ToolTip tp自由模式操作说明;
+        private System.Windows.Forms.Button btn设置光源;
     }
 }
