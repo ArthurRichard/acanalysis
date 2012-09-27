@@ -187,6 +187,7 @@ namespace AC4Analysis
         {
             if (comboBox1.SelectedIndex < 0)
                 return;
+            LightSwitch[comboBox1.SelectedIndex] = cb开启光源.Checked;
             SetLightSwitch(comboBox1.SelectedIndex, cb开启光源.Checked);
         }
 
