@@ -9,3 +9,10 @@ stored in a txt file.).
 
 ![Win](https://github.com/ArthurRichard/acanalysis/blob/master/acwin.PNG?raw=true)
 The program running on Windows
+
+![Lin](https://github.com/ArthurRichard/acanalysis/blob/master/aclin.png?raw=true)
+The program running on Linux.
+
+**How to run it on Linux:**
+Despite being built with Visual Studio, it's not compatible yet with the Mono. To run it, you have to use wine:
+**wine AC4Analysis.exe** ( in the same folder as the executable )
