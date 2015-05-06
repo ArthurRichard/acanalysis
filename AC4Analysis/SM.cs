@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Data;
 using System.Text;
 using System.Windows.Forms;
+using System.IO;
 
 using System.Runtime.InteropServices;
 namespace AC4Analysis
@@ -237,6 +238,7 @@ namespace AC4Analysis
                             顶点列表.Add(BitConverter.ToSingle(data, 顶点偏址));
                             顶点列表.Add(BitConverter.ToSingle(data, 顶点偏址 + 4));
                             顶点列表.Add(BitConverter.ToSingle(data, 顶点偏址 + 8));
+                            
                         }
                         网格偏址 += 224;
                     }
@@ -251,56 +253,56 @@ namespace AC4Analysis
         {
             switch (_编号)
             {
-                case 0: return "机体";
-                case 1: return "升降舵_左";
-                case 2: return "升降舵_右";
-                case 3: return "方向舵_左";
-                case 4: return "方向舵_右";
-                case 5: return "低速副翼_左";
-                case 6: return "低速副翼_右";
-                case 7: return "高速副翼(襟副翼)_左";
-                case 8: return "高速副翼(襟副翼)_右";
-                case 9: return "矢量尾喷_左";
-                case 10: return "矢量尾喷_右";
-                case 11: return "鸭翼_左";
-                case 12: return "鸭翼_右";
-                case 13: return "扰流板_左";
-                case 14: return "扰流板_右";
-                case 15: return "尾喷管";
-                case 16: return "阻力板";
-                case 17: return "辅助进气口";
-                case 18: return "前缘襟翼(缝翼)";
-                case 19: return "可变翼(折叠翼)";
-                case 20: return "可变翼关节";
-                case 22: return "发动机风扇";
-                case 27: return "前起落架灯?";
-                case 28: return "后左起落架灯?";
-                case 29: return "后右起落架灯?";
-                case 30: return "机身发光条";
-                case 31: return "机舱驾驶员";
-                case 33: return "常规武器舱门";
-                case 34: return "特殊兵装舱门";
-                case 40: return "起落架舱门";
-                case 41: return "起落架";
-                case 42: return "尾钩";
-                case 43: return "前轮";
-                case 44: return "后轮_左";
-                case 45: return "后轮_右";
-                case 50: return "武器挂架1";
-                case 51: return "武器挂架2";
-                case 52: return "武器挂架3";
-                case 53: return "武器挂架4";
-                case 54: return "武器挂架5";
-                case 55: return "武器挂架6";
-                case 58: return "特殊挂架1";
-                case 59: return "特殊挂架2";
-                case 60: return "特殊挂架3";
-                case 61: return "特殊挂架4";
-                case 62: return "特殊挂架5";
-                case 63: return "特殊挂架6";
-                case 97: return "空中加油舱门";
-                case 98: return "尾钩";
-                default: return "未知" + _编号.ToString();
+                case 0: return "body";
+                case 1: return "elevator _left";
+                case 2: return "elevator _right";
+                case 3: return "rudder _left";
+                case 4: return "rudder _right";
+                case 5: return "low speed ailerons _left";
+                case 6: return "low speed ailerons _right";
+                case 7: return "High-speed ailerons(flaperons) _Left";
+                case 8: return "High-speed ailerons(flaperons) _Right";
+                case 9: return "vector tail spray _left";
+                case 10: return "vector tail spray _right";
+                case 11: return "canard _left";
+                case 12: return "canard _right";
+                case 13: return "spoiler _left";
+                case 14: return "spoiler _right";
+                case 15: return "tailpipe";
+                case 16: return "resistance board";
+                case 17: return "auxiliary air intake";
+                case 18: return "leading edge flap(slat)";
+                case 19: return "variable wing(folding wings)";
+                case 20: return "variable wing joint";
+                case 22: return "engine fan";
+                case 27: return "before landing lights?";
+                case 28: return "after the left landing gear lights?";
+                case 29: return "right after landing lights?";
+                case 30: return "body light bar";
+                case 31: return "cabin Driver";
+                case 33: return "Conventional Arms door";
+                case 34: return "special military equipment hatch";
+                case 40: return "landing gear door";
+                case 41: return "landing gear";
+                case 42: return "tail hook";
+                case 43: return "front";
+                case 44: return "_rear left";
+                case 45: return "_rear right";
+                case 50: return "weapons pylons 1";
+                case 51: return "weapons pylons 2";
+                case 52: return "weapons pylons 3";
+                case 53: return "weapons pylons 4";
+                case 54: return "weapons pylons 5";
+                case 55: return "weapons pylons 6";
+                case 58: return "special rack 1";
+                case 59: return "special rack 2";
+                case 60: return "special rack 3";
+                case 61: return "special rack 4";
+                case 62: return "special rack 5";
+                case 63: return "special rack 6";
+                case 97: return "aerial refueling door";
+                case 98: return "tail hook";
+                default: return "unknown" + _编号.ToString();
             }
         }
         public SM()
@@ -351,7 +353,7 @@ namespace AC4Analysis
             tb关键帧.Visible = false;
             cboxPart.Items.Clear();
             cbox单独设置.Items.Clear();
-            cboxPart.Items.Add("整体显示, 顶点:" + (顶点列表.Count / 3) + ", 部件:" + 部件列表.Count);
+            cboxPart.Items.Add("Show All: Vertices " + (顶点列表.Count / 3) + ", Parts: " + 部件列表.Count);
             cbox单独设置.Items.Add("");
             cboxPart.SelectedIndex = 0;
             for (int i = 0; i < 部件列表.Count; i++)
@@ -375,16 +377,16 @@ namespace AC4Analysis
                                  ", 位置:" + 部件列表[i].初始位置.x + ", " + 部件列表[i].初始位置.y + ", " + 部件列表[i].初始位置.z +
                                  ", 旋转:" + ((部件列表[i].初始旋转.x / Math.PI)*180f).ToString("f2") + ", " + ((部件列表[i].初始旋转.y / Math.PI)*180f).ToString("f2") + ", " + ((部件列表[i].初始旋转.z / Math.PI)*180f).ToString("f2") + 
                                  ";");*/
-                cboxPart.Items.Add("部件" + i +
-                                 ", 类型:" + 获取部件类型名称(部件列表[i].部件类型) +
-                                 ", 父:" + 部件列表[i].父部件索引 +
-                                 ", 子:" + 部件列表[i].子部件数 +
-                                 ", 动画数:" + 部件列表[i].关键帧动画数  +
-                                 ", 整数2:" + 部件列表[i].不明整数参数2 +
-                                 ", 关键帧数:" + 部件列表[i].关键帧数据.关键帧数 +
-                                 ", 浮点1:" + 部件列表[i].不明浮点参数1 +
+                cboxPart.Items.Add("mmbr" + i +
+                                 ", Type:" + 获取部件类型名称(部件列表[i].部件类型) +
+                                 ", Father:" + 部件列表[i].父部件索引 +
+                                 ", Children:" + 部件列表[i].子部件数 +
+                                 ", Animation Number:" + 部件列表[i].关键帧动画数  +
+                                 ", Integer of 2:" + 部件列表[i].不明整数参数2 +
+                                 ", Keyframes:" + 部件列表[i].关键帧数据.关键帧数 +
+                                 ", Floating-Point 1:" + 部件列表[i].不明浮点参数1 +
                                  ";");
-                cbox单独设置.Items.Add("部件" + i);
+                cbox单独设置.Items.Add("member" + i);
             }
             cboxPart.SelectedIndex = 0;
             cbox单独设置.SelectedIndex = 0;
@@ -541,7 +543,10 @@ namespace AC4Analysis
         private void btn导出_Click(object sender, EventArgs e)
         {  
             //OpenFileDialog 打开文件对话框 = new OpenFileDialog();
-            
+            StreamWriter file = new System.IO.StreamWriter("C:\\Users\\Arthur\\geo.txt");
+            foreach (float s in data)
+                file.WriteLine(s);
+            file.Close();
         }
 
         private void tb关键帧_Scroll(object sender, EventArgs e)
