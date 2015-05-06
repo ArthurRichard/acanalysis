@@ -58,7 +58,7 @@ namespace AC4Analysis
                     cdpfilename = System.IO.Path.GetDirectoryName(ofd.FileName) + "\\" + System.IO.Path.GetFileNameWithoutExtension(ofd.FileName) + ".pac";
                     if (!File.Exists(cdpfilename))
                     {
-                        MessageBox.Show("Can not find data file");
+                        MessageBox.Show("Cannot find data file");
                         return;
                     }
                 }
@@ -66,7 +66,7 @@ namespace AC4Analysis
                     mode = _Mode.AC4;
                 if (string.IsNullOrEmpty(cdpfilename))
                 {
-                    MessageBox.Show("Can not open TBL file");
+                    MessageBox.Show("Cannot open TBL file");
                     return;
                 }
                 FileStream fs = new FileStream(ofd.FileName, FileMode.Open);
