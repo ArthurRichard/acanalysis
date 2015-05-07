@@ -58,76 +58,84 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.AutoScroll = true;
-            this.panel1.Location = new System.Drawing.Point(0, 23);
+            this.panel1.Location = new System.Drawing.Point(0, 25);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(649, 561);
+            this.panel1.Size = new System.Drawing.Size(787, 608);
             this.panel1.TabIndex = 0;
+            this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
             // cboxPart
             // 
             this.cboxPart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.cboxPart.Font = new System.Drawing.Font("宋体", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cboxPart.Font = new System.Drawing.Font("SimSun", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cboxPart.FormattingEnabled = true;
             this.cboxPart.Location = new System.Drawing.Point(3, 3);
             this.cboxPart.Name = "cboxPart";
-            this.cboxPart.Size = new System.Drawing.Size(734, 19);
+            this.cboxPart.Size = new System.Drawing.Size(872, 19);
             this.cboxPart.TabIndex = 3;
             this.cboxPart.SelectedIndexChanged += new System.EventHandler(this.cboxPart_SelectedIndexChanged);
             // 
             // txt旋转Z
             // 
-            this.txt旋转Z.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.txt旋转Z.Location = new System.Drawing.Point(676, 278);
+            this.txt旋转Z.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.txt旋转Z.Location = new System.Drawing.Point(814, 301);
             this.txt旋转Z.Name = "txt旋转Z";
-            this.txt旋转Z.Size = new System.Drawing.Size(61, 21);
+            this.txt旋转Z.Size = new System.Drawing.Size(61, 20);
             this.txt旋转Z.TabIndex = 11;
+            this.txt旋转Z.TextChanged += new System.EventHandler(this.txt旋转Z_TextChanged);
             // 
             // txt旋转Y
             // 
-            this.txt旋转Y.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.txt旋转Y.Location = new System.Drawing.Point(676, 251);
+            this.txt旋转Y.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.txt旋转Y.Location = new System.Drawing.Point(814, 272);
             this.txt旋转Y.Name = "txt旋转Y";
-            this.txt旋转Y.Size = new System.Drawing.Size(61, 21);
+            this.txt旋转Y.Size = new System.Drawing.Size(61, 20);
             this.txt旋转Y.TabIndex = 10;
+            this.txt旋转Y.TextChanged += new System.EventHandler(this.txt旋转Y_TextChanged);
             // 
             // txt旋转X
             // 
-            this.txt旋转X.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.txt旋转X.Location = new System.Drawing.Point(676, 224);
+            this.txt旋转X.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.txt旋转X.Location = new System.Drawing.Point(814, 243);
             this.txt旋转X.Name = "txt旋转X";
-            this.txt旋转X.Size = new System.Drawing.Size(61, 21);
+            this.txt旋转X.Size = new System.Drawing.Size(61, 20);
             this.txt旋转X.TabIndex = 9;
+            this.txt旋转X.TextChanged += new System.EventHandler(this.txt旋转X_TextChanged);
             // 
             // txt位置Z
             // 
-            this.txt位置Z.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.txt位置Z.Location = new System.Drawing.Point(676, 186);
+            this.txt位置Z.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.txt位置Z.Location = new System.Drawing.Point(814, 202);
             this.txt位置Z.Name = "txt位置Z";
-            this.txt位置Z.Size = new System.Drawing.Size(61, 21);
+            this.txt位置Z.Size = new System.Drawing.Size(61, 20);
             this.txt位置Z.TabIndex = 8;
+            this.txt位置Z.TextChanged += new System.EventHandler(this.txt位置Z_TextChanged);
             // 
             // txt位置Y
             // 
-            this.txt位置Y.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.txt位置Y.Location = new System.Drawing.Point(676, 159);
+            this.txt位置Y.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.txt位置Y.Location = new System.Drawing.Point(814, 172);
             this.txt位置Y.Name = "txt位置Y";
-            this.txt位置Y.Size = new System.Drawing.Size(61, 21);
+            this.txt位置Y.Size = new System.Drawing.Size(61, 20);
             this.txt位置Y.TabIndex = 7;
+            this.txt位置Y.TextChanged += new System.EventHandler(this.txt位置Y_TextChanged);
             // 
             // txt位置X
             // 
-            this.txt位置X.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.txt位置X.Location = new System.Drawing.Point(676, 132);
+            this.txt位置X.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.txt位置X.Location = new System.Drawing.Point(814, 143);
             this.txt位置X.Name = "txt位置X";
-            this.txt位置X.Size = new System.Drawing.Size(61, 21);
+            this.txt位置X.Size = new System.Drawing.Size(61, 20);
             this.txt位置X.TabIndex = 6;
+            this.txt位置X.TextChanged += new System.EventHandler(this.txt位置X_TextChanged);
             // 
             // btn导出
             // 
-            this.btn导出.Location = new System.Drawing.Point(655, 332);
+            this.btn导出.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.btn导出.Location = new System.Drawing.Point(793, 356);
             this.btn导出.Name = "btn导出";
-            this.btn导出.Size = new System.Drawing.Size(82, 21);
+            this.btn导出.Size = new System.Drawing.Size(82, 23);
             this.btn导出.TabIndex = 12;
             this.btn导出.Text = "Export";
             this.btn导出.UseVisualStyleBackColor = true;
@@ -135,9 +143,10 @@
             // 
             // btn应用位置旋转
             // 
-            this.btn应用位置旋转.Location = new System.Drawing.Point(655, 305);
+            this.btn应用位置旋转.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.btn应用位置旋转.Location = new System.Drawing.Point(793, 327);
             this.btn应用位置旋转.Name = "btn应用位置旋转";
-            this.btn应用位置旋转.Size = new System.Drawing.Size(82, 21);
+            this.btn应用位置旋转.Size = new System.Drawing.Size(82, 23);
             this.btn应用位置旋转.TabIndex = 13;
             this.btn应用位置旋转.Text = "Apply";
             this.btn应用位置旋转.UseVisualStyleBackColor = true;
@@ -145,111 +154,130 @@
             // 
             // label1
             // 
+            this.label1.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(653, 227);
+            this.label1.Location = new System.Drawing.Point(793, 246);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(17, 12);
+            this.label1.Size = new System.Drawing.Size(22, 13);
             this.label1.TabIndex = 14;
             this.label1.Text = "RX";
+            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // label2
             // 
+            this.label2.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(653, 254);
+            this.label2.Location = new System.Drawing.Point(793, 275);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(17, 12);
+            this.label2.Size = new System.Drawing.Size(22, 13);
             this.label2.TabIndex = 15;
             this.label2.Text = "RY";
+            this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // label4
             // 
+            this.label4.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(653, 135);
+            this.label4.Location = new System.Drawing.Point(793, 146);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(17, 12);
+            this.label4.Size = new System.Drawing.Size(21, 13);
             this.label4.TabIndex = 17;
             this.label4.Text = "TX";
+            this.label4.Click += new System.EventHandler(this.label4_Click);
             // 
             // label5
             // 
+            this.label5.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(653, 162);
+            this.label5.Location = new System.Drawing.Point(793, 175);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(17, 12);
+            this.label5.Size = new System.Drawing.Size(21, 13);
             this.label5.TabIndex = 18;
             this.label5.Text = "TY";
+            this.label5.Click += new System.EventHandler(this.label5_Click);
             // 
             // label6
             // 
+            this.label6.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(653, 189);
+            this.label6.Location = new System.Drawing.Point(793, 205);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(17, 12);
+            this.label6.Size = new System.Drawing.Size(21, 13);
             this.label6.TabIndex = 19;
             this.label6.Text = "TZ";
+            this.label6.Click += new System.EventHandler(this.label6_Click);
             // 
             // label3
             // 
+            this.label3.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(653, 281);
+            this.label3.Location = new System.Drawing.Point(793, 304);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(17, 12);
+            this.label3.Size = new System.Drawing.Size(22, 13);
             this.label3.TabIndex = 16;
             this.label3.Text = "RZ";
+            this.label3.Click += new System.EventHandler(this.label3_Click);
             // 
             // cbox单独设置
             // 
+            this.cbox单独设置.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.cbox单独设置.FormattingEnabled = true;
-            this.cbox单独设置.Location = new System.Drawing.Point(676, 28);
+            this.cbox单独设置.Location = new System.Drawing.Point(793, 28);
             this.cbox单独设置.Name = "cbox单独设置";
-            this.cbox单独设置.Size = new System.Drawing.Size(61, 20);
+            this.cbox单独设置.Size = new System.Drawing.Size(80, 21);
             this.cbox单独设置.TabIndex = 20;
             this.cbox单独设置.SelectedIndexChanged += new System.EventHandler(this.cbox单独设置_SelectedIndexChanged);
             // 
             // label7
             // 
+            this.label7.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(653, 31);
+            this.label7.Location = new System.Drawing.Point(818, 52);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(23, 12);
+            this.label7.Size = new System.Drawing.Size(28, 13);
             this.label7.TabIndex = 21;
             this.label7.Text = "SET";
+            this.label7.Click += new System.EventHandler(this.label7_Click);
             // 
             // tb关键帧
             // 
+            this.tb关键帧.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.tb关键帧.LargeChange = 10;
-            this.tb关键帧.Location = new System.Drawing.Point(649, 54);
+            this.tb关键帧.Location = new System.Drawing.Point(782, 63);
             this.tb关键帧.Maximum = 100;
             this.tb关键帧.Name = "tb关键帧";
-            this.tb关键帧.Size = new System.Drawing.Size(91, 42);
+            this.tb关键帧.Size = new System.Drawing.Size(91, 45);
             this.tb关键帧.TabIndex = 22;
             this.tb关键帧.Scroll += new System.EventHandler(this.tb关键帧_Scroll);
             // 
             // txt部件类型
             // 
-            this.txt部件类型.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.txt部件类型.Location = new System.Drawing.Point(676, 105);
+            this.txt部件类型.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.txt部件类型.Location = new System.Drawing.Point(793, 114);
             this.txt部件类型.Name = "txt部件类型";
-            this.txt部件类型.Size = new System.Drawing.Size(61, 21);
+            this.txt部件类型.Size = new System.Drawing.Size(82, 20);
             this.txt部件类型.TabIndex = 23;
+            this.txt部件类型.TextChanged += new System.EventHandler(this.txt部件类型_TextChanged);
             // 
             // label8
             // 
+            this.label8.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(647, 108);
+            this.label8.Location = new System.Drawing.Point(811, 98);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(29, 12);
+            this.label8.Size = new System.Drawing.Size(35, 13);
             this.label8.TabIndex = 24;
             this.label8.Text = "TYPE";
+            this.label8.Click += new System.EventHandler(this.label8_Click);
             // 
             // SM
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.label7);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.txt部件类型);
             this.Controls.Add(this.tb关键帧);
-            this.Controls.Add(this.label7);
             this.Controls.Add(this.cbox单独设置);
             this.Controls.Add(this.txt旋转Z);
             this.Controls.Add(this.txt旋转Y);
@@ -268,7 +296,7 @@
             this.Controls.Add(this.cboxPart);
             this.Controls.Add(this.panel1);
             this.Name = "SM";
-            this.Size = new System.Drawing.Size(740, 584);
+            this.Size = new System.Drawing.Size(878, 633);
             ((System.ComponentModel.ISupportInitialize)(this.tb关键帧)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

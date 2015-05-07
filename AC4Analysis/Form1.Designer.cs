@@ -47,20 +47,20 @@
             // 
             // treeView1
             // 
-            this.treeView1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)));
+            this.treeView1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.treeView1.LabelEdit = true;
-            this.treeView1.Location = new System.Drawing.Point(12, 12);
+            this.treeView1.Location = new System.Drawing.Point(12, 13);
             this.treeView1.Name = "treeView1";
-            this.treeView1.Size = new System.Drawing.Size(308, 664);
+            this.treeView1.Size = new System.Drawing.Size(308, 719);
             this.treeView1.TabIndex = 0;
             this.treeView1.DoubleClick += new System.EventHandler(this.treeView1_DoubleClick);
             // 
             // btn打开tbl
             // 
-            this.btn打开tbl.Location = new System.Drawing.Point(326, 11);
+            this.btn打开tbl.Location = new System.Drawing.Point(326, 12);
             this.btn打开tbl.Name = "btn打开tbl";
-            this.btn打开tbl.Size = new System.Drawing.Size(91, 23);
+            this.btn打开tbl.Size = new System.Drawing.Size(91, 25);
             this.btn打开tbl.TabIndex = 1;
             this.btn打开tbl.Text = "Open tbl File";
             this.btn打开tbl.UseVisualStyleBackColor = true;
@@ -69,56 +69,56 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(563, 16);
+            this.label1.Location = new System.Drawing.Point(563, 17);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(47, 12);
+            this.label1.Size = new System.Drawing.Size(45, 13);
             this.label1.TabIndex = 2;
             this.label1.Text = "Address";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(715, 16);
+            this.label2.Location = new System.Drawing.Point(715, 17);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(65, 12);
+            this.label2.Size = new System.Drawing.Size(64, 13);
             this.label2.TabIndex = 3;
             this.label2.Text = "SubAddress";
             // 
             // tb绝对地址
             // 
-            this.tb绝对地址.Location = new System.Drawing.Point(609, 13);
+            this.tb绝对地址.Location = new System.Drawing.Point(609, 14);
             this.tb绝对地址.Name = "tb绝对地址";
-            this.tb绝对地址.Size = new System.Drawing.Size(100, 21);
+            this.tb绝对地址.Size = new System.Drawing.Size(100, 20);
             this.tb绝对地址.TabIndex = 4;
             // 
             // tb相对地址
             // 
-            this.tb相对地址.Location = new System.Drawing.Point(784, 11);
+            this.tb相对地址.Location = new System.Drawing.Point(784, 12);
             this.tb相对地址.Name = "tb相对地址";
-            this.tb相对地址.Size = new System.Drawing.Size(100, 21);
+            this.tb相对地址.Size = new System.Drawing.Size(100, 20);
             this.tb相对地址.TabIndex = 5;
             // 
             // tb大小
             // 
-            this.tb大小.Location = new System.Drawing.Point(929, 11);
+            this.tb大小.Location = new System.Drawing.Point(929, 12);
             this.tb大小.Name = "tb大小";
-            this.tb大小.Size = new System.Drawing.Size(100, 21);
+            this.tb大小.Size = new System.Drawing.Size(100, 20);
             this.tb大小.TabIndex = 7;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(894, 16);
+            this.label3.Location = new System.Drawing.Point(894, 17);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(29, 12);
+            this.label3.Size = new System.Drawing.Size(27, 13);
             this.label3.TabIndex = 6;
             this.label3.Text = "Size";
             // 
             // btn另存当前数据段
             // 
-            this.btn另存当前数据段.Location = new System.Drawing.Point(423, 11);
+            this.btn另存当前数据段.Location = new System.Drawing.Point(423, 12);
             this.btn另存当前数据段.Name = "btn另存当前数据段";
-            this.btn另存当前数据段.Size = new System.Drawing.Size(109, 23);
+            this.btn另存当前数据段.Size = new System.Drawing.Size(109, 25);
             this.btn另存当前数据段.TabIndex = 9;
             this.btn另存当前数据段.Text = "Save Select Data";
             this.btn另存当前数据段.UseVisualStyleBackColor = true;
@@ -126,44 +126,44 @@
             // 
             // panel1
             // 
-            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.AutoScroll = true;
-            this.panel1.Location = new System.Drawing.Point(327, 75);
+            this.panel1.Location = new System.Drawing.Point(327, 81);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(789, 629);
+            this.panel1.Size = new System.Drawing.Size(910, 681);
             this.panel1.TabIndex = 10;
             // 
             // progressBar1
             // 
             this.progressBar1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.progressBar1.Location = new System.Drawing.Point(13, 682);
+            this.progressBar1.Location = new System.Drawing.Point(13, 739);
             this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(307, 22);
+            this.progressBar1.Size = new System.Drawing.Size(307, 24);
             this.progressBar1.TabIndex = 11;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(563, 43);
+            this.label4.Location = new System.Drawing.Point(563, 47);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(29, 12);
+            this.label4.Size = new System.Drawing.Size(30, 13);
             this.label4.TabIndex = 12;
             this.label4.Text = "Note";
             // 
             // tbNote
             // 
-            this.tbNote.Location = new System.Drawing.Point(610, 40);
+            this.tbNote.Location = new System.Drawing.Point(610, 43);
             this.tbNote.Name = "tbNote";
-            this.tbNote.Size = new System.Drawing.Size(100, 21);
+            this.tbNote.Size = new System.Drawing.Size(100, 20);
             this.tbNote.TabIndex = 13;
             // 
             // btnSaveNote
             // 
-            this.btnSaveNote.Location = new System.Drawing.Point(717, 37);
+            this.btnSaveNote.Location = new System.Drawing.Point(717, 40);
             this.btnSaveNote.Name = "btnSaveNote";
-            this.btnSaveNote.Size = new System.Drawing.Size(75, 23);
+            this.btnSaveNote.Size = new System.Drawing.Size(75, 25);
             this.btnSaveNote.TabIndex = 14;
             this.btnSaveNote.Text = "Save Note";
             this.btnSaveNote.UseVisualStyleBackColor = true;
@@ -171,9 +171,9 @@
             // 
             // AC4Analysis
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1124, 716);
+            this.ClientSize = new System.Drawing.Size(1245, 776);
             this.Controls.Add(this.btnSaveNote);
             this.Controls.Add(this.tbNote);
             this.Controls.Add(this.label4);
