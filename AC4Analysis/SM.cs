@@ -254,22 +254,22 @@ namespace AC4Analysis
             switch (_编号)
             {
                 case 0: return "body";
-                case 1: return "elevator _left";
-                case 2: return "elevator _right";
-                case 3: return "rudder _left";
-                case 4: return "rudder _right";
-                case 5: return "low speed ailerons _left";
-                case 6: return "low speed ailerons _right";
-                case 7: return "High-speed ailerons(flaperons) _Left";
-                case 8: return "High-speed ailerons(flaperons) _Right";
-                case 9: return "vector tail spray _left";
-                case 10: return "vector tail spray _right";
-                case 11: return "canard _left";
-                case 12: return "canard _right";
-                case 13: return "spoiler _left";
-                case 14: return "spoiler _right";
+                case 1: return "elevator_left";
+                case 2: return "elevator_right";
+                case 3: return "rudder_left";
+                case 4: return "rudder_right";
+                case 5: return "low speed ailerons_left";
+                case 6: return "low speed ailerons_right";
+                case 7: return "left_flap";
+                case 8: return "right_flap";
+                case 9: return "vector tail spray_left";
+                case 10: return "vector tail spray_right";
+                case 11: return "canard_left";
+                case 12: return "canard_right";
+                case 13: return "spoiler_left";
+                case 14: return "spoiler_right";
                 case 15: return "tailpipe";
-                case 16: return "resistance board";
+                case 16: return "speedbrakes";
                 case 17: return "auxiliary air intake";
                 case 18: return "leading edge flap(slat)";
                 case 19: return "variable wing(folding wings)";
@@ -279,10 +279,10 @@ namespace AC4Analysis
                 case 28: return "after the left landing gear lights?";
                 case 29: return "right after landing lights?";
                 case 30: return "body light bar";
-                case 31: return "cabin Driver";
+                case 31: return "pilot";
                 case 33: return "Conventional Arms door";
                 case 34: return "special military equipment hatch";
-                case 40: return "landing gear door";
+                case 40: return "landing gear trap";
                 case 41: return "landing gear";
                 case 42: return "tail hook";
                 case 43: return "front";
@@ -615,6 +615,11 @@ namespace AC4Analysis
 
                 SetPartData(PartTR, PartInfo, 部件列表.Count);
             }
+        }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+
         }
 
 
