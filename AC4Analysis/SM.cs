@@ -540,36 +540,90 @@ namespace AC4Analysis
             }
         }
 
-        private void btn导出_Click(object sender, EventArgs e)
+        private void btn导出_Click(object sender, EventArgs e)//Obj Exporter
         {
-            StreamWriter file = new System.IO.StreamWriter("C:\\Users\\Arthur\\geo.obj"); //Obj Exporter
-            int count = 0;
-            bool ligne = true;
-            file.WriteLine("o acmodel");
-            file.WriteLine();
-            foreach (float s in 顶点列表)
+            SaveFileDialog exportobj = new SaveFileDialog();
+            exportobj.Filter = "Wavefront obj (*.obj)|*.obj|All files (*.*)|*.*";
+            exportobj.FilterIndex = 2;
+            exportobj.RestoreDirectory = true;
+            
+            if (exportobj.ShowDialog() == DialogResult.OK)
             {
-                if (ligne == true)
+                StreamWriter file = new System.IO.StreamWriter(exportobj.FileName);
+                int count = 0;
+                bool ligne = true;
+                file.WriteLine("o acmodel");
+                file.WriteLine();
+                foreach (float s in 顶点列表) //Vertices
                 {
-                    count = 0;
-                    file.Write("v " + s);
-                    ligne = false;
-                }
-                else
-                {
-                    if (count<=1)
+                    if (ligne == true)
                     {
-                        count++;
-                        file.Write(" " + s);
+                        count = 0;
+                        file.Write("v " + s);
+                        ligne = false;
                     }
                     else
                     {
-                        ligne = true;
-                        file.WriteLine();
-                    }      
+                        if (count <= 1)
+                        {
+                            count++;
+                            file.Write(" " + s);
+                        }
+                        else
+                        {
+                            ligne = true;
+                            file.WriteLine();
+                        }
+                    }
                 }
+                file.WriteLine();
+                foreach (float s in 法线列表) //Normals
+                {
+                    if (ligne == true)
+                    {
+                        count = 0;
+                        file.Write("vn " + s);
+                        ligne = false;
+                    }
+                    else
+                    {
+                        if (count <= 1)
+                        {
+                            count++;
+                            file.Write(" " + s);
+                        }
+                        else
+                        {
+                            ligne = true;
+                            file.WriteLine();
+                        }
+                    }
+                }
+                foreach (float s in 纹理位置列表) //Texture Coordinates
+                {
+                    if (ligne == true)
+                    {
+                        count = 0;
+                        file.Write("vt " + s);
+                        ligne = false;
+                    }
+                    else
+                    {
+                        if (count <= 1)
+                        {
+                            count++;
+                            file.Write(" " + s);
+                        }
+                        else
+                        {
+                            ligne = true;
+                            file.WriteLine();
+                        }
+                    }
+                }
+
+                file.Close();
             }
-            file.Close();
         }
 
         private void tb关键帧_Scroll(object sender, EventArgs e)
