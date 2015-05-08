@@ -1,0 +1,24 @@
+﻿Build started 06/05/2015 14:04:07.
+     1>Project "C:\Users\Arthur\Desktop\ACECOMBAT\acanalysis\AC4_3DWIN2\AC4_3DWIN2.vcxproj" on node 2 (Rebuild target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I..\inc /Zi /nologo /W3 /WX- /O2 /Oi /Oy- /GL /D _WINDLL /D GLEW_STATIC /D _WINDLL /D _MBCS /Gm- /EHsc /MT /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt AC4Map.cpp AC4_3DWIN2.cpp NodeMath.cpp Set.cpp TAList.cpp
+         AC4Map.cpp
+         AC4_3DWIN2.cpp
+         NodeMath.cpp
+         Set.cpp
+         TAList.cpp
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"..\bin\AC4_3DWIN.dll" /NOLOGO /LIBPATH:..\lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"..\bin\AC4_3DWIN.pdb" /SUBSYSTEM:WINDOWS /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"..\bin\AC4_3DWIN.lib" /MACHINE:X86 /SAFESEH /DLL Release\AC4Map.obj
+         Release\AC4_3DWIN2.obj
+         Release\NodeMath.obj
+         Release\Set.obj
+         Release\TAList.obj
+            Creating library ..\bin\AC4_3DWIN.lib and object ..\bin\AC4_3DWIN.exp
+         Generating code
+         Finished generating code
+         AC4_3DWIN2.vcxproj -> C:\Users\Arthur\Desktop\ACECOMBAT\acanalysis\AC4_3DWIN2\..\bin\AC4_3DWIN.dll
+     1>Done Building Project "C:\Users\Arthur\Desktop\ACECOMBAT\acanalysis\AC4_3DWIN2\AC4_3DWIN2.vcxproj" (Rebuild target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:09.49

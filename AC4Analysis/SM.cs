@@ -541,11 +541,34 @@ namespace AC4Analysis
         }
 
         private void btn导出_Click(object sender, EventArgs e)
-        {  
-            //OpenFileDialog 打开文件对话框 = new OpenFileDialog();
-            StreamWriter file = new System.IO.StreamWriter("C:\\Users\\Arthur\\geo.txt");
-            foreach (float s in data)
-                file.WriteLine(s);
+        {
+            StreamWriter file = new System.IO.StreamWriter("C:\\Users\\Arthur\\geo.obj"); //Obj Exporter
+            int count = 0;
+            bool ligne = true;
+            file.WriteLine("o acmodel");
+            file.WriteLine();
+            foreach (float s in 顶点列表)
+            {
+                if (ligne == true)
+                {
+                    count = 0;
+                    file.Write("v " + s);
+                    ligne = false;
+                }
+                else
+                {
+                    if (count<=1)
+                    {
+                        count++;
+                        file.Write(" " + s);
+                    }
+                    else
+                    {
+                        ligne = true;
+                        file.WriteLine();
+                    }      
+                }
+            }
             file.Close();
         }
 
@@ -618,6 +641,81 @@ namespace AC4Analysis
         }
 
         private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void label8_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txt部件类型_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label7_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txt旋转Z_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txt旋转Y_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txt旋转X_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txt位置Z_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txt位置Y_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txt位置X_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label6_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label5_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
         {
 
         }

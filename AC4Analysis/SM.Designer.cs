@@ -83,6 +83,7 @@
             this.txt旋转Z.Name = "txt旋转Z";
             this.txt旋转Z.Size = new System.Drawing.Size(61, 20);
             this.txt旋转Z.TabIndex = 11;
+            this.txt旋转Z.TextChanged += new System.EventHandler(this.txt旋转Z_TextChanged);
             // 
             // txt旋转Y
             // 
@@ -91,6 +92,7 @@
             this.txt旋转Y.Name = "txt旋转Y";
             this.txt旋转Y.Size = new System.Drawing.Size(61, 20);
             this.txt旋转Y.TabIndex = 10;
+            this.txt旋转Y.TextChanged += new System.EventHandler(this.txt旋转Y_TextChanged);
             // 
             // txt旋转X
             // 
@@ -99,6 +101,7 @@
             this.txt旋转X.Name = "txt旋转X";
             this.txt旋转X.Size = new System.Drawing.Size(61, 20);
             this.txt旋转X.TabIndex = 9;
+            this.txt旋转X.TextChanged += new System.EventHandler(this.txt旋转X_TextChanged);
             // 
             // txt位置Z
             // 
@@ -107,6 +110,7 @@
             this.txt位置Z.Name = "txt位置Z";
             this.txt位置Z.Size = new System.Drawing.Size(61, 20);
             this.txt位置Z.TabIndex = 8;
+            this.txt位置Z.TextChanged += new System.EventHandler(this.txt位置Z_TextChanged);
             // 
             // txt位置Y
             // 
@@ -115,6 +119,7 @@
             this.txt位置Y.Name = "txt位置Y";
             this.txt位置Y.Size = new System.Drawing.Size(61, 20);
             this.txt位置Y.TabIndex = 7;
+            this.txt位置Y.TextChanged += new System.EventHandler(this.txt位置Y_TextChanged);
             // 
             // txt位置X
             // 
@@ -123,6 +128,7 @@
             this.txt位置X.Name = "txt位置X";
             this.txt位置X.Size = new System.Drawing.Size(61, 20);
             this.txt位置X.TabIndex = 6;
+            this.txt位置X.TextChanged += new System.EventHandler(this.txt位置X_TextChanged);
             // 
             // btn导出
             // 
@@ -155,6 +161,7 @@
             this.label1.Size = new System.Drawing.Size(22, 13);
             this.label1.TabIndex = 14;
             this.label1.Text = "RX";
+            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // label2
             // 
@@ -165,6 +172,7 @@
             this.label2.Size = new System.Drawing.Size(22, 13);
             this.label2.TabIndex = 15;
             this.label2.Text = "RY";
+            this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // label4
             // 
@@ -175,6 +183,7 @@
             this.label4.Size = new System.Drawing.Size(21, 13);
             this.label4.TabIndex = 17;
             this.label4.Text = "TX";
+            this.label4.Click += new System.EventHandler(this.label4_Click);
             // 
             // label5
             // 
@@ -185,6 +194,7 @@
             this.label5.Size = new System.Drawing.Size(21, 13);
             this.label5.TabIndex = 18;
             this.label5.Text = "TY";
+            this.label5.Click += new System.EventHandler(this.label5_Click);
             // 
             // label6
             // 
@@ -195,6 +205,7 @@
             this.label6.Size = new System.Drawing.Size(21, 13);
             this.label6.TabIndex = 19;
             this.label6.Text = "TZ";
+            this.label6.Click += new System.EventHandler(this.label6_Click);
             // 
             // label3
             // 
@@ -205,6 +216,7 @@
             this.label3.Size = new System.Drawing.Size(22, 13);
             this.label3.TabIndex = 16;
             this.label3.Text = "RZ";
+            this.label3.Click += new System.EventHandler(this.label3_Click);
             // 
             // cbox单独设置
             // 
@@ -225,6 +237,7 @@
             this.label7.Size = new System.Drawing.Size(28, 13);
             this.label7.TabIndex = 21;
             this.label7.Text = "SET";
+            this.label7.Click += new System.EventHandler(this.label7_Click);
             // 
             // tb关键帧
             // 
@@ -244,6 +257,7 @@
             this.txt部件类型.Name = "txt部件类型";
             this.txt部件类型.Size = new System.Drawing.Size(82, 20);
             this.txt部件类型.TabIndex = 23;
+            this.txt部件类型.TextChanged += new System.EventHandler(this.txt部件类型_TextChanged);
             // 
             // label8
             // 
@@ -254,6 +268,7 @@
             this.label8.Size = new System.Drawing.Size(35, 13);
             this.label8.TabIndex = 24;
             this.label8.Text = "TYPE";
+            this.label8.Click += new System.EventHandler(this.label8_Click);
             // 
             // SM
             // 
