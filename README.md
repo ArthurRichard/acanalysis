@@ -10,7 +10,7 @@ Textures are exportable to more standard image files while the 3D export feature
 The program running on Windows
 
 ![Lin](https://github.com/ArthurRichard/acanalysis/blob/master/aclin.png?raw=true)
-The program running on Linux.
+The program running on GNU/Linux.
 
 **How to run it on Linux:**
 Despite being built with Visual Studio, it's not compatible yet with the Mono. To run it, you have to use wine:
