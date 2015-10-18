@@ -1,0 +1,58 @@
+﻿Build started 06/05/2015 14:03:53.
+     1>Project "C:\Users\Arthur\Desktop\ACECOMBAT\acanalysis\glfw\GLFW.vcxproj" on node 2 (Rebuild target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /IC:\Users\Arthur\Desktop\ACECOMBAT\acanalysis\glfw\\ /IC:\Users\Arthur\Desktop\ACECOMBAT\acanalysis\glfw\\win32\ /nologo /W3 /WX- /O2 /Oi /Oy- /D WIN32 /D NDEBUG /D _LIB /D _MBCS /Gm- /EHsc /MT /GS /Gy- /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TC /analyze- /errorReport:prompt enable.c fullscreen.c glext.c image.c init.c input.c joystick.c stream.c tga.c thread.c time.c win32\win32_dllmain.c win32\win32_enable.c win32\win32_fullscreen.c win32\win32_glext.c win32\win32_init.c win32\win32_joystick.c win32\win32_thread.c win32\win32_time.c win32\win32_window.c window.c
+         enable.c
+         fullscreen.c
+         glext.c
+         image.c
+         init.c
+         input.c
+         joystick.c
+         stream.c
+         tga.c
+         thread.c
+         time.c
+         win32_dllmain.c
+         win32_enable.c
+         win32_fullscreen.c
+         win32_glext.c
+         win32_init.c
+     1>win32\win32_init.c(237): warning C4996: 'GetVersionExA': was declared deprecated
+                 C:\Program Files (x86)\Windows Kits\8.1\Include\um\sysinfoapi.h(433) : see declaration of 'GetVersionExA'
+         win32_joystick.c
+         win32_thread.c
+         win32_time.c
+         win32_window.c
+         Generating Code...
+         Compiling...
+         window.c
+         Generating Code...
+       Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\Lib.exe /OUT:"..\lib\GLFW.lib" /NOLOGO Release\enable.obj
+         Release\fullscreen.obj
+         Release\glext.obj
+         Release\image.obj
+         Release\init.obj
+         Release\input.obj
+         Release\joystick.obj
+         Release\stream.obj
+         Release\tga.obj
+         Release\thread.obj
+         Release\time.obj
+         Release\win32_dllmain.obj
+         Release\win32_enable.obj
+         Release\win32_fullscreen.obj
+         Release\win32_glext.obj
+         Release\win32_init.obj
+         Release\win32_joystick.obj
+         Release\win32_thread.obj
+         Release\win32_time.obj
+         Release\win32_window.obj
+         Release\window.obj
+         GLFW.vcxproj -> C:\Users\Arthur\Desktop\ACECOMBAT\acanalysis\glfw\..\lib\GLFW.lib
+     1>Done Building Project "C:\Users\Arthur\Desktop\ACECOMBAT\acanalysis\glfw\GLFW.vcxproj" (Rebuild target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:13.83
