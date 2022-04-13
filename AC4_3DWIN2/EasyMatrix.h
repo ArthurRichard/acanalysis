@@ -1662,7 +1662,7 @@ inline void PointProjectD(double objx, double objy, double objz, double *modelvi
       fTempo[6]=projection[2]*fTempo[0]+projection[6]*fTempo[1]+projection[10]*fTempo[2]+projection[14]*fTempo[3];
       fTempo[7]=-fTempo[2];
       //The result normalizes between -1 and 1
-      if(abs(fTempo[7])>=0.0000001)	//The w value
+      if(fabs(fTempo[7])>=0.0000001)	//The w value
       fTempo[7]=1.0/fTempo[7];
       //Perspective division
       fTempo[4]*=fTempo[7];
@@ -1693,7 +1693,7 @@ inline void PointProjectD(float * obj, double *projection, int *viewport, double
       fTempo[6]=projection[2]*fTempo[0]+projection[6]*fTempo[1]+projection[10]*fTempo[2]+projection[14]*fTempo[3];
       fTempo[7]=-fTempo[2];
       //The result normalizes between -1 and 1
-      if(abs(fTempo[7])>=0.0000001)	//The w value
+      if(fabs(fTempo[7])>=0.0000001)	//The w value
       fTempo[7]=1.0/fTempo[7];
       //Perspective division
       fTempo[4]*=fTempo[7];
@@ -1723,7 +1723,7 @@ inline void PointProjectF(float * obj, float *projection, int *viewport, float *
       fTempo[6]=projection[2]*fTempo[0]+projection[6]*fTempo[1]+projection[10]*fTempo[2]+projection[14]*fTempo[3];
       fTempo[7]=-fTempo[2];
       //The result normalizes between -1 and 1
-      if(abs(fTempo[7])>=0.0000001f)	//The w value
+      if(fabsf(fTempo[7])>=0.0000001f)	//The w value
       fTempo[7]=1.0f/fTempo[7];
       //Perspective division
       fTempo[4]*=fTempo[7];
@@ -1843,7 +1843,7 @@ inline void CreateTangent(float * VerticesInToTBN ,float * NormalsInToTBN,float 
 	float s2 = TexCoordsInToTBN[2*2+0] - TexCoordsInToTBN[0*2+0];
 	float t1 = TexCoordsInToTBN[1*2+1] - TexCoordsInToTBN[0*2+1];
 	float t2 = TexCoordsInToTBN[2*2+1] - TexCoordsInToTBN[0*2+1];
-	if(abs(s1 * t2 - s2 * t1)<0.0000001f)
+	if(fabsf(s1 * t2 - s2 * t1)<0.0000001f)
 	{
 		for(int i=0;i<3;i++)
 		{

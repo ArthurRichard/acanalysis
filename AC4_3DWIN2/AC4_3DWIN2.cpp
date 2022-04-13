@@ -478,7 +478,7 @@ extern "C" _declspec(dllexport) void Set3DData(float * VecsIn,float * NorsIn,int
 	memcpy_s(Texs,sizeof(float)*TexsSizeIn,TexsIn,sizeof(float)*TexsSizeIn);
 
 	for(int i=0;i<VecSizeIn;i++)
-		msize=max(msize,abs(Vecs[i]));
+		msize=max(msize,fabs(Vecs[i]));
 	mpos[2]=msize=min(1000.0f,msize);
 	ClearViewTurn();
 	ReleaseMutex(Mutex);
