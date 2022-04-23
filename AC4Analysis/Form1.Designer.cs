@@ -190,7 +190,7 @@
             this.Controls.Add(this.treeView1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "AC4Analysis";
-            this.Text = "AC4Analysis v1.7.3";
+            this.Text = "AC4Analysis v1.7.4";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.AC4Analysis_FormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();
